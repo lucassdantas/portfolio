@@ -6,9 +6,9 @@ import React from 'react'
 export const Header = () => {
   return (
     <header className='flex justify-between w-full'>
-      <div className='bg-base_2-c1 flex justfify-between text-white w-2/12 '>
-        <LanguagesFlags/>
-        <LightAndDarkMode/>
+      <div className='bg-base_2-c1 flex justify-between items-center text-white w-2/12 px-4 py-2 '>
+        <LanguagesFlags className='w-1/12' />
+        <LightAndDarkMode className='w-fit'/>
       </div>
 
       <Nav/>

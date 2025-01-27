@@ -1,7 +1,7 @@
 import React from 'react'
 
-export const LanguagesFlags = () => {
+export const LanguagesFlags = ({className=''}:{className:string}) => {
   return (
-    <div>a</div>
+    <div className={className}>a</div>
   )
 }
