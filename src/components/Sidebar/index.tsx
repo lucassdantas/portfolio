@@ -3,8 +3,9 @@ import React from 'react'
 import personalImage from '@/assets/eu-rd-serio.png'
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import Image from 'next/image'
-import { birthday, currentAge } from '@/utils/personalData'
+import { birthday, currentAge, email, location } from '@/utils/personalData'
 import { Button } from '@/components/Sidebar/components/Button'
+import { Title } from '@/components/Title'
 
 export const Sidebar = () => {
   return (
@@ -25,12 +26,11 @@ export const Sidebar = () => {
         </ul>
         <hr className='w-[50px] my-4'></hr>
 
-        <h4>Informações pessoais</h4>
-        <ul>
-          <li>{currentAge} anos</li>
-          <li></li>
-          <li><Link href='' target='_blank'></Link></li>
-          <li></li>
+        <Title tag='h4'>Informações pessoais</Title>
+        <ul className='gap-7 text-left'>
+          <li className='flex gap-4'>{currentAge} anos</li>
+          <li className='flex gap-4'>{location}</li>
+          <li className='flex gap-4'><Link href={`mailto:${email}`}>{email}</Link></li>
         </ul>
         
         <Button/>

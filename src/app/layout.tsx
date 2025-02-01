@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Inter, Mina } from 'next/font/google'
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
 import { Limiter } from "@/components/Limiter";
+import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 export default function RootLayout({children}:Readonly<{children: React.ReactNode;}>) {
   return (
     <html lang="pt-br">
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.className} antialiased bg-gradient-to-br from-primary-darkBlue to-base_2-c1 dark:text-white h-screen w-screen`}>
         <Limiter>
           <Header/>
           <div className="flex">
