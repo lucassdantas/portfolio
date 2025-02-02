@@ -18,6 +18,8 @@ export default {
           a0:'#E2E8F0',
           a1:'#D7DCE5',
           a2:'#C5CCD6',
+          a3:'#E8EAED',
+          a4:'#ACB5C3',
           a5:'#8C98AB',
           a7:'#4E5D74',
           a10:'#1F2B3D',
