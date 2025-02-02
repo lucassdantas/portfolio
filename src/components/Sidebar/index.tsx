@@ -32,11 +32,11 @@ export const Sidebar = () => {
             <li><Link href='https://www.linkedin.com/in/lucas-de-sousa-dantas/' target='_blank'><Icons icon='linkedin' className='text-2xl'/></Link></li>
             <li><Link href='https://github.com/lucassdantas' target='_blank'><Icons icon='github'  className='text-2xl'/></Link></li>
           </ul>
-          <Separator className=' h-[3px] my-4 bg-base_1-a1 w-2/4'/>
+          <Separator className='h-[3px] my-4 bg-base_1-a1 w-2/4'/>
         </div>
 
         <h4 className='font-bold mt-4'>Informações pessoais</h4>
-        <ul className='flex flex-col gap-4 text-left my-5'>
+        <ul className='flex flex-col gap-2 text-left my-5'>
           {infoList.map((info, i) => (<InfoIcon key={i} icon={info.icon} content={info.content} url={info.url}/>))}
         </ul>
         <div className='flex justify-center'>
