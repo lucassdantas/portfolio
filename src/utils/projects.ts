@@ -1,4 +1,6 @@
-import { Project } from "@/types/projectsType";
+import { Category } from "@/types/categoryType";
+import { Project } from "@/types/projectType";
+import { Technology } from "@/types/technologies";
 
 export const projects:Project[] = [
   {
@@ -7,6 +9,7 @@ export const projects:Project[] = [
     image:'',
     repositoryUrl:'',
     liveProjectUrl:'',
-    category:'a'
+    category: Category.Wordpress,
+    technologies:[Technology.React,]
   }
 ]

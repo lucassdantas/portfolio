@@ -1,3 +1,7 @@
-export interface Category{
-  name:string;
+export enum Category{
+  Sites,
+  Sistemas,
+  Deploy,
+  Wordpress,
+
 }
