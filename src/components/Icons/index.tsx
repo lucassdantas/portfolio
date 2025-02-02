@@ -20,5 +20,5 @@ export const Icons = ({icon, className='', bgClassName=''}:IconsProps) => {
 
 
 const IconBackground = ({children, className=''}:{children:ReactNode, className?:string}) => {
-  return <div className={`bg-base_1-a1 text-base_1-a5 p-1  ${className} `}>{children}</div>
+  return <div className={`bg-base_1-a1 text-base_1-a5 p-1 ${className} `}>{children}</div>
 }

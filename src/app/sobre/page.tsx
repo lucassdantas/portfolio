@@ -1,7 +1,7 @@
 import { Title } from '@/components/Title'
 import React from 'react'
 
-export const About = () => {
+export default function About () {
   return (
     <>
       <section>

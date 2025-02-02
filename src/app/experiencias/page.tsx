@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const Experiences = () => {
+export default function Experiences () {
   return (
     <div>Experiences</div>
   )

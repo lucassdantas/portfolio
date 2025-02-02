@@ -12,10 +12,10 @@ export const InfoIcon = ({icon, url='', content}:InfoProps) => {
   return (
     <>
       <li className='flex gap-4'>
-        <Icons icon={icon} bgClassName='bg-base_1-a12 text-base_1-a3'/> 
+        <Icons icon={icon} bgClassName='bg-base_1-a12' className='text-base_1-a3'/> 
         {url?<Link href={url}>{content}</Link>:<span>{content}</span>}
       </li>
-      <Separator className='bg-neutral-100 w-[40px] h-[2px] my-0'/>
+      <Separator className='w-[50px] h-[2px] bg-neutral-100'/>
     </>
   )
 }

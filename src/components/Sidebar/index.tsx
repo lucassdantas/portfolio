@@ -3,11 +3,10 @@ import React from 'react'
 import Image from 'next/image'
 import { currentAge, email, location } from '@/utils/personalData'
 import { Button } from '@/components/Sidebar/components/Button'
-import { Title } from '@/components/Title'
 import { Icons } from '@/components/Icons'
-import personalImage from '@/assets/eu-rd-serio.png'
 import { Separator } from '@/components/Separator'
 import { InfoIcon } from '@/components/Sidebar/components/InfoIcon'
+import personalImage from '@/assets/eu-rd-serio.png'
 
 export const Sidebar = () => {
   const infoList = [
@@ -24,7 +23,7 @@ export const Sidebar = () => {
         <div className="bg-gradient-to-br from-primary-purple to bg-primary-blue h-[100px] w-[100px] ml-[65%]"></div>
       </div>
 
-      <div className='text-center my-10'>
+      <div className='text-center mt-8'>
         <h4 className='font-bold'>Lucas Dantas</h4>
         <p className='text-base_1-a4'>Desenvolvedor Web</p>
 
@@ -33,10 +32,10 @@ export const Sidebar = () => {
             <li><Link href='https://www.linkedin.com/in/lucas-de-sousa-dantas/' target='_blank'><Icons icon='linkedin' className='text-2xl'/></Link></li>
             <li><Link href='https://github.com/lucassdantas' target='_blank'><Icons icon='github'  className='text-2xl'/></Link></li>
           </ul>
-          <Separator className='w-2/4'/>
+          <Separator className=' h-[3px] my-4 bg-base_1-a1 w-2/4'/>
         </div>
 
-        <Title tag='h4' className='font-bold'>Informações pessoais</Title>
+        <h4 className='font-bold mt-4'>Informações pessoais</h4>
         <ul className='flex flex-col gap-4 text-left my-5'>
           {infoList.map((info, i) => (<InfoIcon key={i} icon={info.icon} content={info.content} url={info.url}/>))}
         </ul>

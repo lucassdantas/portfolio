@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const Education = () => {
+export default function Education () {
   return (
     <div>Education</div>
   )
