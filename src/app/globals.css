@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 .title{
   font-family:'Mina', 'sans-serif';
 }

@@ -6,7 +6,7 @@ import { Button } from '@/components/Sidebar/components/Button'
 import { Icons } from '@/components/Icons'
 import { Separator } from '@/components/Separator'
 import { InfoIcon } from '@/components/Sidebar/components/InfoIcon'
-import personalImage from '@/assets/eu-rd-serio.png'
+import personalImage from '@/assets/desenvolvedor-web-lucas-dantas.jpg'
 
 export const Sidebar = () => {
   const infoList = [
