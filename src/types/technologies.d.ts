@@ -1,3 +1,5 @@
+import { StaticImageData } from "next/image";
+
 export enum Technology{
   React,
   NextJS,
@@ -16,5 +18,9 @@ export enum Technology{
 
 export interface TechnologyGroup{
   label:string;
-  images:StaticImageData[];
+  technologies:{
+    name:string;
+    grayImage:StaticImageData;
+    coloredImage:StaticImageData;
+  }[]
 }
