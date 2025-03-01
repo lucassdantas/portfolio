@@ -1,3 +1,4 @@
+import { ExperiencesAccordion } from '@/app/experiencias/components/ExperiencesAccordeon'
 import { Section } from '@/components/Section'
 import { Title } from '@/components/Title'
 import React from 'react'
@@ -10,8 +11,7 @@ export default function Experiences () {
         <p className=''>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque at convallis turpis. Proin sit amet eros a justo malesuada facilisis. Integer auctor, ex a vestibulum hendrerit, felis purus facilisis velit, eu luctus.</p>
       </div>
       <div>
-        <Title tag='h2' className='text-3xl font-bold '>Técnologias</Title>
-        <p className='mb-4'>Lorem ipsum sit amet, consectur</p>
+        <ExperiencesAccordion/>
       </div>
     </Section>
   )
