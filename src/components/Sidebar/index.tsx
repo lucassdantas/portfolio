@@ -16,7 +16,7 @@ export const Sidebar = () => {
   ]
 
   return (
-    <div className='bg-white text-black p-4'>
+    <div className='bg-white text-black p-4 max-h-[770px]'>
       <div>
         <div className="bg-base_1-a13 h-[150px] w-[150px] -mb-[90px]"></div>
         <Image src={personalImage} alt='Foto Lucas Desenvolvedor' className='max-w-[200px] object-cover h-[200px] ml-[40px] z-10 -mb-[75px]'/>
