@@ -13,3 +13,8 @@ export enum Technology{
   Supabase,
   Java,
 }
+
+export interface TechnologyGroup{
+  label:string;
+  images:StaticImageData[];
+}
