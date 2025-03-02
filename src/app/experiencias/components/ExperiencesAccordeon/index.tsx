@@ -49,11 +49,13 @@ export const ExperiencesAccordion = () => {
             <hr className=' border-primary-blue mt-4 mb-1'></hr>
             {/* Acordeão Expandido */}
             {expandedIndex === index && (
-              <div className="pl-8 py-4 pr-4 border border-primary-blue  ">
-                <ul className="list-disc space-y-2 marker:text-base_1-a7 w-[99%] ">
-                  {experience.experienceDetails.map((detail, i) => (<li key={i} className="text-sm pl-4 ">{detail}</li>))}
-                </ul>
-                <button className="mt-4 text-primary-blue">Ver mais</button>
+              <div className='flex flex-col items-end'>
+                <div className="pl-8 py-4 pr-4 border border-primary-blue  ">
+                  <ul className="list-disc space-y-2 marker:text-base_1-a7 w-[99%] ">
+                    {experience.experienceDetails.map((detail, i) => (<li key={i} className="text-sm pl-4 ">{detail}</li>))}
+                  </ul>
+                </div>
+                <button className="mt-4 text-base_1-a0 border border-primary-blue py-2 px-4">Ver mais</button>
               </div>
             )}
           </div>
