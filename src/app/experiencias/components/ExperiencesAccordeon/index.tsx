@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { experiences } from '@/utils/experiences';
 import { Title } from '@/components/Title';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 export const ExperiencesAccordion = () => {
@@ -24,9 +23,11 @@ export const ExperiencesAccordion = () => {
         {experiences.map((experience, index) => (
           <div key={index} className="flex flex-col pl-10 pr-6 pb-4">
             <div className="flex justify-between items-center">
-              
               <div className="flex items-center absolute -left-3">
-                <div className={`w-6 h-6 bg-primary-blue relative left-1/2 transform -translate-x-1/2`}></div>
+                {expandedIndex === index ? 
+                  <div className={`w-6 h-6 bg-primary-blue relative left-1/2 transform -translate-x-1/2`}></div>:
+                  <div className={`w-6 h-6 bg-base_1-a0 relative left-1/2 transform -translate-x-1/2`}></div>
+                }
               </div>
 
               {/* Informações de Período, Título e Empresa */}
@@ -36,11 +37,11 @@ export const ExperiencesAccordion = () => {
               </div>
 
               {/* Informações da Empresa na Horizontal */}
-              <div className="flex flex-col justify-center items-end ml-4">
+              <div className="flex flex-col gap-2 justify-center items-end ml-4">
                 <span className="text-sm text-base_1-a0">{experience.company}</span>
-                <div className="cursor-pointer text-primary-blue" onClick={() => toggleAccordion(index)}>
+                <button className="cursor-pointer text-primary-blue" onClick={() => toggleAccordion(index)}>
                   {expandedIndex === index ? (<FaArrowRight size={12} />) : (<FaArrowLeft size={12} /> )}
-                </div>
+                </button>
               </div>
 
               
