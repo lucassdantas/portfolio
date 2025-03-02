@@ -1,4 +1,4 @@
-import { ExperiencesAccordion } from '@/app/experiencias/components/ExperiencesAccordeon'
+import { ExperiencesAccordion } from '@/app/experiencias/components/ExperiencesAccordion'
 import { Section } from '@/components/Section'
 import { Title } from '@/components/Title'
 import React from 'react'

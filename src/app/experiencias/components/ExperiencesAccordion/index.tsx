@@ -1,8 +1,8 @@
 'use client'
 import React, { useState } from 'react';
 import { experiences } from '@/utils/experiences';
-import { AccordionHeader } from '@/app/experiencias/components/ExperiencesAccordeon/AccordionHeader';
-import { AccordionSquare } from '@/app/experiencias/components/ExperiencesAccordeon/AccordionSquare';
+import { AccordionHeader } from '@/app/experiencias/components/ExperiencesAccordion/AccordionHeader';
+import { AccordionSquare } from '@/app/experiencias/components/ExperiencesAccordion/AccordionSquare';
 
 export const ExperiencesAccordion = () => {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
