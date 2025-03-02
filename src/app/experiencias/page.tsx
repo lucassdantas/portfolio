@@ -5,8 +5,8 @@ import React from 'react'
 
 export default function Experiences () {
   return (
-    <Section limiterClassname='relative flex flex-col justify-between h-full' className=' text-base_1-a0'>
-      <div className='h-1/2 '>
+    <Section limiterClassname='relative  h-full' className=' text-base_1-a0'>
+      <div className='mb-24'>
         <Title tag='h1' className='font-extrabold'>Experiências</Title>
         <p className=''>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque at convallis turpis. Proin sit amet eros a justo malesuada facilisis. Integer auctor, ex a vestibulum hendrerit, felis purus facilisis velit, eu luctus.</p>
       </div>
