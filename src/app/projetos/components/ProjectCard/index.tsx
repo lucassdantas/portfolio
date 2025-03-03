@@ -18,7 +18,7 @@ export const ProjectCard = ({ project, cardIndex, isHovered, setHoveredCardIndex
 
   return (
     <div
-      className="relative w-full lg:w-[47%] max-w-4xl"
+      className="relative w-full lg:w-[47%] max-w-4xl "
       onMouseEnter={() => setHoveredCardIndex(cardIndex)}
     >
       <CardTechnologies project={project} isCardHover={isHovered} />
