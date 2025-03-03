@@ -4,7 +4,7 @@ import { Title } from '@/components/Title';
 import { useState } from 'react';
 import { projects } from '@/utils/projects';
 import { Button } from '@/components/Button';
-import {ProjectCard} from '@/app/projetos/components/ProjectCard';
+import { ProjectCard } from '@/app/projetos/components/ProjectCard';
 
 const categories = [
   { label: 'Todos', value: 'all' },
@@ -16,16 +16,23 @@ const categories = [
 
 export default function Projects() {
   const [selectedCategory, setSelectedCategory] = useState('all');
-
+  const cs = () => {
+    console.log('aaaaaaaaaaaa')
+  }
+  // Filtra os projetos com base na categoria selecionada
   const filteredProjects = selectedCategory === 'all'
     ? projects
     : projects.filter(project => project.category === selectedCategory);
 
+    console.log(selectedCategory)
   return (
     <Section limiterClassname='relative h-full' className='text-base_1-a0'>
       <div className='mb-24'>
         <Title tag='h1' className='font-extrabold'>Projetos</Title>
-        <p className=''>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque at convallis turpis. Proin sit amet eros a justo malesuada facilisis. Integer auctor, ex a vestibulum hendrerit, felis purus facilisis velit, eu luctus.</p>
+        <p className=''>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque at convallis turpis.
+          Proin sit amet eros a justo malesuada facilisis. Integer auctor, ex a vestibulum hendrerit, felis purus facilisis velit, eu luctus.
+        </p>
       </div>
 
       {/* Abas de filtro */}
@@ -34,6 +41,7 @@ export default function Projects() {
           <Button
             key={category.value}
             onClick={() => setSelectedCategory(category.value)}
+            className={selectedCategory === category.value ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'} // Alterando o estilo para mostrar qual está selecionado
           >
             {category.label}
           </Button>
@@ -41,7 +49,7 @@ export default function Projects() {
       </div>
 
       {/* Exibição dos cards filtrados */}
-      <div className='flex flex-wrap gap-8 justify-center'>
+      <div className='flex flex-wrap gap-8 justify-start'>
         {filteredProjects.length > 0 ? (
           filteredProjects.map((project, index) => <ProjectCard key={index} project={project} />)
         ) : (

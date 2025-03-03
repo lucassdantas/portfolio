@@ -22,7 +22,7 @@ export const projects:Project[] = [
     galleryImages:[portfolio,education],
     repositoryUrl:'aaaaaaaaaa',
     liveProjectUrl:'',
-    category:'Wordpress',
+    category:'Sites',
     technologies:[tailwindTechnology,]
   },
 ]
