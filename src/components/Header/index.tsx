@@ -10,7 +10,7 @@ export const Header = () => {
         <LanguagesFlags currentLanguage='pt-br' className='w-1/12' />
         <LightAndDarkMode className='w-fit'/>
       </div>
-      <Nav/>
+      <Nav className=''/>
     </header>
   )
 }
