@@ -33,6 +33,6 @@ export const projects:Project[] = [
     repositoryUrl:'aaaaaaaaaa',
     liveProjectUrl:'',
     category:'Sites',
-    technologies:[tailwindTechnology,]
+    technologies:[tailwindTechnology, javaTechnology]
   },
 ]

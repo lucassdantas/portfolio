@@ -4,12 +4,14 @@ import React from 'react'
 
 interface ProjectTechnologiesProps {
   project: Project;
+  isCardHover:boolean;
 }
-export const CardTechnologies = ({project}:ProjectTechnologiesProps) => {
+export const CardTechnologies = ({project, isCardHover=false}:ProjectTechnologiesProps) => {
   return (
     <>
-      <hr className="h-[2px] mb-8 w-full bg-gradient-to-r from-blue-900 to-primary-blue border-none" />
-
+      <hr
+        className={`h-[2px] mb-7 w-full border-none bg-gradient-to-r from-base_2-c1 to-primary-blue transition-opacity duration-500 ease-in-out ${isCardHover ? 'opacity-100' : 'opacity-0'}`}
+      />
       <div className="flex absolute -top-8 -left-2 gap-4 p-4 justify-center">
         {project.technologies.map((technology) => (
           <div key={technology.name} className="w-[30px] h-[30px] relative bg-gray-800 p-1 group">
