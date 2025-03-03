@@ -1,7 +1,7 @@
 export enum Category{
-  Sites,
-  Sistemas,
-  Deploy,
-  Wordpress,
+  Sites = 'Sites',
+  Sistemas = 'Sistemas',
+  Deploy = 'Deploy',
+  Wordpress = 'Wordpress',
 
 }

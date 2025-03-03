@@ -1,21 +1,25 @@
 import { StaticImageData } from "next/image";
 
-export enum Technology{
-  React,
-  NextJS,
-  TailwindCSS,
-  Wordpress,
-  Typescript,
-  Javascript,
-  HTML,
-  CSS,
-  PHP,
-  NodeJS,
-  MySQL,
-  Supabase,
-  Java,
-}
+// export enum Technology{
+//   React,
+//   NextJS,
+//   TailwindCSS,
+//   Wordpress,
+//   Typescript,
+//   Javascript,
+//   HTML,
+//   CSS,
+//   PHP,
+//   NodeJS,
+//   MySQL,
+//   Supabase,
+//   Java,
+// }
 
+export interface Technology{
+  name:string;
+  coloredImage:StaticImageData;
+}
 export interface TechnologyGroup{
   label:string;
   technologies:{

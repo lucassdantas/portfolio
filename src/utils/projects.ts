@@ -1,15 +1,26 @@
-import { Category } from "@/types/categoryType";
 import { Project } from "@/types/projectType";
-import { Technology } from "@/types/technologies";
+import { javaTechnology, tailwindTechnology } from "@/utils/technologies";
 
+import portfolio from '@/assets/Projects/portfolio.png'
 export const projects:Project[] = [
   {
     name:'projeto 1',
     description:'projeto',
-    image:'',
+    mainImage:portfolio,
+    galleryImages:[portfolio,portfolio],
     repositoryUrl:'',
     liveProjectUrl:'',
-    category: Category.Wordpress,
-    technologies:[Technology.React,]
-  }
+    category:'Wordpress',
+    technologies:[javaTechnology,]
+  },
+  {
+    name:'projeto 2',
+    description:'projeto 2',
+    mainImage:portfolio,
+    galleryImages:[portfolio,portfolio],
+    repositoryUrl:'',
+    liveProjectUrl:'',
+    category:'Wordpress',
+    technologies:[tailwindTechnology,]
+  },
 ]
