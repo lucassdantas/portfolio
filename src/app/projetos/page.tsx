@@ -16,15 +16,12 @@ const categories = [
 
 export default function Projects() {
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const cs = () => {
-    console.log('aaaaaaaaaaaa')
-  }
+
   // Filtra os projetos com base na categoria selecionada
   const filteredProjects = selectedCategory === 'all'
     ? projects
     : projects.filter(project => project.category === selectedCategory);
 
-    console.log(selectedCategory)
   return (
     <Section limiterClassname='relative h-full' className='text-base_1-a0'>
       <div className='mb-24'>
@@ -38,13 +35,13 @@ export default function Projects() {
       {/* Abas de filtro */}
       <div className='flex gap-4 mb-8'>
         {categories.map(category => (
-          <Button
+          <button
             key={category.value}
             onClick={() => setSelectedCategory(category.value)}
-            className={selectedCategory === category.value ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'} // Alterando o estilo para mostrar qual está selecionado
+            className={selectedCategory === category.value ? 'text-base_1-a1 border-b border-primary-blue ' : ' text-base_2-c0 hover:border-b hover:border-primary-blue hover:text-base_1-a1'} 
           >
             {category.label}
-          </Button>
+          </button>
         ))}
       </div>
 

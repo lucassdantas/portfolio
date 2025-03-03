@@ -25,4 +25,14 @@ export const projects:Project[] = [
     category:'Sites',
     technologies:[tailwindTechnology,]
   },
+  {
+    name:'projeto 2',
+    description:'projeto 2',
+    mainImage:education,
+    galleryImages:[portfolio,education],
+    repositoryUrl:'aaaaaaaaaa',
+    liveProjectUrl:'',
+    category:'Sites',
+    technologies:[tailwindTechnology,]
+  },
 ]
