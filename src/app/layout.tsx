@@ -11,7 +11,8 @@ const inter = Inter({
 });
 
 const mina = Mina({
-  weight:'400'
+  weight:'400',
+  subsets:['latin']
 });
 
 export const metadata: Metadata = {
