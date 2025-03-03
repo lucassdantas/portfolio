@@ -9,7 +9,7 @@ export const projects:Project[] = [
     mainImage:portfolio,
     galleryImages:[portfolio,portfolio],
     repositoryUrl:'',
-    liveProjectUrl:'',
+    liveProjectUrl:'aaaaaaaaaaaaaaaaaaaaaa',
     category:'Wordpress',
     technologies:[javaTechnology,]
   },
@@ -18,7 +18,7 @@ export const projects:Project[] = [
     description:'projeto 2',
     mainImage:portfolio,
     galleryImages:[portfolio,portfolio],
-    repositoryUrl:'',
+    repositoryUrl:'aaaaaaaaaa',
     liveProjectUrl:'',
     category:'Wordpress',
     technologies:[tailwindTechnology,]

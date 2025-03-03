@@ -26,7 +26,7 @@ export const Technologies = () => {
                   className='absolute inset-0 w-full h-full opacity-0 transition-opacity duration-300 group-hover:opacity-100 p-1'
                 />
                 {/* Tooltip (Nome da tecnologia) */}
-                <span className="absolute left-1/2 -bottom-8 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <span className="absolute left-1/2 -bottom-8 transform -translate-x-1/2 bg-gray-900 text-base_1-a0  text-xs px-2 py-1 rounded opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                   {technology.name}
                 </span>
               </div>
