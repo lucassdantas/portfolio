@@ -17,27 +17,27 @@ export const EducationAccordion = () => {
 
   return (
     <div className="relative flex">
-      <div className='w-1/2 relative'>
+      <div className='w-1/3 relative'>
         <div className="flex flex-col gap-6">
           <div className="absolute right-0 top-0 h-full border-l-2 border-primary-blue"></div>
           {educations.map((experience, index) => {
             const isExpanded = expandedIndex === index;
             return (
               <div key={'i1'+index} className=" pr-6 ">
-                <div className="flex flex-col justify-between items-center pr-2 pl-2 pb-4">
+                <div className="flex flex-col items-start pr-2 pl-4">
                   <AccordionSquare isExpanded={isExpanded} index={index} toggleAccordion={toggleAccordion}/>
                   <AccordionHeader title={experience.course} index={index} period={experience.period} company={experience.institution} toggleAccordion={toggleAccordion} isExpanded={isExpanded}/>
                 </div>
-                <hr className='w-full border-base_1-a0 mt-4 mb-1'></hr>
+                <hr className='w-full border-base_1-a0  mb-1'></hr>
               </div>
             );
           })}
         </div>
       </div>
 
-      <div className='w-1/2 flex justify-center'>
-        <ul>
-        {currentContent.map((content, i) => (<li key={i} className=''>{content}</li>))}
+      <div className='w-2/3 px-24 flex justify-center'>
+        <ul className='border-b-8 border-primary-blue w-full list-disc  '>
+          {currentContent.map((content, i) => (<li key={i} className={`${(i+1)%3===0&&i!==0? 'mb-4':''}`}>{content}</li>))}
         </ul>
       </div>
     </div>

@@ -2,6 +2,6 @@ export interface Certificate {
   period:string;
   url?:string;
   title:string;
-  description:string;
+  institution:string;
   hours:number
 }

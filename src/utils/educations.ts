@@ -7,7 +7,11 @@ export const educations:Education[] = [
     institution:'Faculdade descomplica',
     descriptionList:[
       'aaa',
-      'bbb,'
+      'bbb,',
+      'bbb,',
+      'bbb,',
+      'bbb,',
+      'bbb,',
     ],
   },
   {

@@ -1,0 +1,46 @@
+import { Certificate } from "@/types/certificatesType";
+
+export const certifications:Certificate[] = [
+  {
+    period:'mês/ano',
+    title:'Título',
+    url:'aaaaa',
+    institution:'Rocketseat',
+    hours:37
+  },
+  {
+    period:'mês/ano',
+    title:'Título3',
+    url:'aaaaa',
+    institution:'Rocketseat',
+    hours:37
+  },
+  {
+    period:'mês/ano',
+    title:'Título2',
+    url:'aaaaa',
+    institution:'Rocketseat',
+    hours:37
+  },
+  {
+    period:'mês/ano',
+    title:'Título2',
+    url:'aaaaa',
+    institution:'Rocketseat',
+    hours:37
+  },
+  {
+    period:'mês/ano',
+    title:'Título2',
+    url:'aaaaa',
+    institution:'Rocketseat',
+    hours:37
+  },
+  {
+    period:'mês/ano',
+    title:'Título2',
+    url:'aaaaa',
+    institution:'Rocketseat',
+    hours:37
+  },
+]
