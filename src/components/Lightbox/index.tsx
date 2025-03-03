@@ -1,8 +1,8 @@
 import Image, { StaticImageData } from "next/image";
-import { useState } from "react";
+import { useEffect } from "react";
 
 interface LightboxProps {
-  images: StaticImageData[];
+  images: StaticImageData[]; // Mudado para string[] para lidar com URLs de imagem
   currentIndex: number;
   onClose: () => void;
   onPrev: () => void;
@@ -16,8 +16,27 @@ export const Lightbox = ({
   onPrev,
   onNext,
 }: LightboxProps) => {
+  
+  useEffect(() => {
+    // Função para fechar a lightbox quando a tecla ESC for pressionada
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    // Adiciona o listener para o evento de pressionamento de tecla
+    document.addEventListener("keydown", handleKeyDown);
+
+    // Remove o listener quando o componente for desmontado ou fechado
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
+    <div className="fixed inset-0 flex justify-center items-center z-50">
+      <div className="fixed inset-0 bg-black bg-opacity-75" onClick={onClose}></div>
       <div className="relative w-full max-w-3xl">
         {/* Botão de Fechar */}
         <button
@@ -53,5 +72,3 @@ export const Lightbox = ({
     </div>
   );
 };
-
-

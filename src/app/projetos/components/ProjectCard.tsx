@@ -25,15 +25,12 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
   // Funções para navegação entre as imagens
   const goToNext = () => {
-    console.log(currentIndex)
     setCurrentIndex((prevIndex) =>
       prevIndex < project.galleryImages.length ? prevIndex + 1 : prevIndex
     );
   };
   
   const goToPrev = () => {
-    console.log(currentIndex)
-
     setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
   };
 
@@ -64,7 +61,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
               width={300}
               height={200}
               onClick={() => handleImageClick(0)} // Clica para abrir a lightbox
-              className="cursor-pointer"
+              className="cursor-pointer w-[300px] h-[200px]  object-cover"
             />
           </div>
 
@@ -74,18 +71,18 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
                 key={index}
                 src={image}
                 alt={`${project.name} gallery`}
-                width={150}
-                height={100}
-                onClick={() => handleImageClick(index)} // Clica para abrir a lightbox
-                className="cursor-pointer"
+                width={120}
+                height={80}
+                onClick={() => handleImageClick(index+1)} // Clica para abrir a lightbox
+                className="cursor-pointer w-[120px] h-[80px]"
               />
             ))}
           </div>
         </div>
 
-        <div className="text-center p-4">
+        <div className="text-center p-4 text-base_1-a0">
           <h3 className="text-xl font-bold">{project.name}</h3>
-          <p className="text-gray-600">{project.description}</p>
+          <p >{project.description}</p>
         </div>
 
         <div className="flex justify-center gap-4 pb-4">
