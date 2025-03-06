@@ -5,7 +5,7 @@ import euaFlag from '@/assets/bandeira-dos-eua.jpg'
 
 type LanguageProps = {
   className?:string;
-  currentLanguage:string;
+  currentLanguage?:string;
 }
 export const LanguagesFlags = ({className='', currentLanguage='pt-br'}:LanguageProps) => {
   return (

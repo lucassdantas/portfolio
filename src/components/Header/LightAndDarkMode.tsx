@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaMoon } from "react-icons/fa";
 
-export const LightAndDarkMode = ({className=''}:{className:string}) => {
+export const LightAndDarkMode = ({className=''}:{className?:string}) => {
   return (
     <div className={'p-2 flex items-center justify-between bg-base_2-c1 ' + className}>
       <div className='relative w-[50%]'>
