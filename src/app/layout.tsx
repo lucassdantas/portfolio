@@ -11,7 +11,8 @@ const inter = Inter({
 });
 
 const mina = Mina({
-  weight:'400',
+  weight:'700',
+  
   subsets:['latin']
 });
 
@@ -23,12 +24,14 @@ export const metadata: Metadata = {
 export default function RootLayout({children}:Readonly<{children: React.ReactNode;}>) {
   return (
     <html lang="pt-br">
-      <body className={`${inter.className} antialiased bg-gradient-to-br from-primary-darkBlue to-base_2-c1 dark:text-white w-screen`}>
+      <body className={`${inter.className} overflow-x-hidden antialiased bg-gradient-to-br from-primary-darkBlue to-base_2-c1 dark:text-white w-screen`}>
         <Limiter>
           <Header/>
-          <div className="flex gap-12 ">
+          <div className="flex gap-12 lg:pt-0 pt-12 overflo-x-hidden">
             <Sidebar/>
-            {children}
+            <main className='relative overflow-x-hidden'>
+              {children}
+            </main>
           </div>
           <Footer/>
         </Limiter>

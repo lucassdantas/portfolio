@@ -4,7 +4,7 @@ import React from 'react'
 
 export const Header = () => {
   return (
-    <header className='relative flex justify-between items-center w-full lg:mb-12 lg:mt-4'>
+    <header className='relative flex justify-between items-center w-full lg:mb-12 lg:mt-4 overflow-x-hidden'>
       <DesktopHeader/>
       <MobileHeader/>
     </header>

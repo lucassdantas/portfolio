@@ -15,7 +15,7 @@ export const InfoIcon = ({icon, url='', content}:InfoProps) => {
         <Icons icon={icon} bgClassName='bg-base_1-a12' className='text-base_1-a3'/> 
         {url?<Link href={url}>{content}</Link>:<span>{content}</span>}
       </li>
-      <Separator className='w-[50px] h-[2px] bg-neutral-100'/>
+      <Separator className='w-[50px] h-[2px] lg:bg-neutral-100 bg-base_1-a5'/>
     </>
   )
 }
