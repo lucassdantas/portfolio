@@ -12,7 +12,7 @@ export const MobileHeader = () => {
         <MobileToggleButton isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen}/>
       </div>
       <div className='bg-gradient-to-r from-primary-purple to-primary-blue w-full h-[3px] mt-4'></div>
-      <MobileSideBar isMenuOpen={isMenuOpen}/>
+      <MobileSideBar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen}/>
     </div>
   )
 }

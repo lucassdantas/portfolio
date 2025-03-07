@@ -10,7 +10,7 @@ type SectionProps = {
 export const Section = ({children, className='', limiterClassname='', id=''}:SectionProps) => {
   return (
   <section className={`${className}`} id={id}>
-    <Limiter className={`xl:px-0 px-4 ${limiterClassname}`}>
+    <Limiter className={`xl:px-0 px-6 ${limiterClassname}`}>
       {children}
     </Limiter>
   </section>

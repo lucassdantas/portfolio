@@ -4,14 +4,14 @@ import { Nav } from '@/components/Header/Nav'
 import { Button } from '@/components/Sidebar/components/Button'
 import React from 'react'
 
-export const MobileSideBar = ({isMenuOpen}:{isMenuOpen:boolean}) => {
+export const MobileSideBar = ({isMenuOpen, setIsMenuOpen}:{isMenuOpen:boolean, setIsMenuOpen:(isMenuOpen:boolean) => void}) => {
   if(isMenuOpen) return (
-    <div className='fixed text-right p-8 top-9 left-0 w-screen h-screen bg-base_2-b8 z-10'>
+    <div className='fixed text-right p-8 top-10 left-0 w-screen h-screen bg-base_2-b8 z-10'>
         <div className='flex justify-between items-center mb-12'>
           <LanguagesFlags/>
           <LightAndDarkMode/>
         </div>
-        <Nav className='text-base_1-a0 flex-col items-end text-3xl'/>
+        <Nav className='text-base_1-a0 flex-col items-end text-3xl' setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen}/>
         <div className='w-full flex justify-end mt-12'>
           <Button/>
         </div>

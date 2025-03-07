@@ -1,7 +1,15 @@
+'use client'
 import Link from 'next/link'
 import React from 'react'
 
-export const Nav = ({className='', navClassName=''}:{className?:string, navClassName?:string}) => {
+interface NavProps{
+  className?:string;
+  navClassName?:string;
+  setIsMenuOpen:(isMenuOpen:boolean) => void;
+  isMenuOpen:boolean;
+}
+
+export const Nav = ({className='', navClassName='', setIsMenuOpen, isMenuOpen}:NavProps) => {
   const navMenus = [
     {content:'Sobre',       url:'/sobre'},
     {content:'Experiência', url:'/experiencias'},
@@ -9,7 +17,7 @@ export const Nav = ({className='', navClassName=''}:{className?:string, navClass
     {content:'Educação',    url:'/educacao'},
   ]
   return (
-    <nav className={`${navClassName}`}>
+    <nav className={`${navClassName}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
       <ul className={'flex gap-4 text-2xl'+className}>
         {navMenus.map((menu, i) => <Link key={i} href={menu.url} className='hover:border hover:border-primary-blue p-4'><li>{menu.content}</li></Link>)}
       </ul>
