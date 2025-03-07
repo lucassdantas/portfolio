@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Project } from "@/types/projectType";
 import { Lightbox } from "@/components/Lightbox";
 import { CardTechnologies } from "@/app/projetos/components/ProjectCard/CardTechnologies";
@@ -20,6 +20,7 @@ export const ProjectCard = ({ project, cardIndex, isHovered, setHoveredCardIndex
     <div
       className="relative w-full lg:w-[47%] max-w-4xl "
       onMouseEnter={() => setHoveredCardIndex(cardIndex)}
+      onClick={() => setHoveredCardIndex(cardIndex)}
     >
       <CardTechnologies project={project} isCardHover={isHovered} />
 

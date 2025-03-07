@@ -31,12 +31,12 @@ export default function Projects() {
       </div>
 
       {/* Abas de filtro */}
-      <div className='flex gap-4 mb-12'>
+      <div className='flex gap-4 mb-12 overflow-x-scroll w-full scrollbar-hidden py-4'>
         {categories.map(category => (
           <button
             key={category.value}
             onClick={() => setSelectedCategory(category.value)}
-            className={selectedCategory === category.value ? 'text-base_1-a1 border-b border-primary-blue ' : ' text-base_2-c0 hover:border-b hover:border-primary-blue hover:text-base_1-a1'} 
+            className={`text-xl min-w-max ${selectedCategory === category.value ? 'text-base_1-a1 border-b border-primary-blue ' : ' text-base_2-c0 hover:border-b hover:border-primary-blue hover:text-base_1-a1'}`} 
           >
             {category.label}
           </button>
