@@ -14,7 +14,7 @@ export default function About () {
         <Title tag='h1' isBigText={true} className='font-extrabold text-2xl'>Desenvolvedor Web</Title>
         <p className='lg:text-2xl text-base text-base_1-a0 '>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque at convallis turpis. Proin sit amet eros a justo malesuada facilisis. Integer auctor, ex a vestibulum hendrerit, felis purus facilisis velit, eu luctus.</p>
       </div>
-      <div className='lg:hidden flex flex-col items-center pt-12 w-full'>
+      <div className='lg:hidden flex flex-col items-center pt-12 mb-12 w-full'>
         <ImageWithSquares/>
         <SocialNetworks/>
         <PersonalInfos/>
