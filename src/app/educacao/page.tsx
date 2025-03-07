@@ -9,8 +9,8 @@ export default function Education () {
   return (
     <Section limiterClassname='h-full' className=' text-base_1-a0'>
       <div className='mb-24'>
-        <Title tag='h1' className='font-extrabold'>Educação</Title>
-        <p className=''>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque at convallis turpis. Proin sit amet eros a justo malesuada facilisis. Integer auctor, ex a vestibulum hendrerit, felis purus facilisis velit, eu luctus.</p>
+        <Title tag='h1' className='font-extrabold mb-4'>Educação</Title>
+        <p className=''>Sempre acreditei que a base para um bom desenvolvedor é a busca constante pelo conhecimento. Minha formação combina ensino acadêmico, técnico e certificações especializadas, permitindo que eu esteja sempre atualizado com as melhores práticas e tecnologias do mercado.</p>
       </div>
       <div className='mb-12'>
         <EducationAccordion/>

@@ -12,7 +12,7 @@ export default function About () {
       <div className='h-1/2 '>
         <Title tag='h2' className='font-bold text-2xl'>Lucas Dantas</Title>
         <Title tag='h1' isBigText={true} className='font-extrabold text-2xl'>Desenvolvedor Web</Title>
-        <p className='lg:text-2xl text-base text-base_1-a0 '>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque at convallis turpis. Proin sit amet eros a justo malesuada facilisis. Integer auctor, ex a vestibulum hendrerit, felis purus facilisis velit, eu luctus.</p>
+        <p className='lg:text-2xl text-base text-base_1-a0 '>A tecnologia sempre foi minha paixão, e transformá-la em soluções reais é o que me motiva todos os dias. Como desenvolvedor web, construo aplicações robustas e escaláveis, focadas em performance, usabilidade e inovação. Meu objetivo é criar experiências digitais impactantes, alinhando código limpo, boas práticas e tecnologias modernas.</p>
       </div>
       <div className='lg:hidden flex flex-col items-center pt-12 mb-12 w-full'>
         <ImageWithSquares/>
@@ -21,7 +21,7 @@ export default function About () {
       </div>
       <div className='h-1/2 text-left'>
         <Title tag='h2' className='text-3xl font-bold '>Técnologias</Title>
-        <p className='mb-4'>Lorem ipsum sit amet, consectur</p>
+        <p className='mb-4'> tecnologia certa faz toda a diferença. Trabalho com um stack moderno e eficiente, combinando linguagens e frameworks poderosos para entregar soluções de alta qualidade.</p>
         <Technologies/>
       </div>
     </Section>

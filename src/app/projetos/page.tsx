@@ -26,8 +26,8 @@ export default function Projects() {
   return (
     <Section limiterClassname='relative h-full' className='text-base_1-a0'>
       <div className='mb-24'>
-        <Title tag='h1' className='font-extrabold'>Projetos</Title>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+        <Title tag='h1' className='font-extrabold mb-4'>Projetos</Title>
+        <p>Ao longo da minha jornada como desenvolvedor web, trabalhei em diversos projetos que abrangem desde aplicações empresariais e e-commerces até soluções personalizadas para clientes individuais. Cada projeto representou um desafio único, onde pude aplicar minhas habilidades para criar experiências digitais eficientes e escaláveis.</p>
       </div>
 
       {/* Abas de filtro */}

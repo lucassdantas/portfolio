@@ -5,7 +5,7 @@ import React from 'react'
 export const CardBody = ({project}:{project:Project}) => {
   return (
     <>
-      <div className="text-center p-4 text-base_1-a0">
+      <div className="text-left p-4 text-base_1-a0">
         <h3 className="text-xl font-bold">{project.name}</h3>
         <p >{project.description}</p>
       </div>

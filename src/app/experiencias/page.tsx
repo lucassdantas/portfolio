@@ -8,7 +8,7 @@ export default function Experiences () {
     <Section limiterClassname='relative  h-full' className=' text-base_1-a0'>
       <div className='mb-24'>
         <Title tag='h1' className='font-extrabold mb-4 '>Experiências</Title>
-        <p className=''>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque at convallis turpis. Proin sit amet eros a justo malesuada facilisis. Integer auctor, ex a vestibulum hendrerit, felis purus facilisis velit, eu luctus.</p>
+        <p className=''>Ao longo da minha carreira como desenvolvedor web, trabalhei em diversas empresas e projetos, desenvolvendo aplicações modernas e escaláveis. Atuei no front-end e back-end, contribuindo com novas funcionalidades, otimização de sistemas, refatoração de código e integrações com APIs, sempre seguindo boas práticas de desenvolvimento para garantir código limpo, eficiente e de fácil manutenção.</p>
       </div>
       <div>
         <ExperiencesAccordion/>
