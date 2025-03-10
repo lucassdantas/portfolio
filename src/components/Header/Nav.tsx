@@ -5,11 +5,11 @@ import React from 'react'
 interface NavProps{
   className?:string;
   navClassName?:string;
-  setIsMenuOpen:(isMenuOpen:boolean) => void;
-  isMenuOpen:boolean;
+  setIsMenuOpen?:(isMenuOpen:boolean) => void;
+  isMenuOpen?:boolean;
 }
 
-export const Nav = ({className='', navClassName='', setIsMenuOpen, isMenuOpen}:NavProps) => {
+export const Nav = ({className='', navClassName='', setIsMenuOpen=() => {''}, isMenuOpen=false}:NavProps) => {
   const navMenus = [
     {content:'Sobre',       url:'/sobre'},
     {content:'Experiência', url:'/experiencias'},

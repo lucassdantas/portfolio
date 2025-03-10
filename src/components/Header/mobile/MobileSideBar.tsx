@@ -8,8 +8,8 @@ export const MobileSideBar = ({isMenuOpen, setIsMenuOpen}:{isMenuOpen:boolean, s
   if(isMenuOpen) return (
     <div className='fixed text-right p-8 top-10 left-0 w-screen h-screen bg-base_2-b8 z-10'>
         <div className='flex justify-between items-center mb-12'>
-          <LanguagesFlags/>
-          <LightAndDarkMode/>
+          {/* <LanguagesFlags/>
+          <LightAndDarkMode/> */}
         </div>
         <Nav className='text-base_1-a0 flex-col items-end text-3xl' setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen}/>
         <div className='w-full flex justify-end mt-12'>
