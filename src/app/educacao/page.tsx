@@ -17,7 +17,7 @@ export default function Education () {
       </div>
       <div>
         <Title tag={'h2'} className='text-3xl font-bold mb-8'>Certificados</Title>
-        <div className="flex gap-x-8 gap-y-12 flex-wrap">
+        <div className="flex justify-between gap-x-8 gap-y-12 flex-wrap">
           {certifications.map((certificate, i) => (
             <CertificateCard certificate={certificate} key={i}/>
           ))}

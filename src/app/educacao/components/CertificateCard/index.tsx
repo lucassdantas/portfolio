@@ -9,7 +9,7 @@ interface CertificateCardProps{
 }
 export const CertificateCard = ({certificate}:CertificateCardProps) => {
   return (
-    <div className='relative bg-base_1-a0 text-black p-3 lg:w-[30%]'>
+    <div className='relative bg-base_1-a0 text-black p-3 lg:w-[30%] sm:w-[45%] w-full'>
       <div className='absolute bg-base_2-c1 w-full h-full -z-10 -bottom-4 -right-4'></div>
       <div className='flex justify-between'>
         <span className='text-sm'>{certificate.period}</span>

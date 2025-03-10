@@ -12,7 +12,7 @@ export default function About () {
       <div className='h-1/2 '>
         <Title tag='h2' className='font-bold text-2xl'>Lucas Dantas</Title>
         <Title tag='h1' isBigText={true} className='font-extrabold text-2xl'>Desenvolvedor Web</Title>
-        <p className='lg:text-2xl text-base text-base_1-a0 '>A tecnologia sempre foi minha paixão, e transformá-la em soluções reais é o que me motiva todos os dias. Como desenvolvedor web, construo aplicações robustas e escaláveis, focadas em performance, usabilidade e inovação. Meu objetivo é criar experiências digitais impactantes, alinhando código limpo, boas práticas e tecnologias modernas.</p>
+        <p className='lg:text-2xl text-base text-base_1-a0 '>A tecnologia sempre foi minha paixão, e transformá-la em soluções reais me motiva diariamente. Como desenvolvedor web, foco em performance, usabilidade e inovação para criar experiências digitais impactantes com código limpo e boas práticas.</p>
       </div>
       <div className='lg:hidden flex flex-col items-center pt-12 mb-12 w-full'>
         <ImageWithSquares/>
