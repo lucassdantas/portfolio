@@ -8,7 +8,7 @@ import autovistoria3 from '@/assets/Projects/sites/wordpress/autovistoria-predia
 import seutreino from '@/assets/Projects/sites/wordpress/seu-treino/seu-treino-main.jpg'
 import seutreino2 from '@/assets/Projects/sites/wordpress/seu-treino/seu-treino-sobre.jpg'
 import seutreino3 from '@/assets/Projects/sites/wordpress/seu-treino/seu-treino-calculadora.jpg'
-export const sites:Project[] = [
+export const wordpress:Project[] = [
   
   {
     name:'Seu Treino',
