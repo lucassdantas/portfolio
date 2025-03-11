@@ -4,13 +4,33 @@ import { githubTechnology, gitTechnology, javaTechnology, nextJSTechnology, node
 import seutreino28dias from '@/assets/Projects/sites/seu-treino-28-dias/seu-treino-28-dias-main.jpg'
 import seutreino28dias2 from '@/assets/Projects/sites/seu-treino-28-dias/seu-treino-28-dias-sessao.jpg'
 import seutreino28dias3 from '@/assets/Projects/sites/seu-treino-28-dias/seu-treino-28-dias-sobre.jpg'
+
+import postfast from '@/assets/Projects/sites/postfast/postfast-main.jpg'
+import postfast2 from '@/assets/Projects/sites/postfast/postfast-conectando.jpg'
+import postfast3 from '@/assets/Projects/sites/postfast/postfast-banner.jpg'
+
+import carlosPsi from '@/assets/Projects/sites/carlos-psicanalista/carlos-psicanalista-main.jpg'
+import carlosPsi2 from '@/assets/Projects/sites/carlos-psicanalista/carlos-psicanalista-cards.jpg'
+import carlosPsi3 from '@/assets/Projects/sites/carlos-psicanalista/carlos-psicanalista-vantagens.jpg'
+
+import carneiro from '@/assets/Projects/sites/carneiro-e-carbalito/carneiro-main.jpg'
+import carneiro2 from '@/assets/Projects/sites/carneiro-e-carbalito/carneiro-form.jpg'
+import carneiro3 from '@/assets/Projects/sites/carneiro-e-carbalito/carneiro-banner.jpg'
+
+import corpore from '@/assets/Projects/sites/corpore/corpore-main.jpg'
+import corpore2 from '@/assets/Projects/sites/corpore/corpore-banner.jpg'
+import corpore3 from '@/assets/Projects/sites/corpore/corpore-cards.jpg'
+
+import thialita from '@/assets/Projects/sites/thialita-power-boss/thialita.jpg'
+import thialita2 from '@/assets/Projects/sites/thialita-power-boss/thialita-rodape.jpg'
+import thialita3 from '@/assets/Projects/sites/thialita-power-boss/thialita-cronometro.jpg'
 export const sites:Project[] = [
   
   {
     name:'Postfast',
     description:'Landing page feita com Next e Tailwind. Configurei hospedagem em VPS',
-    mainImage:seutreino28dias,
-    galleryImages:[seutreino28dias2, seutreino28dias3],
+    mainImage:postfast,
+    galleryImages:[postfast2, postfast3],
     repositoryUrl:'',
     liveProjectUrl:'https://www.postfast.com.br/',
     category:'Sites',
@@ -28,11 +48,11 @@ export const sites:Project[] = [
   },
   {
     name:'Thialita',
-    description:'Landing page feita com Next e Tailwind, formulários com formJS',
-    mainImage:seutreino28dias,
-    galleryImages:[seutreino28dias2, seutreino28dias3],
+    description:'Landing page feita com Next e Tailwind, formulários com EmailJS',
+    mainImage:thialita,
+    galleryImages:[thialita2, thialita3],
     repositoryUrl:'',
-    liveProjectUrl:'https://www.thialitasilva.com.br/',
+    liveProjectUrl:'https://www.thialitasilva.com.br/power-boss',
     category:'Sites',
     technologies:[nextJSTechnology, tailwindTechnology]
   },
@@ -59,8 +79,8 @@ export const sites:Project[] = [
   {
     name:'Corpore',
     description:'Site onepage para a clínica de fisioterapia Corpore',
-    mainImage:seutreino28dias,
-    galleryImages:[seutreino28dias2, seutreino28dias3],
+    mainImage:corpore,
+    galleryImages:[corpore2, corpore3],
     repositoryUrl:'https://github.com/lucassdantas/corporetorre',
     liveProjectUrl:'https://www.corporetorre.com.br/',
     category:'Sites',
@@ -69,8 +89,8 @@ export const sites:Project[] = [
   {
     name:'Carneiro e Carballido',
     description:'Site instutucional para empresa de contabilidade',
-    mainImage:seutreino28dias,
-    galleryImages:[seutreino28dias2, seutreino28dias3],
+    mainImage:carneiro,
+    galleryImages:[carneiro2, carneiro3],
     repositoryUrl:'https://github.com/lucassdantas/Carneiro-e-Carballido',
     liveProjectUrl:'https://cecconsultores.com.br/',
     category:'Sites',
@@ -79,8 +99,8 @@ export const sites:Project[] = [
   {
     name:'Carlos Psicanalista',
     description:'LP para psicanalista',
-    mainImage:seutreino28dias,
-    galleryImages:[seutreino28dias2, seutreino28dias3],
+    mainImage:carlosPsi,
+    galleryImages:[carlosPsi2, carlosPsi3],
     repositoryUrl:'https://github.com/lucassdantas/carlos-psicanalista-nextjs',
     liveProjectUrl:'https://www.carlosalbertopsicanalista.com.br/',
     category:'Sites',
