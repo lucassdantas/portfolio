@@ -3,11 +3,11 @@ import { Section } from '@/components/Section';
 import { Title } from '@/components/Title';
 import { useState } from 'react';
 import { projects } from '@/utils/projects';
-import { Button } from '@/components/Button';
 import { ProjectCard } from '@/app/projetos/components/ProjectCard';
 
 const categories = [
   { label: 'Todos', value: 'all' },
+  { label: 'Aplicações', value: 'Aplicações' },
   { label: 'Sites', value: 'Sites' },
   { label: 'Sistemas', value: 'Sistemas' },
   { label: 'Deploy', value: 'Deploy' },
