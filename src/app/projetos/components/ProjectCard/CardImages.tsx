@@ -4,9 +4,10 @@ import React from 'react'
 
 interface CardImagesProps {
   project:Project;
-  handleImageClick: (index:number) => any
+  handleImageClick: (index:number) => any;
+  setIsLightboxOpen: (isLightboxOpen:boolean) => any;
 }
-export const CardImages = ({project, handleImageClick}:CardImagesProps) => {
+export const CardImages = ({project, handleImageClick, setIsLightboxOpen}:CardImagesProps) => {
   return (
     <div className="flex">
       <div className="flex-1 w-3/4">
@@ -15,7 +16,7 @@ export const CardImages = ({project, handleImageClick}:CardImagesProps) => {
           alt={project.name}
           width={300}
           height={200}
-          onClick={() => handleImageClick(0)} // Clica para abrir a lightbox
+          onClick={() => {handleImageClick(0); setIsLightboxOpen(true)}} // Clica para abrir a lightbox
           className="cursor-pointer w-[300px] h-[200px]  object-cover"
         />
       </div>
@@ -28,8 +29,8 @@ export const CardImages = ({project, handleImageClick}:CardImagesProps) => {
             alt={`${project.name} gallery`}
             width={120}
             height={80}
-            onClick={() => handleImageClick(index+1)} // Clica para abrir a lightbox
-            className="cursor-pointer w-[120px] h-[80px]"
+            onClick={() => {handleImageClick(index+1); setIsLightboxOpen(true)}} // Clica para abrir a lightbox
+            className="cursor-pointer w-[120px] h-[80px] object-cover"
           />
         ))}
       </div>

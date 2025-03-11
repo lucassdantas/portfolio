@@ -25,7 +25,7 @@ export const ProjectCard = ({ project, cardIndex, isHovered, setHoveredCardIndex
       <CardTechnologies project={project} isCardHover={isHovered} />
 
       <div className="flex flex-col items-start gap-4 p-4 bg-base_2-b0">
-        <CardImages project={project} handleImageClick={setCurrentIndex} />
+        <CardImages project={project} setIsLightboxOpen={setIsLightboxOpen} handleImageClick={setCurrentIndex} />
         <CardBody project={project} />
       </div>
 
