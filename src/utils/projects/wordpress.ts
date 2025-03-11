@@ -30,15 +30,5 @@ export const wordpress:Project[] = [
     category:'Wordpress',
     technologies:[wordpressTechnology]
   },
-  {
-    name:'Seu Treino - 28 dias para mudar',
-    description:'Landing page feita com React e Tailwind',
-    mainImage:autovistoria,
-    galleryImages:[autovistoria2, autovistoria3],
-    repositoryUrl:'',
-    liveProjectUrl:'https://seutreino.com/28-dias-para-mudar/',
-    category:'Wordpress',
-    technologies:[reactJSTechnology, tailwindTechnology]
-  },
  
 ]

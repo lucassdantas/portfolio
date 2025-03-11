@@ -13,7 +13,7 @@ export const sites:Project[] = [
     galleryImages:[seutreino28dias2, seutreino28dias3],
     repositoryUrl:'',
     liveProjectUrl:'https://www.postfast.com.br/',
-    category:'Site',
+    category:'Sites',
     technologies:[nextJSTechnology, tailwindTechnology, nodeJSTechnology, gitTechnology, githubTechnology]
   },
   {
@@ -23,7 +23,7 @@ export const sites:Project[] = [
     galleryImages:[seutreino28dias2, seutreino28dias3],
     repositoryUrl:'https://github.com/lucassdantas/seu-treino-28-dias-lp',
     liveProjectUrl:'https://seutreino.com/28-dias-para-mudar/',
-    category:'Site',
+    category:'Sites',
     technologies:[reactJSTechnology, tailwindTechnology]
   },
   {
@@ -33,7 +33,7 @@ export const sites:Project[] = [
     galleryImages:[seutreino28dias2, seutreino28dias3],
     repositoryUrl:'',
     liveProjectUrl:'https://www.thialitasilva.com.br/',
-    category:'Site',
+    category:'Sites',
     technologies:[nextJSTechnology, tailwindTechnology]
   },
   {
@@ -43,7 +43,7 @@ export const sites:Project[] = [
     galleryImages:[seutreino28dias2, seutreino28dias3],
     repositoryUrl:'https://github.com/lucassdantas/diagonal-ag',
     liveProjectUrl:'https://diagonal.ag/',
-    category:'Site',
+    category:'Sites',
     technologies:[reactJSTechnology, tailwindTechnology, phpTechnology, gitTechnology, githubTechnology]
   },
   {
@@ -53,7 +53,7 @@ export const sites:Project[] = [
     galleryImages:[seutreino28dias2, seutreino28dias3],
     repositoryUrl:'https://github.com/lucassdantas/rbdsre-revista-ibremp',
     liveProjectUrl:'https://rbdsre.ibremp.org.br/',
-    category:'Site',
+    category:'Sites',
     technologies:[nextJSTechnology, tailwindTechnology, gitTechnology, githubTechnology]
   },
   {
@@ -63,7 +63,7 @@ export const sites:Project[] = [
     galleryImages:[seutreino28dias2, seutreino28dias3],
     repositoryUrl:'https://github.com/lucassdantas/corporetorre',
     liveProjectUrl:'https://www.corporetorre.com.br/',
-    category:'Site',
+    category:'Sites',
     technologies:[reactJSTechnology, tailwindTechnology, phpTechnology, gitTechnology, githubTechnology]
   },
   {
@@ -73,7 +73,7 @@ export const sites:Project[] = [
     galleryImages:[seutreino28dias2, seutreino28dias3],
     repositoryUrl:'https://github.com/lucassdantas/Carneiro-e-Carballido',
     liveProjectUrl:'https://cecconsultores.com.br/',
-    category:'Site',
+    category:'Sites',
     technologies:[reactJSTechnology, tailwindTechnology, phpTechnology, gitTechnology, githubTechnology]
   },
   {
@@ -83,7 +83,7 @@ export const sites:Project[] = [
     galleryImages:[seutreino28dias2, seutreino28dias3],
     repositoryUrl:'https://github.com/lucassdantas/carlos-psicanalista-nextjs',
     liveProjectUrl:'https://www.carlosalbertopsicanalista.com.br/',
-    category:'Site',
+    category:'Sites',
     technologies:[nextJSTechnology, tailwindTechnology, gitTechnology, githubTechnology]
   },
   {
@@ -93,7 +93,7 @@ export const sites:Project[] = [
     galleryImages:[seutreino28dias2, seutreino28dias3],
     repositoryUrl:'https://github.com/lucassdantas/lucassdantas.github.io/tree/main/sites/catolica',
     liveProjectUrl:'https://lucassdantas.github.io/sites/catolica/',
-    category:'Site',
+    category:'Sites',
     technologies:[reactJSTechnology, tailwindTechnology]
   },
  
