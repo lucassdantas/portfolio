@@ -24,6 +24,20 @@ import corpore3 from '@/assets/Projects/sites/corpore/corpore-cards.jpg'
 import thialita from '@/assets/Projects/sites/thialita-power-boss/thialita.jpg'
 import thialita2 from '@/assets/Projects/sites/thialita-power-boss/thialita-rodape.jpg'
 import thialita3 from '@/assets/Projects/sites/thialita-power-boss/thialita-cronometro.jpg'
+
+import diagonal from'@/assets/Projects/sites/diagonal/diagonal-main.jpg'
+import diagonal2 from'@/assets/Projects/sites/diagonal/diagonal-form.jpg'
+import diagonal3 from'@/assets/Projects/sites/diagonal/diagonal-partners.jpg'
+
+import minhaBiblioteca from '@/assets/Projects/sites/minha-biblioteca/minha-biblioteca-main.jpg'
+import minhaBiblioteca2 from '@/assets/Projects/sites/minha-biblioteca/minha-biblioteca-cards.jpg'
+import minhaBiblioteca3 from '@/assets/Projects/sites/minha-biblioteca/minha-biblioteca-video.jpg'
+
+import ibremp from '@/assets/Projects/sites/ibremp/ibremp-main.jpg'
+import ibremp2 from '@/assets/Projects/sites/ibremp/ibremp-contato.jpg'
+import ibremp3 from '@/assets/Projects/sites/ibremp/ibremp-regulamento.jpg'
+
+
 export const sites:Project[] = [
   
   {
@@ -59,8 +73,8 @@ export const sites:Project[] = [
   {
     name:'Diagonal Ag',
     description:'Site onepage para agência Diagonal',
-    mainImage:seutreino28dias,
-    galleryImages:[seutreino28dias2, seutreino28dias3],
+    mainImage:diagonal,
+    galleryImages:[diagonal2, diagonal3],
     repositoryUrl:'https://github.com/lucassdantas/diagonal-ag',
     liveProjectUrl:'https://diagonal.ag/',
     category:'Sites',
@@ -69,8 +83,8 @@ export const sites:Project[] = [
   {
     name:'Revista Ibremp',
     description:'Site institucional para apresentação das revistas Ibremp',
-    mainImage:seutreino28dias,
-    galleryImages:[seutreino28dias2, seutreino28dias3],
+    mainImage:ibremp,
+    galleryImages:[ibremp2, ibremp3],
     repositoryUrl:'https://github.com/lucassdantas/rbdsre-revista-ibremp',
     liveProjectUrl:'https://rbdsre.ibremp.org.br/',
     category:'Sites',
@@ -109,8 +123,8 @@ export const sites:Project[] = [
   {
     name:'Cópia de Minha Biblioteca Católica',
     description:'Cópia do site minha biblioteca católica',
-    mainImage:seutreino28dias,
-    galleryImages:[seutreino28dias2, seutreino28dias3],
+    mainImage:minhaBiblioteca,
+    galleryImages:[minhaBiblioteca2, minhaBiblioteca3],
     repositoryUrl:'https://github.com/lucassdantas/lucassdantas.github.io/tree/main/sites/catolica',
     liveProjectUrl:'https://lucassdantas.github.io/sites/catolica/',
     category:'Sites',
