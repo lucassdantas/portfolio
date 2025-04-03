@@ -18,7 +18,20 @@ import instaPostReminder from '@/assets/Projects/applications/insta-post-reminde
 import instaPostReminder2 from '@/assets/Projects/applications/insta-post-reminder/insta-post-reminder-notificacoes.jpg' 
 import instaPostReminder3 from '@/assets/Projects/applications/insta-post-reminder/insta-post-reminder.jpg' 
 
+import precnetInvestimentSimulator from '@/projects/applications/precnet-investiment-simulator/simulador-investimento-completo.jpg'
+import precnetInvestimentSimulator2 from '@/projects/applications/precnet-investiment-simulator/simulador-de-investimentos.jpg'
+import precnetInvestimentSimulator3 from '@/projects/applications/precnet-investiment-simulator/simulador-de-investimentos-mobile.jpg'
 export const applications:Project[] = [
+  {
+    name:'Simulador de investimento (Precatório, CDB, LCI/LCA)',
+    description:'Simulador de investimento que compara a rentabilidade do cliente com outros tipos de investimentos',
+    mainImage:precnetInvestimentSimulator,
+    galleryImages:[precnetInvestimentSimulator2,precnetInvestimentSimulator3],
+    repositoryUrl:'https://github.com/lucassdantas/precatory_rentability_simulator',
+    liveProjectUrl:'https://investidor.precnet.com.br/#simulatorSectionPrecnet',
+    category:'Aplicações',
+    technologies:[gitTechnology, githubTechnology]
+  },
   {
     name:'Urna Eletrônica',
     description:'Urna Eletrônica feita com Javascript focado orientação a modulos',
