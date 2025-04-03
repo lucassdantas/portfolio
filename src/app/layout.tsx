@@ -25,7 +25,7 @@ export default function RootLayout({children}:Readonly<{children: React.ReactNod
   return (
     <html lang="pt-br">
       <body className={`${inter.className} overflow-x-hidden antialiased bg-gradient-to-br from-primary-darkBlue to-base_2-c1 dark:text-white w-screen`}>
-        <Limiter>
+        <Limiter className='max-w-[1350px]'>
           <Header/>
           <div className="flex gap-12 lg:pt-0 pt-20 overflo-x-hidden lg:h-full h-screen">
             <Sidebar/>

@@ -31,7 +31,7 @@ export default function Projects() {
       </div>
 
       {/* Abas de filtro */}
-      <div className='flex gap-4 mb-12 overflow-x-scroll w-full scrollbar-hidden py-4'>
+      <div className='flex gap-4 mb-12 overflow-x-scroll lg:overflow-x-hidden w-full scrollbar-hidden py-4'>
         {categories.map(category => (
           <button
             key={category.value}
