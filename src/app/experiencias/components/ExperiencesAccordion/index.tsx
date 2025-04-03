@@ -15,7 +15,7 @@ export const ExperiencesAccordion = () => {
 
   return (
     <div className="relative">
-      <div className="absolute left-0 top-0 h-full border-l-2 border-primary-blue"></div>
+      <div className="absolute left-3 top-0 h-full border-l-2 border-primary-blue"></div>
       
       <div className="flex flex-col gap-6">
         {experiences.map((experience, index) => {
@@ -32,7 +32,7 @@ export const ExperiencesAccordion = () => {
               <hr className=' border-primary-blue mt-4 mb-1'></hr>
               {isExpanded && (
                 <div className='relative flex flex-col items-end'>
-                  <div className="pl-8 py-4 pr-4 border border-primary-blue relative overflow-hidden">
+                  <div className="w-full pl-8 py-4 pr-4 border border-primary-blue relative overflow-hidden">
                     <ul className="list-disc space-y-2 marker:text-base_1-a7 w-[99%] relative">
                       {detailsToShow.map((detail, i) => (
                         <li key={'i2'+i} className={
