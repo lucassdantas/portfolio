@@ -1,5 +1,5 @@
 import { Project } from "@/types/projectType";
-import { githubTechnology, gitTechnology, javaTechnology, reactJSTechnology, tailwindTechnology, typescriptTechnology, wordpressTechnology } from "@/utils/technologies";
+import { githubTechnology, gitTechnology, javaTechnology, nextJSTechnology, phpTechnology, reactJSTechnology, tailwindTechnology, typescriptTechnology, wordpressTechnology } from "@/utils/technologies";
 
 
 import eletronicUrn from '@/assets/Projects/applications/urna-eletronica/urna-eletronica-main.jpg'
@@ -21,6 +21,11 @@ import instaPostReminder3 from '@/assets/Projects/applications/insta-post-remind
 import precnetInvestimentSimulator from '@/projects/applications/precnet-investiment-simulator/simulador-investimento-completo.jpg'
 import precnetInvestimentSimulator2 from '@/projects/applications/precnet-investiment-simulator/simulador-de-investimentos.jpg'
 import precnetInvestimentSimulator3 from '@/projects/applications/precnet-investiment-simulator/simulador-de-investimentos-mobile.jpg'
+
+import acadCalculator from '@/projects/applications/calculadora-acad/calculadora-acad (1).jpg'
+import acadCalculator2 from '@/projects/applications/calculadora-acad/calculadora-acad (2).jpg'
+import acadCalculator3 from '@/projects/applications/calculadora-acad/calculadora-acad (3).jpg'
+import acadCalculator4 from '@/projects/applications/calculadora-acad/calculadora-acad (4).jpg'
 export const applications:Project[] = [
   {
     name:'Simulador de investimento (Precatório, CDB, LCI/LCA)',
@@ -31,6 +36,16 @@ export const applications:Project[] = [
     liveProjectUrl:'https://investidor.precnet.com.br/#simulatorSectionPrecnet',
     category:'Aplicações',
     technologies:[gitTechnology, githubTechnology]
+  },
+  {
+    name:'Calculadora de economia',
+    description:'Formulário em etapas com design personalizado e calculo de economia. Possui envio de e-mail. Será utilizada em evento e feito em torno de 4 dias',
+    mainImage:acadCalculator2,
+    galleryImages:[acadCalculator3,acadCalculator4],
+    repositoryUrl:'https://github.com/lucassdantas/acad-economy-calculator',
+    liveProjectUrl:'https://acad.diagonal.ag/',
+    category:'Aplicações',
+    technologies:[nextJSTechnology,typescriptTechnology, phpTechnology, gitTechnology, githubTechnology]
   },
   {
     name:'Urna Eletrônica',
