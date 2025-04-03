@@ -12,6 +12,10 @@ import finalRubrazPartners4 from '@/projects/systems/rubraz-parceiros/versao-fin
 
 import trancarteSystem from '@/projects/systems/trancarte-system/area-do-arquiteto-inicio.jpg'
 import trancarteSystem2 from '@/projects/systems/trancarte-system/area-do-arquiteto-trancarte.jpg'
+
+import blogBreno from '@/projects/systems/blog-breno/blog-breno-silva.jpg'
+import blogBreno2 from '@/projects/systems/blog-breno/blog-breno-silva-2.jpg'
+import blogBreno3 from '@/projects/systems/blog-breno/feed-breno-silva.jpg'
 export const systems:Project[] = [
   
   {
@@ -43,6 +47,16 @@ export const systems:Project[] = [
     liveProjectUrl:'https://trancarte.com.br/novosistemaarquitetos/index.php',
     category:'Sistemas',
     technologies:[phpTechnology, mysqlTechnology, gitTechnology, githubTechnology]
+  },
+  {
+    name:'Fórum Breno Silva',
+    description:'Fórum para interação entre usuários. É possível fazer CRUD em amigos, editar os próprios dados e possui uma área ADM para gerenciar os demais usuários e posts. É possível realizar CRUD em postagens próprias, incluindo a adição/remoção de fotos',
+    mainImage:blogBreno,
+    galleryImages:[blogBreno2, blogBreno3],
+    repositoryUrl:'',
+    liveProjectUrl:'https://forum.seutreino.com/',
+    category:'Sistemas',
+    technologies:[reactJSTechnology, typescriptTechnology, phpTechnology, mysqlTechnology, gitTechnology, githubTechnology]
   },
  
 ]
