@@ -7,6 +7,7 @@ import { ProjectCard } from '@/app/projetos/components/ProjectCard';
 
 const categories = [
   { label: 'Todos', value: 'all' },
+  { label: 'Apps', value: 'Apps' },
   { label: 'Aplicações', value: 'Aplicações' },
   { label: 'Sites', value: 'Sites' },
   { label: 'Sistemas', value: 'Sistemas' },
