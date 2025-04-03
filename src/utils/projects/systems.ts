@@ -34,7 +34,7 @@ export const systems:Project[] = [
     name:'Parceiros rubraz - fase 2',
     description:'Sistema que realiza o cálculo de frete com base nas dimensões de produtos ou quantidade e tamanho de vigotas, somando este valor com o frete calculado pela distância até o endereço do cliente',
     mainImage:finalRubrazPartners,
-    galleryImages:[finalRubrazPartners2, finalRubrazPartners3, /*finalRubrazPartners4*/],
+    galleryImages:[finalRubrazPartners2, finalRubrazPartners3, finalRubrazPartners4],
     repositoryUrl:'https://github.com/lucassdantas/calculo_de_frete_rubraz/tree/main',
     liveProjectUrl:'https://rubrazlajes.com/parceiros/teste',
     category:'Sistemas',

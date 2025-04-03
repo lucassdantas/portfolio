@@ -17,11 +17,7 @@ export const ProjectCard = ({ project, cardIndex, isHovered, setHoveredCardIndex
   const [currentIndex, setCurrentIndex] = useState(0);
 
   return (
-    <div
-      className="relative w-full lg:w-[47%] max-w-4xl "
-      onMouseEnter={() => setHoveredCardIndex(cardIndex)}
-      onClick={() => setHoveredCardIndex(cardIndex)}
-    >
+    <div className="relative w-full lg:w-[47%] max-w-4xl " onMouseEnter={() => setHoveredCardIndex(cardIndex)} onClick={() => setHoveredCardIndex(cardIndex)}>
       <CardTechnologies project={project} isCardHover={isHovered} />
 
       <div className="flex flex-col items-start gap-4 p-4 bg-base_2-b0">

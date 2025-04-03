@@ -1,0 +1,32 @@
+/* Torna a scrollbar inicialmente invisível */
+.scrollbar-visible {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: transparent transparent; /* Firefox */
+}
+
+/* Webkit (Chrome, Edge, Safari) */
+.scrollbar-visible::-webkit-scrollbar {
+  width: 6px;
+  background: transparent;
+}
+
+/* Aparece ao passar o mouse */
+.scrollbar-visible:hover {
+  scrollbar-color: rgba(0, 0, 0, 0.4) transparent; /* Firefox */
+}
+
+.scrollbar-visible:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 3px;
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+/* Edge & IE (fallback para navegadores mais antigos) */
+@supports (-ms-overflow-style: none) {
+  .scrollbar-visible {
+    -ms-overflow-style: none;
+  }
+}
