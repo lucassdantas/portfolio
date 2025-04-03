@@ -16,6 +16,8 @@ import trancarteSystem2 from '@/projects/systems/trancarte-system/area-do-arquit
 import blogBreno from '@/projects/systems/blog-breno/blog-breno-silva.jpg'
 import blogBreno2 from '@/projects/systems/blog-breno/blog-breno-silva-2.jpg'
 import blogBreno3 from '@/projects/systems/blog-breno/feed-breno-silva.jpg'
+
+import stockChef from '@/projects/systems/stock-chef/stock-chef-java.jpg'
 export const systems:Project[] = [
   
   {
@@ -57,6 +59,16 @@ export const systems:Project[] = [
     liveProjectUrl:'https://forum.seutreino.com/',
     category:'Sistemas',
     technologies:[reactJSTechnology, typescriptTechnology, phpTechnology, mysqlTechnology, gitTechnology, githubTechnology]
+  },
+  {
+    name:'Sistema de estoque de produtos',
+    description:'Como projeto integrador, liderei equipe para desenvolvermos o sistema utilizando Java Swing. Design foi feito por Gabriel Modesto',
+    mainImage:stockChef,
+    galleryImages:[],
+    repositoryUrl:'',
+    liveProjectUrl:'https://github.com/lucassdantas/ProjetoIntegrador',
+    category:'Sistemas',
+    technologies:[javaTechnology, gitTechnology, githubTechnology]
   },
  
 ]
