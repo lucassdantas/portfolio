@@ -8,7 +8,7 @@ import React from 'react'
 
 export default function About () {
   return (
-    <Section limiterClassname='relative flex flex-col justify-between h-full ' className='text-base_1-a0 text-center lg:text-left lg:py-12 lg:px-12 py-12 px-4 h-full lg:overflow-y-hidden '>
+    <Section limiterClassname='relative flex flex-col justify-between h-full ' className='text-base_1-a0 text-center lg:text-left lg:py-12 lg:px-12 py-12 px-4 h-full min-h-fit'>
       <div className='h-1/2 '>
         <Title tag='h2' className='font-bold text-2xl'>Lucas Dantas</Title>
         <Title tag='h1' isBigText={true} className='font-extrabold text-2xl'>Desenvolvedor Web</Title>
@@ -19,7 +19,7 @@ export default function About () {
         <SocialNetworks/>
         <PersonalInfos/>
       </div>
-      <div className='h-1/2 text-left'>
+      <div className='h-1/2 text-left mb-6'>
         <Title tag='h2' className='text-3xl font-bold '>Técnologias</Title>
         <p className='mb-4'> tecnologia certa faz toda a diferença. Trabalho com um stack moderno e eficiente, combinando linguagens e frameworks poderosos para entregar soluções de alta qualidade.</p>
         <Technologies/>
