@@ -8,7 +8,7 @@ import React from 'react'
 
 export default function About () {
   return (
-    <Section limiterClassname='relative flex flex-col justify-between h-full ' className='wtext-base_1-a0 text-center lg:text-left lg:py-12 lg:px-12 py-12 px-4 h-full lg:overflow-y-hidden '>
+    <Section limiterClassname='relative flex flex-col justify-between h-full ' className='text-base_1-a0 text-center lg:text-left lg:py-12 lg:px-12 py-12 px-4 h-full lg:overflow-y-hidden '>
       <div className='h-1/2 '>
         <Title tag='h2' className='font-bold text-2xl'>Lucas Dantas</Title>
         <Title tag='h1' isBigText={true} className='font-extrabold text-2xl'>Desenvolvedor Web</Title>

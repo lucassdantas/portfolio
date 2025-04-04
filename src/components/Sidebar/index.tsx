@@ -8,7 +8,7 @@ export const Sidebar = () => {
 
 
   return (
-    <div className='hidden lg:block bg-white text-black p-4 max-h-[770px] w-full max-w-[290px]'>
+    <div className='hidden lg:block bg-white text-black p-4 max-h-[770px] w-full max-w-[290px] sticky top-0 z-40'>
       <ImageWithSquares/>
 
       <div className='text-center mt-8'>

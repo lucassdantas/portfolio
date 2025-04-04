@@ -18,7 +18,7 @@ export const Nav = ({className='', navClassName='', setIsMenuOpen=() => {''}, is
   ]
   return (
     <nav className={`${navClassName}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
-      <ul className={'flex gap-4 text-2xl'+className}>
+      <ul className={'flex gap-4 text-2xl '+className}>
         {navMenus.map((menu, i) => <Link key={i} href={menu.url} className='hover:border hover:border-primary-blue p-4'><li>{menu.content}</li></Link>)}
       </ul>
     </nav>
