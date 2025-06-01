@@ -21,6 +21,9 @@ import precnetCredentSendLeadToApi from '@/projects/wp-plugins/precnet/credor/cr
 import precnetCredentSendLeadToApi2 from '@/projects/wp-plugins/precnet/credor/credor-precnet-send-lead-to-api-02.jpg' 
 import precnetCredentSendLeadToApi3 from '@/projects/wp-plugins/precnet/credor/credor-precnet-send-lead-to-api-responsivo.jpg' 
 
+import helpBateriasPlugin from '@/projects/wp-plugins/help-baterias/help-baterias-plugin.jpg'
+import helpBateriasPlugin2 from '@/projects/wp-plugins/help-baterias/help-baterias-plugin-02.jpg'
+import helpBateriasPlugin3 from '@/projects/wp-plugins/help-baterias/help-baterias-plugin-03.jpg'
 export const wpPlugins:Project[] = [
   {
     name:'Eventos no Mirante',
@@ -43,7 +46,7 @@ export const wpPlugins:Project[] = [
     technologies:[wordpressTechnology, phpTechnology, gitTechnology, githubTechnology]
   },
   {
-    name:'Formulário integrado com API do Investidor',
+    name:'Formulário integrado com API',
     description:'Formulário customizado integrado com API para envio do Lead. Em caso de envio com sucesso, redireciona o usuário para página de obrigado',
     mainImage:precnetSendLeadToApi,
     galleryImages:[precnetSendLeadToAp2, precnetSendLeadToAp3],
@@ -63,12 +66,22 @@ export const wpPlugins:Project[] = [
     technologies:[wordpressTechnology, phpTechnology, gitTechnology, githubTechnology]
   },
   {
-    name:'Diversos Formulários integrados com API do Credor',
+    name:'Diversos Formulários integrados com API',
     description:'Plugin que integra diversos formulários do site com API, enviando payloads diferentes a depender do formulário.',
     mainImage:precnetCredentSendLeadToApi,
     galleryImages:[precnetCredentSendLeadToApi2, precnetCredentSendLeadToApi3],
     repositoryUrl:'',
     liveProjectUrl:'https://credor.precnet.com.br/consulta/?no_proc_pagamento=exemplo&tel_sms=5511999999999&primeiro_nome=Teste&requerido=INSS&tribunal=TRF%206&dt_autuacao=20/10/2024',
+    category:'WpPlugins',
+    technologies:[wordpressTechnology, phpTechnology, gitTechnology, githubTechnology]
+  },
+  {
+    name:'Opções de entrega customizadas',
+    description:'Plugin adiciona opções de entrega customizadas e agendamento de entrega para o woocommerce.',
+    mainImage:helpBateriasPlugin,
+    galleryImages:[helpBateriasPlugin2, helpBateriasPlugin3],
+    repositoryUrl:'',
+    liveProjectUrl:'loja.helpbaterias.com.br',
     category:'WpPlugins',
     technologies:[wordpressTechnology, phpTechnology, gitTechnology, githubTechnology]
   },
