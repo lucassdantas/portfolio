@@ -24,6 +24,16 @@ import precnetCredentSendLeadToApi3 from '@/projects/wp-plugins/precnet/credor/c
 import helpBateriasPlugin from '@/projects/wp-plugins/help-baterias/help-baterias-plugin.jpg'
 import helpBateriasPlugin2 from '@/projects/wp-plugins/help-baterias/help-baterias-plugin-02.jpg'
 import helpBateriasPlugin3 from '@/projects/wp-plugins/help-baterias/help-baterias-plugin-03.jpg'
+
+import associadosMindePlugin from '@/projects/wp-plugins/mindemineracao/espaco-do-associado-minde.jpg'
+
+import associadosSeteConfiancaPlugin from '@/projects/wp-plugins/sete-confianca/associados-sete-confianca.jpg'
+
+import cropImagePlugin from '@/projects/wp-plugins/wp-sos/crop-image/wp-sos-crop-image.jpg'
+
+import voceEuropeuPlugin from '@/projects/wp-plugins/voce-europeu/voce-europeu-blog-plugin.jpg'
+
+
 export const wpPlugins:Project[] = [
   {
     name:'Eventos no Mirante',
@@ -82,6 +92,46 @@ export const wpPlugins:Project[] = [
     galleryImages:[helpBateriasPlugin2, helpBateriasPlugin3],
     repositoryUrl:'',
     liveProjectUrl:'loja.helpbaterias.com.br',
+    category:'WpPlugins',
+    technologies:[wordpressTechnology, phpTechnology, gitTechnology, githubTechnology]
+  },
+  {
+    name:'Área restrita',
+    description:'Plugin adiciona uma área para associados, conteúdo restrito e tipo de usuário customizado, gerenciados pelo painel administrativo',
+    mainImage:associadosMindePlugin,
+    galleryImages:[],
+    repositoryUrl:'',
+    liveProjectUrl:'https://mindemineracao.com.br/',
+    category:'WpPlugins',
+    technologies:[wordpressTechnology, phpTechnology, gitTechnology, githubTechnology]
+  },
+  {
+    name:'Área de associados',
+    description:'Plugin adiciona uma área para associados e tipo de usuário customizado, gerenciados pelo painel administrativo',
+    mainImage:associadosSeteConfiancaPlugin,
+    galleryImages:[],
+    repositoryUrl:'',
+    liveProjectUrl:'https://seteconfianca.com.br/',
+    category:'WpPlugins',
+    technologies:[wordpressTechnology, phpTechnology, gitTechnology, githubTechnology]
+  },
+  {
+    name:'Seleção de vendedor',
+    description:'Plugin que troca entre o vendedor de forma automática para cada submissão do formulário',
+    mainImage:voceEuropeuPlugin,
+    galleryImages:[],
+    repositoryUrl:'',
+    liveProjectUrl:'',
+    category:'WpPlugins',
+    technologies:[wordpressTechnology, phpTechnology, gitTechnology, githubTechnology]
+  },
+  {
+    name:'Recorte e redimensionamento de imagem',
+    description:'Plugin redimensiona automaticamente imagens no envio e adiciona dimensão padrão para recorte de imagens para posts de blog',
+    mainImage:cropImagePlugin,
+    galleryImages:[],
+    repositoryUrl:'https://github.com/lucassdantas/wp_image-cropper-plugin',
+    liveProjectUrl:'',
     category:'WpPlugins',
     technologies:[wordpressTechnology, phpTechnology, gitTechnology, githubTechnology]
   },
