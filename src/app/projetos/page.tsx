@@ -11,6 +11,7 @@ const categories = [
   { label: 'Aplicações', value: 'Aplicações' },
   { label: 'Sites', value: 'Sites' },
   { label: 'Sistemas', value: 'Sistemas' },
+  { label: 'Plugins Wordpress', value: 'WpPlugins' },
   { label: 'Deploy', value: 'Deploy' },
   { label: 'Wordpress', value: 'Wordpress' },
 ];

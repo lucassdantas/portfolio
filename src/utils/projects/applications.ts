@@ -18,9 +18,9 @@ import instaPostReminder from '@/assets/Projects/applications/insta-post-reminde
 import instaPostReminder2 from '@/assets/Projects/applications/insta-post-reminder/insta-post-reminder-notificacoes.jpg' 
 import instaPostReminder3 from '@/assets/Projects/applications/insta-post-reminder/insta-post-reminder.jpg' 
 
-import precnetInvestimentSimulator from '@/projects/applications/precnet-investiment-simulator/simulador-investimento-completo.jpg'
-import precnetInvestimentSimulator2 from '@/projects/applications/precnet-investiment-simulator/simulador-de-investimentos.jpg'
-import precnetInvestimentSimulator3 from '@/projects/applications/precnet-investiment-simulator/simulador-de-investimentos-mobile.jpg'
+import precnetInvestimentSimulator from '@/projects/applications/precnet-investiment-simulator/simulador-precnet.jpg'
+import precnetInvestimentSimulator2 from '@/projects/applications/precnet-investiment-simulator/simulador-precnet-02.jpg'
+import precnetInvestimentSimulator3 from '@/projects/applications/precnet-investiment-simulator/simulador-precnet-responsivo.jpg'
 
 import acadCalculator from '@/projects/applications/calculadora-acad/calculadora-acad (1).jpg'
 import acadCalculator2 from '@/projects/applications/calculadora-acad/calculadora-acad (2).jpg'
@@ -29,7 +29,7 @@ import acadCalculator4 from '@/projects/applications/calculadora-acad/calculador
 export const applications:Project[] = [
   {
     name:'Simulador de investimento (Precatório, CDB, LCI/LCA)',
-    description:'Simulador de investimento que compara a rentabilidade do cliente com outros tipos de investimentos',
+    description:'Simulador de investimento que compara a rentabilidade do precatório da precnet com outros tipos de investimentos',
     mainImage:precnetInvestimentSimulator,
     galleryImages:[precnetInvestimentSimulator2,precnetInvestimentSimulator3],
     repositoryUrl:'https://github.com/lucassdantas/precatory_rentability_simulator',
