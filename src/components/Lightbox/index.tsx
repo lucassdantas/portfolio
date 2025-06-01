@@ -57,13 +57,13 @@ export const Lightbox = ({
 
         {/* Navegação do Carrossel */}
         <div
-          className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white text-3xl cursor-pointer"
+          className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white text-3xl cursor-pointer bg-primary-blue"
           onClick={onPrev}
         >
           &#60;
         </div>
         <div
-          className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white text-3xl cursor-pointer"
+          className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white text-3xl cursor-pointer bg-primary-blue"
           onClick={onNext}
         >
           &#62;
