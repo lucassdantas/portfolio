@@ -33,15 +33,28 @@ import cropImagePlugin from '@/projects/wp-plugins/wp-sos/crop-image/wp-sos-crop
 
 import voceEuropeuPlugin from '@/projects/wp-plugins/voce-europeu/voce-europeu-blog-plugin.jpg'
 
+import royal4HouseImg from '@/projects/wp-plugins/royal4house/watermark-plugin-img.jpg'
+import royal4HouseImg2 from '@/projects/wp-plugins/royal4house/watermark-plugin-img-1.jpg'
+import royal4HouseImg3 from '@/projects/wp-plugins/royal4house/watermark-plugin-img-2.jpg'
 
 export const wpPlugins:Project[] = [
   {
-    name:'Eventos no Mirante',
-    description:'Plugin que gera CPT para adição de eventos e shortcode para exibi-los em cards de 4 colunas no desktop e uma no celular',
-    mainImage:mirante,
-    galleryImages:[mirante2, mirante3],
-    repositoryUrl:'https://github.com/lucassdantas/wp_mirante-events-plugin',
-    liveProjectUrl:'https://mirantedoarvrao.com.br/eventos/',
+    name:'Opções de entrega customizadas',
+    description:'Plugin adiciona opções de entrega customizadas e agendamento de entrega para o woocommerce.',
+    mainImage:royal4HouseImg,
+    galleryImages:[royal4HouseImg2, royal4HouseImg3],
+    repositoryUrl:'',
+    liveProjectUrl:'https://royal4house.com.br/',
+    category:'WpPlugins',
+    technologies:[wordpressTechnology, phpTechnology, gitTechnology, githubTechnology]
+  },
+  {
+    name:'Adição de marcas dagua',
+    description:'Plugin adiciona automaticamente marca dagua e selos de imóvel vendido com base nas opções selecionadas pelos usuários. A marca se aplica automaticamente nas fotos da galeria dos imóveis.',
+    mainImage:helpBateriasPlugin,
+    galleryImages:[helpBateriasPlugin2, helpBateriasPlugin3],
+    repositoryUrl:'',
+    liveProjectUrl:'loja.helpbaterias.com.br',
     category:'WpPlugins',
     technologies:[wordpressTechnology, phpTechnology, gitTechnology, githubTechnology]
   },
@@ -85,16 +98,7 @@ export const wpPlugins:Project[] = [
     category:'WpPlugins',
     technologies:[wordpressTechnology, phpTechnology, gitTechnology, githubTechnology]
   },
-  {
-    name:'Opções de entrega customizadas',
-    description:'Plugin adiciona opções de entrega customizadas e agendamento de entrega para o woocommerce.',
-    mainImage:helpBateriasPlugin,
-    galleryImages:[helpBateriasPlugin2, helpBateriasPlugin3],
-    repositoryUrl:'',
-    liveProjectUrl:'loja.helpbaterias.com.br',
-    category:'WpPlugins',
-    technologies:[wordpressTechnology, phpTechnology, gitTechnology, githubTechnology]
-  },
+
   {
     name:'Área restrita',
     description:'Plugin adiciona uma área para associados, conteúdo restrito e tipo de usuário customizado, gerenciados pelo painel administrativo',
@@ -135,5 +139,14 @@ export const wpPlugins:Project[] = [
     category:'WpPlugins',
     technologies:[wordpressTechnology, phpTechnology, gitTechnology, githubTechnology]
   },
- 
+   {
+    name:'Eventos no Mirante',
+    description:'Plugin que gera CPT para adição de eventos e shortcode para exibi-los em cards de 4 colunas no desktop e uma no celular',
+    mainImage:mirante,
+    galleryImages:[mirante2, mirante3],
+    repositoryUrl:'https://github.com/lucassdantas/wp_mirante-events-plugin',
+    liveProjectUrl:'https://mirantedoarvrao.com.br/eventos/',
+    category:'WpPlugins',
+    technologies:[wordpressTechnology, phpTechnology, gitTechnology, githubTechnology]
+  },
 ]
