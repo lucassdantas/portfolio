@@ -41,8 +41,8 @@ export const wpPlugins:Project[] = [
   {
     name:'Opções de entrega customizadas',
     description:'Plugin adiciona opções de entrega customizadas e agendamento de entrega para o woocommerce.',
-    mainImage:royal4HouseImg,
-    galleryImages:[royal4HouseImg2, royal4HouseImg3],
+    mainImage:helpBateriasPlugin,
+    galleryImages:[ helpBateriasPlugin2, helpBateriasPlugin3], 
     repositoryUrl:'',
     liveProjectUrl:'https://royal4house.com.br/',
     category:'WpPlugins',
@@ -51,8 +51,8 @@ export const wpPlugins:Project[] = [
   {
     name:'Adição de marcas dagua',
     description:'Plugin adiciona automaticamente marca dagua e selos de imóvel vendido com base nas opções selecionadas pelos usuários. A marca se aplica automaticamente nas fotos da galeria dos imóveis.',
-    mainImage:helpBateriasPlugin,
-    galleryImages:[helpBateriasPlugin2, helpBateriasPlugin3],
+    mainImage:royal4HouseImg,
+    galleryImages:[royal4HouseImg2, royal4HouseImg3],
     repositoryUrl:'',
     liveProjectUrl:'loja.helpbaterias.com.br',
     category:'WpPlugins',
