@@ -56,7 +56,7 @@ export const systems:Project[] = [
     mainImage:blogBreno,
     galleryImages:[blogBreno2, blogBreno3],
     repositoryUrl:'',
-    liveProjectUrl:'https://forum.seutreino.com/',
+    liveProjectUrl:'',
     category:'Sistemas',
     technologies:[reactJSTechnology, typescriptTechnology, phpTechnology, mysqlTechnology, gitTechnology, githubTechnology]
   },

@@ -16,7 +16,7 @@ export const wordpress:Project[] = [
     mainImage:seutreino,
     galleryImages:[seutreino2, seutreino3],
     repositoryUrl:'',
-    liveProjectUrl:'https://seutreino.com/',
+    liveProjectUrl:'',
     category:'Wordpress',
     technologies:[wordpressTechnology]
   },
