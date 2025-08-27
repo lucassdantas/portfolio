@@ -46,7 +46,6 @@ export const sites:Project[] = [
     mainImage:postfast,
     galleryImages:[postfast2, postfast3],
     repositoryUrl:'',
-    liveProjectUrl:'https://www.postfast.com.br/',
     category:'Sites',
     technologies:[nextJSTechnology, tailwindTechnology, nodeJSTechnology, gitTechnology, githubTechnology]
   },
@@ -56,7 +55,6 @@ export const sites:Project[] = [
     mainImage:seutreino28dias,
     galleryImages:[seutreino28dias2, seutreino28dias3],
     repositoryUrl:'https://github.com/lucassdantas/seu-treino-28-dias-lp',
-    liveProjectUrl:'https://seutreino.com/28-dias-para-mudar/',
     category:'Sites',
     technologies:[reactJSTechnology, tailwindTechnology]
   },
