@@ -10,7 +10,7 @@ export const Sidebar = () => {
   const { t } = useLanguage()
 
   return (
-    <div className='hidden lg:block bg-white text-black p-4 max-h-[770px] w-full max-w-[290px] sticky top-0 z-40 transition-colors duration-300 shadow-sm'>
+    <div className='hidden lg:block bg-white text-black p-4 h-fit w-full max-w-[290px] sticky top-0 z-40 transition-colors duration-300 shadow-sm'>
       <ImageWithSquares/>
 
       <div className='text-center mt-8 text-black'>

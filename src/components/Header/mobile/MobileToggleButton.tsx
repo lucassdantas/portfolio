@@ -6,11 +6,11 @@ export const MobileToggleButton = ({isMenuOpen, setIsMenuOpen}:{isMenuOpen:boole
     <button className='w-[30px] flex flex-col items-end cursor-pointer' onClick={() => setIsMenuOpen(!isMenuOpen)}>
       {!isMenuOpen &&
         <>
-          <div className={`bg-base_1-a0 w-full h-[3px] mb-[4px]`}></div>
-          <div className={`bg-base_1-a0 w-[75%] h-[3px]`}></div>
+          <div className={`bg-black dark:bg-white w-full h-[3px] mb-[4px] transition-colors duration-300`}></div>
+          <div className={`bg-black dark:bg-white w-[75%] h-[3px] transition-colors duration-300`}></div>
         </>
       }
-      {isMenuOpen && <IoCloseSharp/> }
+      {isMenuOpen && <IoCloseSharp className="text-black dark:text-white transition-colors duration-300" size={30} /> }
     </button>
   )
 }

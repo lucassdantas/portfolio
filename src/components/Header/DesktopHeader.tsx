@@ -6,7 +6,7 @@ import React from 'react'
 export const DesktopHeader = ({isSticky=false}:{isSticky:boolean}) => {
   return (
     <div className='flex flex-nowrap justify-between items-center w-full pr-8'>
-      <div className='hidden lg:flex items-center justify-between w-[290px] px-4 min-h-[60px]'>
+      <div className='hidden lg:flex items-center justify-between w-[290px] px-4 min-h-[40px]'>
         <LanguagesFlags />
         <LightAndDarkMode />
       </div>

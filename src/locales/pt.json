@@ -38,7 +38,8 @@
   },
   "sidebar": {
     "role": "Desenvolvedor Web",
-    "personalInfo": "Informações pessoais"
+    "personalInfo": "Informações pessoais",
+    "contactMe": "Fale comigo agora"
   },
   "footer": {
     "developedBy": "Desenvolvido por",

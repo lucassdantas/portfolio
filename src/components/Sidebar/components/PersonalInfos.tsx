@@ -12,9 +12,9 @@ export const PersonalInfos = () => {
     ]
   
   return (
-    <div className="text-black">
-      <h4 className='font-bold mt-4 text-black'>{t('sidebar.personalInfo')}</h4>
-      <ul className='flex flex-col gap-2 text-left my-5 w-full text-black'>
+    <div className="text-black dark:lg:text-black dark:text-white">
+      <h4 className='font-bold mt-4 text-black dark:lg:text-black dark:text-white'>{t('sidebar.personalInfo')}</h4>
+      <ul className='flex flex-col gap-2 text-left my-5 w-full text-black dark:lg:text-black dark:text-white'>
         {infoList.map((info, i) => (<InfoIcon key={i} icon={info.icon} content={info.content} url={info.url}/>))}
       </ul>
     </div>

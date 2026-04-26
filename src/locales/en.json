@@ -38,7 +38,8 @@
   },
   "sidebar": {
     "role": "Web Developer",
-    "personalInfo": "Personal Information"
+    "personalInfo": "Personal Information",
+    "contactMe": "Contact me now"
   },
   "footer": {
     "developedBy": "Developed by",

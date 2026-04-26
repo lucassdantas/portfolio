@@ -11,7 +11,7 @@ export const MobileSideBar = ({isMenuOpen, setIsMenuOpen}:{isMenuOpen:boolean, s
           <LanguagesFlags className="w-20" />
           <LightAndDarkMode className="w-fit" />
         </div>
-        <Nav className='text-base_1-a0 flex-col items-end text-3xl' setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen}/>
+        <Nav className='flex-col items-end text-3xl' setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen}/>
         <div className='w-full flex justify-end mt-12'>
           <Button/>
         </div>
