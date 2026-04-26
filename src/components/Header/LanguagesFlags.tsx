@@ -10,6 +10,8 @@ import euaFlag from '@/assets/bandeira-dos-eua.jpg'
 const franceFlag = "https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg"
 const spainFlag = "https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg"
 
+import { FaChevronDown } from 'react-icons/fa'
+
 const languageConfig = [
   { code: 'pt', img: brasilFlag, alt: 'Português' },
   { code: 'en', img: euaFlag, alt: 'English' },
@@ -19,35 +21,66 @@ const languageConfig = [
 
 export const LanguagesFlags = ({ className = '' }: { className?: string }) => {
   const { language, setLanguage } = useLanguage()
+  const [isHovered, setIsHovered] = React.useState(false)
 
-  // Put current language first
-  const sortedLanguages = [
-    languageConfig.find(l => l.code === language)!,
-    ...languageConfig.filter(l => l.code !== language)
-  ]
+  // Current language first
+  const currentLang = languageConfig.find(l => l.code === language)!
+  const otherLanguages = languageConfig.filter(l => l.code !== language)
+
+  // Show at most 3 flags (current + 2 others)
+  const visibleLanguages = [currentLang, ...otherLanguages.slice(0, 2)]
 
   return (
-    <div className={`relative flex items-center h-10 ${className}`}>
-      {sortedLanguages.map((lang, index) => (
-        <div
-          key={lang.code}
-          onClick={() => setLanguage(lang.code as any)}
-          className="absolute transition-all duration-300 cursor-pointer hover:scale-110"
-          style={{
-            zIndex: 40 - index,
-            left: `${index * 12}px`,
-            top: `-${index * 8}px`,
-            width: '32px',
-            height: '22px',
-          }}
-        >
-          <img
-            src={typeof lang.img === 'string' ? lang.img : lang.img.src}
-            alt={lang.alt}
-            className="w-full h-full object-cover border border-gray-300 shadow-sm rounded-sm"
-          />
-        </div>
-      ))}
+    <div
+      className={`relative flex flex-col items-center group pt-6 ${className}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="relative h-14 w-24">
+        {visibleLanguages.map((lang, index) => (
+          <div
+            key={lang.code}
+            onClick={() => setLanguage(lang.code as any)}
+            className="absolute transition-all duration-300 cursor-pointer hover:scale-110"
+            style={{
+              zIndex: 40 - index,
+              left: `${index * 12}px`,
+              top: `${20 - (index * 8)}px`,
+              width: '32px',
+              height: '22px',
+            }}
+          >
+            <img
+              src={typeof lang.img === 'string' ? lang.img : lang.img.src}
+              alt={lang.alt}
+              className="w-full h-full object-cover border border-gray-300 shadow-sm rounded-sm"
+            />
+          </div>
+        ))}
+      </div>
+
+      <div className="flex flex-col items-center mt-2 cursor-pointer">
+        <FaChevronDown size={10} className={`transition-transform duration-300 ${isHovered ? 'rotate-180 text-primary-blue' : 'text-gray-400'}`} />
+
+        {isHovered && (
+          <div className="absolute top-full mt-2 bg-white dark:bg-base_2-b8 border border-gray-200 dark:border-base_1-a7 shadow-xl rounded-md p-2 z-50 min-w-[120px]">
+            {languageConfig.map((lang) => (
+              <div
+                key={lang.code}
+                onClick={() => setLanguage(lang.code as any)}
+                className={`flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-base_1-10 cursor-pointer rounded-sm ${language === lang.code ? 'bg-blue-50 dark:bg-primary-darkBlue' : ''}`}
+              >
+                <img
+                  src={typeof lang.img === 'string' ? lang.img : lang.img.src}
+                  alt={lang.alt}
+                  className="w-6 h-4 object-cover border border-gray-200"
+                />
+                <span className="text-xs font-medium text-black dark:text-white">{lang.alt}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

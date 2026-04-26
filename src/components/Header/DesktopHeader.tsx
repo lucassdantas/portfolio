@@ -5,10 +5,10 @@ import React from 'react'
 
 export const DesktopHeader = ({isSticky=false}:{isSticky:boolean}) => {
   return (
-    <div className='flex flex-nowrap justify-end items-center gap-8 w-full pr-8'>
-      <div className='hidden lg:flex items-center gap-12'>
-        <LanguagesFlags className='w-20' />
-        <LightAndDarkMode className='w-fit'/>
+    <div className='flex flex-nowrap justify-between items-center w-full pr-8'>
+      <div className='hidden lg:flex items-center justify-between w-[290px] px-4 min-h-[60px]'>
+        <LanguagesFlags />
+        <LightAndDarkMode />
       </div>
       <Nav  navClassName='hidden lg:block ' className={`${isSticky? 'text-sm':''}`}/>
     </div>

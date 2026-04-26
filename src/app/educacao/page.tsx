@@ -11,7 +11,7 @@ export default function Education () {
   const { t } = useLanguage()
 
   return (
-    <Section limiterClassname='h-full' className=' text-base_1-a0 lg:overflow-y-hidden'>
+    <Section limiterClassname='h-full' className='text-black dark:text-base_1-a0 lg:overflow-y-hidden'>
       <div className='mb-24'>
         <Title tag='h1' className='font-extrabold mb-4'>{t('education.title')}</Title>
         <p className=''>{t('education.description')}</p>

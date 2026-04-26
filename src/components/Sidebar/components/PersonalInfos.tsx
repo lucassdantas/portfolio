@@ -12,11 +12,11 @@ export const PersonalInfos = () => {
     ]
   
   return (
-    <>
-      <h4 className='font-bold mt-4'>{t('sidebar.personalInfo')}</h4>
-      <ul className='flex flex-col gap-2 text-left my-5 w-full'>
+    <div className="text-black">
+      <h4 className='font-bold mt-4 text-black'>{t('sidebar.personalInfo')}</h4>
+      <ul className='flex flex-col gap-2 text-left my-5 w-full text-black'>
         {infoList.map((info, i) => (<InfoIcon key={i} icon={info.icon} content={info.content} url={info.url}/>))}
       </ul>
-    </>
+    </div>
   )
 }

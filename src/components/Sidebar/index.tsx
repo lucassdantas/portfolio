@@ -10,16 +10,18 @@ export const Sidebar = () => {
   const { t } = useLanguage()
 
   return (
-    <div className='hidden lg:block bg-white dark:bg-base_1-13 text-black dark:text-white p-4 max-h-[770px] w-full max-w-[290px] sticky top-0 z-40 transition-colors duration-300'>
+    <div className='hidden lg:block bg-white text-black p-4 max-h-[770px] w-full max-w-[290px] sticky top-0 z-40 transition-colors duration-300 shadow-sm'>
       <ImageWithSquares/>
 
-      <div className='text-center mt-8'>
-        <h4 className='font-bold'>Lucas Dantas</h4>
-        <p className='text-base_1-a4'>{t('sidebar.role')}</p>
+      <div className='text-center mt-8 text-black'>
+        <h4 className='font-bold text-black text-xl'>Lucas Dantas</h4>
+        <p className='text-base_2-c0 font-medium mb-6'>{t('sidebar.role')}</p>
 
         <SocialNetworks/>
-        <PersonalInfos/>
-        <div className='flex justify-center'>
+        <div className="text-black border-t border-gray-100 mt-6 pt-2">
+          <PersonalInfos/>
+        </div>
+        <div className='flex justify-center mt-6'>
           <Button/>
         </div>
       </div>

@@ -10,6 +10,8 @@ export const LightAndDarkMode = ({ className = '' }: { className?: string }) => 
   return (
     <div
       onClick={toggleTheme}
+      role="button"
+      aria-label="Toggle theme"
       className={`flex items-center cursor-pointer overflow-hidden rounded-sm border border-black dark:border-white transition-all duration-300 ${className}`}
       style={{ height: '36px' }}
     >
