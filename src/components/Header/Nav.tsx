@@ -1,4 +1,5 @@
 'use client'
+import { useLanguage } from '@/contexts/LanguageContext'
 import Link from 'next/link'
 import React from 'react'
 
@@ -10,11 +11,12 @@ interface NavProps{
 }
 
 export const Nav = ({className='', navClassName='', setIsMenuOpen=() => {''}, isMenuOpen=false}:NavProps) => {
+  const { t } = useLanguage()
   const navMenus = [
-    {content:'Sobre',       url:'/sobre'},
-    {content:'Experiência', url:'/experiencias'},
-    {content:'Projetos',    url:'/projetos'},
-    {content:'Educação',    url:'/educacao'},
+    {content: t('nav.about'),       url:'/sobre'},
+    {content: t('nav.experience'), url:'/experiencias'},
+    {content: t('nav.projects'),    url:'/projetos'},
+    {content: t('nav.education'),    url:'/educacao'},
   ]
   return (
     <nav className={`${navClassName}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>

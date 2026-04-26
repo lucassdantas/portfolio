@@ -4,19 +4,20 @@ import { Title } from '@/components/Title';
 import { useState } from 'react';
 import { projects } from '@/utils/projects';
 import { ProjectCard } from '@/app/projetos/components/ProjectCard';
-
-const categories = [
-  { label: 'Todos', value: 'all' },
-  { label: 'Apps', value: 'Apps' },
-  { label: 'Aplicações', value: 'Aplicações' },
-  { label: 'Sites', value: 'Sites' },
-  { label: 'Sistemas', value: 'Sistemas' },
-  { label: 'Plugins Wordpress', value: 'WpPlugins' },
-  { label: 'Deploy', value: 'Deploy' },
-  { label: 'Wordpress', value: 'Wordpress' },
-];
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function Projects() {
+  const { t } = useLanguage();
+  const categories = [
+    { label: t('projects.all') || 'Todos', value: 'all' },
+    { label: t('projects.apps') || 'Apps', value: 'Apps' },
+    { label: t('projects.applications') || 'Aplicações', value: 'Aplicações' },
+    { label: t('projects.sites') || 'Sites', value: 'Sites' },
+    { label: t('projects.systems') || 'Sistemas', value: 'Sistemas' },
+    { label: t('projects.wpPlugins') || 'Plugins Wordpress', value: 'WpPlugins' },
+    { label: t('projects.deploy') || 'Deploy', value: 'Deploy' },
+    { label: t('projects.wordpress') || 'Wordpress', value: 'Wordpress' },
+  ];
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [hoveredCardIndex, setHoveredCardIndex] = useState<number>(0); // Começa no index 0
 
@@ -28,8 +29,8 @@ export default function Projects() {
   return (
     <Section limiterClassname='relative h-full' className='text-base_1-a0'>
       <div className='mb-24'>
-        <Title tag='h1' className='font-extrabold mb-4'>Projetos</Title>
-        <p>Ao longo da minha jornada como desenvolvedor web, trabalhei em diversos projetos que abrangem desde aplicações empresariais e e-commerces até soluções personalizadas para clientes individuais. Cada projeto representou um desafio único, onde pude aplicar minhas habilidades para criar experiências digitais eficientes e escaláveis.</p>
+        <Title tag='h1' className='font-extrabold mb-4'>{t('projects.title')}</Title>
+        <p>{t('projects.description')}</p>
       </div>
 
       {/* Abas de filtro */}
@@ -57,7 +58,7 @@ export default function Projects() {
               setHoveredCardIndex={setHoveredCardIndex}
             />
           ))
-        ) : (<p className='text-center text-gray-500'>Nenhum projeto encontrado.</p>)
+        ) : (<p className='text-center text-gray-500'>{t('projects.noProjects')}</p>)
         }
       </div>
     </Section>

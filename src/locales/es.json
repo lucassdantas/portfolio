@@ -1,0 +1,47 @@
+{
+  "nav": {
+    "about": "Sobre",
+    "experience": "Experiencia",
+    "projects": "Proyectos",
+    "education": "Educación"
+  },
+  "about": {
+    "name": "Lucas Dantas",
+    "role": "Desarrollador Web",
+    "description": "La tecnología siempre ha sido mi pasión, y transformarla en soluciones reales me motiva a diario. Como desarrollador web, me enfoco en el rendimiento, la usabilidad y la innovación para crear experiencias digitales impactantes con un código limpio y buenas prácticas.",
+    "technologiesTitle": "Tecnologías",
+    "technologiesDescription": "La tecnología adecuada marca la diferencia. Trabajo con un stack moderno y eficiente, combinando lenguajes y frameworks potentes para ofrecer soluciones de alta calidad."
+  },
+  "projects": {
+    "title": "Proyectos",
+    "description": "A lo largo de mi trayectoria como desarrollador web, he trabajado en diversos proyectos que abarcan desde aplicaciones empresariales y e-commerces hasta soluciones personalizadas para clientes individuales. Cada proyecto representó un desafío único, donde pude aplicar mis habilidades para crear experiencias digitales eficientes y escalables.",
+    "noProjects": "No se encontraron proyectos.",
+    "deploy": "Desplegar",
+    "github": "GitHub",
+    "all": "Todos",
+    "apps": "Apps",
+    "applications": "Aplicaciones",
+    "sites": "Sitios",
+    "systems": "Sistemas",
+    "wpPlugins": "Plugins Wordpress",
+    "wordpress": "Wordpress"
+  },
+  "education": {
+    "title": "Educación",
+    "description": "Siempre he creído que la base de un buen desarrollador es la búsqueda constante de conocimiento. Mi formación combina educación académica, técnica y certificaciones especializadas, lo que me permite estar siempre actualizado con las mejores prácticas y tecnologías del mercado.",
+    "certificatesTitle": "Certificados"
+  },
+  "experiences": {
+    "title": "Experiencias",
+    "description": "A lo largo de mi carrera como desarrollador web, he trabajado en diversas empresas y proyectos, desarrollando aplicaciones modernas y escalables. He trabajado en el front-end y el back-end, contribuyendo con nuevas funcionalidades, optimización de sistemas, refactorización de código e integraciones con APIs, siempre siguiendo las buenas prácticas de desarrollo para garantizar un código limpio, eficiente y de fácil mantenimiento.",
+    "seeMore": "Ver más"
+  },
+  "sidebar": {
+    "role": "Desarrollador Web",
+    "personalInfo": "Información personal"
+  },
+  "footer": {
+    "developedBy": "Desarrollado por",
+    "designBy": "Diseño por"
+  }
+}

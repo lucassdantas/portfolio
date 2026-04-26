@@ -1,0 +1,47 @@
+{
+  "nav": {
+    "about": "About",
+    "experience": "Experience",
+    "projects": "Projects",
+    "education": "Education"
+  },
+  "about": {
+    "name": "Lucas Dantas",
+    "role": "Web Developer",
+    "description": "Technology has always been my passion, and transforming it into real solutions motivates me daily. As a web developer, I focus on performance, usability, and innovation to create impactful digital experiences with clean code and best practices.",
+    "technologiesTitle": "Technologies",
+    "technologiesDescription": "The right technology makes all the difference. I work with a modern and efficient stack, combining powerful languages and frameworks to deliver high-quality solutions."
+  },
+  "projects": {
+    "title": "Projects",
+    "description": "Throughout my journey as a web developer, I have worked on various projects ranging from business applications and e-commerces to customized solutions for individual clients. Each project represented a unique challenge, where I could apply my skills to create efficient and scalable digital experiences.",
+    "noProjects": "No projects found.",
+    "deploy": "Deploy",
+    "github": "GitHub",
+    "all": "All",
+    "apps": "Apps",
+    "applications": "Applications",
+    "sites": "Sites",
+    "systems": "Systems",
+    "wpPlugins": "Wordpress Plugins",
+    "wordpress": "Wordpress"
+  },
+  "education": {
+    "title": "Education",
+    "description": "I have always believed that the foundation for a good developer is the constant search for knowledge. My training combines academic, technical education and specialized certifications, allowing me to stay up to date with the best practices and technologies in the market.",
+    "certificatesTitle": "Certificates"
+  },
+  "experiences": {
+    "title": "Experiences",
+    "description": "Throughout my career as a web developer, I have worked at various companies and projects, developing modern and scalable applications. I acted in front-end and back-end, contributing with new features, system optimization, code refactoring and API integrations, always following good development practices to ensure clean, efficient and easy-to-maintain code.",
+    "seeMore": "See more"
+  },
+  "sidebar": {
+    "role": "Web Developer",
+    "personalInfo": "Personal Information"
+  },
+  "footer": {
+    "developedBy": "Developed by",
+    "designBy": "Design by"
+  }
+}

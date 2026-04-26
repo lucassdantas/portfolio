@@ -1,0 +1,47 @@
+{
+  "nav": {
+    "about": "Sobre",
+    "experience": "Experiência",
+    "projects": "Projetos",
+    "education": "Educação"
+  },
+  "about": {
+    "name": "Lucas Dantas",
+    "role": "Desenvolvedor Web",
+    "description": "A tecnologia sempre foi minha paixão, e transformá-la em soluções reais me motiva diariamente. Como desenvolvedor web, foco em performance, usabilidade e inovação para criar experiências digitais impactantes com código limpo e boas práticas.",
+    "technologiesTitle": "Tecnologias",
+    "technologiesDescription": "A tecnologia certa faz toda a diferença. Trabalho com um stack moderno e eficiente, combinando linguagens e frameworks poderosos para entregar soluções de alta qualidade."
+  },
+  "projects": {
+    "title": "Projetos",
+    "description": "Ao longo da minha jornada como desenvolvedor web, trabalhei em diversos projetos que abrangem desde aplicações empresariais e e-commerces até soluções personalizadas para clientes individuais. Cada projeto representou um desafio único, onde pude aplicar minhas habilidades para criar experiências digitais eficientes e escaláveis.",
+    "noProjects": "Nenhum projeto encontrado.",
+    "deploy": "Deploy",
+    "github": "GitHub",
+    "all": "Todos",
+    "apps": "Apps",
+    "applications": "Aplicações",
+    "sites": "Sites",
+    "systems": "Sistemas",
+    "wpPlugins": "Plugins Wordpress",
+    "wordpress": "Wordpress"
+  },
+  "education": {
+    "title": "Educação",
+    "description": "Sempre acreditei que a base para um bom desenvolvedor é a busca constante pelo conhecimento. Minha formação combina ensino acadêmico, técnico e certificações especializadas, permitindo que eu esteja sempre atualizado com as melhores práticas e tecnologias do mercado.",
+    "certificatesTitle": "Certificados"
+  },
+  "experiences": {
+    "title": "Experiências",
+    "description": "Ao longo da minha carreira como desenvolvedor web, trabalhei em diversas empresas e projetos, desenvolvendo aplicações modernas e escaláveis. Atuei no front-end e back-end, contribuindo com novas funcionalidades, otimização de sistemas, refatoração de código e integrações com APIs, sempre seguindo boas práticas de desenvolvimento para garantir código limpo, eficiente e de fácil manutenção.",
+    "seeMore": "Ver mais"
+  },
+  "sidebar": {
+    "role": "Desenvolvedor Web",
+    "personalInfo": "Informações pessoais"
+  },
+  "footer": {
+    "developedBy": "Desenvolvido por",
+    "designBy": "Design por"
+  }
+}

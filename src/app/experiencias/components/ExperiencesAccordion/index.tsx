@@ -3,8 +3,10 @@ import React, { useState } from 'react';
 import { experiences } from '@/utils/experiences';
 import { AccordionHeader } from '@/app/experiencias/components/ExperiencesAccordion/AccordionHeader';
 import { AccordionSquare } from '@/app/experiencias/components/ExperiencesAccordion/AccordionSquare';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export const ExperiencesAccordion = () => {
+  const { t } = useLanguage();
   const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
   const [showAllDetails, setShowAllDetails] = useState<number | null>(null);
 
@@ -49,7 +51,7 @@ export const ExperiencesAccordion = () => {
                   </div>
                   {!isShowingAll && (
                     <button className="mt-4 text-base_1-a0 border border-primary-blue py-2 px-4" onClick={() => setShowAllDetails(index)}>
-                      Ver mais
+                      {t('experiences.seeMore')}
                     </button>
                   )}
                 </div>

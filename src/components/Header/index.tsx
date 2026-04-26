@@ -17,8 +17,8 @@ export const Header = () => {
 
   return (
     <header
-      className={`relative lg:sticky top-0 z-10 flex justify-between items-center w-full lg:mb-12 lg:mt-4 overflow-x-hidden 
-      ${isSticky ? 'bg-base_2-b8' : ''}`}
+      className={`relative lg:sticky top-0 z-10 flex justify-between items-center w-full lg:mb-12 lg:mt-4 overflow-x-hidden transition-colors duration-300
+      ${isSticky ? 'bg-base_1-a3 dark:bg-base_2-b8' : ''}`}
     >
       <DesktopHeader isSticky={isSticky}/>
       <MobileHeader />
