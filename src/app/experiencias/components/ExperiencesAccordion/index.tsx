@@ -50,7 +50,7 @@ export const ExperiencesAccordion = () => {
                     </ul>
                   </div>
                   {!isShowingAll && (
-                    <button className="mt-4 text-base_1-a0 border border-primary-blue py-2 px-4" onClick={() => setShowAllDetails(index)}>
+                    <button className="mt-4 dark:text-base_1-a0 text-base_1-a12 border border-primary-blue py-2 px-4" onClick={() => setShowAllDetails(index)}>
                       {t('experiences.seeMore')}
                     </button>
                   )}

@@ -21,7 +21,7 @@ export default function About () {
       <div className='lg:hidden flex flex-col items-center pt-12 mb-12 w-full'>
         <ImageWithSquares/>
         <SocialNetworks/>
-        <PersonalInfos/>
+        <PersonalInfos bgColor='dark'/>
       </div>
       <div className='h-1/2 text-left mb-6'>
         <Title tag='h2' className='text-3xl font-bold '>{t('about.technologiesTitle')}</Title>

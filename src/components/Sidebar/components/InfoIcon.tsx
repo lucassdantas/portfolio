@@ -7,19 +7,20 @@ type InfoProps={
   icon:string;
   url?:string;
   content:string;
+  bgColor?:string;
 }
-export const InfoIcon = ({icon, url='', content}:InfoProps) => {
+export const InfoIcon = ({icon, url='', content, bgColor = 'white'}:InfoProps) => {
   return (
     <div className="text-black w-full">
-      <li className='flex gap-4 items-center text-black w-full'>
+      <li className={`flex gap-4 items-center ${bgColor === 'white' ? 'text-black' : 'text-white'} w-full`}>
         <Icons icon={icon} bgClassName='bg-base_1-a12' className='text-base_1-a3'/> 
         <div className="overflow-hidden text-ellipsis whitespace-nowrap">
           {url ? (
-            <Link href={url} className="text-black hover:text-primary-blue transition-colors">
+            <Link href={url} className={`${bgColor === 'white' ? 'text-black' : 'text-white'} hover:text-primary-blue transition-colors`}>
               {content}
             </Link>
           ) : (
-            <span className="text-black">{content}</span>
+            <span className={`${bgColor === 'white' ? 'text-black' : 'text-white'}`}>{content}</span>
           )}
         </div>
       </li>
