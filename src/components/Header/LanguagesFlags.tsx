@@ -65,7 +65,7 @@ export const LanguagesFlags = ({ className = '' }: { className?: string }) => {
         <FaChevronDown size={12} className={`transition-transform duration-300 ${isOpen ? 'rotate-180 text-primary-blue' : 'text-gray-400'}`} />
 
         {isOpen && (
-          <div className="absolute top-full mt-2 bg-white dark:bg-base_2-b8 border border-gray-200 dark:border-base_1-a7 shadow-xl rounded-md p-2 z-50 min-w-[160px] right-[-40px] lg:right-auto">
+          <div className="absolute top-0 mt-2 bg-white dark:bg-base_2-b8 border border-gray-200 dark:border-base_1-a7 shadow-xl rounded-md p-2 z-50 min-w-[160px] right-[-40px] lg:right-auto">
             {languageConfig.map((lang) => (
               <div
                 key={lang.code}
