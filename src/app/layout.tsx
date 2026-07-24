@@ -19,7 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 const title = "Lucas Dantas — Desenvolvedor Full Stack";
 const description =
-  "Portfólio de Lucas Dantas, desenvolvedor full stack com 4+ anos de experiência — aplicações web, APIs, automações e sistemas críticos (chatbots com IA, sistemas da área da saúde) com arquitetura limpa.";
+  "Portfólio de Lucas Dantas, desenvolvedor full stack — aplicações web, APIs, automações e sistemas críticos com arquitetura limpa e IA.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),

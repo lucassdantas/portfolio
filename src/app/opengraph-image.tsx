@@ -8,7 +8,7 @@ export const contentType = "image/png";
 async function loadGoogleFont(family: string, weight: number, text: string) {
   const url = `https://fonts.googleapis.com/css2?family=${family}:wght@${weight}&text=${encodeURIComponent(text)}`;
   const css = await (await fetch(url)).text();
-  const match = css.match(/src: url\(([^)]+)\) format\('(?:opentype|truetype)'\)/);
+  const match = /src: url\(([^)]+)\) format\('(?:opentype|truetype)'\)/.exec(css);
   if (match) {
     const res = await fetch(match[1]);
     if (res.ok) return res.arrayBuffer();
@@ -23,13 +23,14 @@ export default async function Image() {
   const prompt = "lucas@dantas:~$ whoami";
   const badge = "disponível para novos desafios";
   const handle = site.url.replace(/^https?:\/\//, "");
+  const cta = "Ver portfólio →";
 
   const fonts: { name: string; data: ArrayBuffer; weight: 400 | 700; style: "normal" }[] = [];
   try {
     const [grotesk, groteskBold, mono] = await Promise.all([
       loadGoogleFont("Space+Grotesk", 400, subtitle + tagline),
       loadGoogleFont("Space+Grotesk", 700, title),
-      loadGoogleFont("JetBrains+Mono", 400, prompt + badge + handle),
+      loadGoogleFont("JetBrains+Mono", 400, prompt + badge + handle + cta),
     ]);
     fonts.push(
       { name: "Space Grotesk", data: grotesk, weight: 400, style: "normal" },
@@ -100,14 +101,32 @@ export default async function Image() {
             paddingTop: 28,
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#22c55e", display: "flex" }} />
-            <div style={{ fontFamily: "JetBrains Mono", fontSize: 20, color: "#8c98ab", display: "flex" }}>
-              {badge}
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#22c55e", display: "flex" }} />
+              <div style={{ fontFamily: "JetBrains Mono", fontSize: 20, color: "#8c98ab", display: "flex" }}>
+                {badge}
+              </div>
+            </div>
+            <div style={{ fontFamily: "JetBrains Mono", fontSize: 18, color: "#4e5d74", display: "flex" }}>
+              {handle}
             </div>
           </div>
-          <div style={{ fontFamily: "JetBrains Mono", fontSize: 20, color: "#1d94e3", display: "flex" }}>
-            {handle}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              fontFamily: "JetBrains Mono",
+              fontSize: 22,
+              fontWeight: 700,
+              color: "#e2e8f0",
+              background: "rgba(29,148,227,0.16)",
+              border: "1px solid #1d94e3",
+              borderRadius: 8,
+              padding: "12px 22px",
+            }}
+          >
+            {cta}
           </div>
         </div>
       </div>
