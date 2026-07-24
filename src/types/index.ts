@@ -55,6 +55,7 @@ export interface Translation {
   privacy: string;
   langs: SpokenLang[];
   all: string;
+  chat: ChatCopy;
 }
 
 export interface Experience {
@@ -115,3 +116,60 @@ export interface Book {
   title: string;
   author: string;
 }
+
+export type ChatOptionId = "exp" | "skills" | "projects" | "education" | "contact" | "about";
+
+export interface ChatOption {
+  id: ChatOptionId;
+  icon: string;
+}
+
+/** Textos do chatbot determinístico (widget flutuante). */
+export interface ChatCopy {
+  launcher: string;
+  title: string;
+  greeting: string;
+  askName: string;
+  namePlaceholder: string;
+  sendLabel: string;
+  /** Usa "{name}" como placeholder — substituído em runtime. */
+  menuPrompt: string;
+  optionLabels: Record<ChatOptionId, string>;
+  answers: Record<ChatOptionId, string[]>;
+  backToMenu: string;
+  resetLabel: string;
+  closeLabel: string;
+  invalidName: string;
+  typing: string;
+}
+
+// ------------------------------------------------------------------
+// Grafo do fluxo do chatbot (src/data/chatbot.ts).
+// Cada nó é uma etapa; `next`/`options[].next` apontam para o `id` da
+// próxima etapa (ou sub-etapa). Adicionar/reordenar etapas é só editar
+// o array `chatFlow` — o motor (src/lib/chatEngine.ts) não muda.
+// ------------------------------------------------------------------
+
+/** Etapa que aguarda texto livre do usuário (hoje só o nome). */
+export interface ChatInputNode {
+  kind: "input";
+  id: string;
+  next: string;
+}
+
+/** Etapa de menu: um botão por opção, cada uma podendo levar a uma sub-etapa. */
+export interface ChatOptionsNode {
+  kind: "options";
+  id: string;
+  options: { id: ChatOptionId; icon: string; next: string }[];
+}
+
+/** Etapa que só emite texto (respostas do bot) e segue automaticamente para `next`. */
+export interface ChatMessageNode {
+  kind: "message";
+  id: string;
+  answerId: ChatOptionId;
+  next: string;
+}
+
+export type ChatNode = ChatInputNode | ChatOptionsNode | ChatMessageNode;

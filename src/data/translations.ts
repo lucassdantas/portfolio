@@ -68,6 +68,56 @@ const pt: Translation = {
     ["Francês", "A1", 25],
   ],
   all: "Todos",
+  chat: {
+    launcher: "Abrir chat",
+    title: "Fale com o assistente",
+    greeting: "Oi! Eu sou o assistente virtual do Lucas 👋",
+    askName: "Antes de começar, como posso te chamar?",
+    namePlaceholder: "Seu nome…",
+    sendLabel: "Enviar",
+    menuPrompt: "Prazer, {name}! O que você quer saber sobre o Lucas?",
+    optionLabels: {
+      about: "Sobre o Lucas",
+      exp: "Experiência",
+      skills: "Habilidades",
+      projects: "Projetos",
+      education: "Formação",
+      contact: "Contato",
+    },
+    answers: {
+      about: [
+        "Lucas é desenvolvedor full stack no Rio de Janeiro, com 4+ anos construindo aplicações web, APIs, automações e sistemas críticos.",
+        "Hoje ele atua na CMEXX, migrando chatbots corporativos de fluxos probabilísticos (n8n) para fluxos determinísticos em Python.",
+      ],
+      exp: [
+        "Atualmente é dev full stack na CMEXX, em sistemas críticos de saúde e na migração de chatbots para arquitetura determinística.",
+        "Também atende como freelancer para clientes nacionais e internacionais, e foi dev WordPress pleno na RD Exclusive por mais de 3 anos.",
+      ],
+      skills: [
+        "Back-end: Python, FastAPI, Laravel, Node.js, PHP.",
+        "Front-end: React, Next.js, TypeScript, Tailwind CSS.",
+        "Infra & IA: Docker, Linux, Nginx, automações com n8n e integrações com LLMs.",
+      ],
+      projects: [
+        "Já entregou mais de 40 projetos — sistemas, sites e MVPs — incluindo clientes internacionais.",
+        "O case em destaque é a migração de chatbots corporativos de fluxos probabilísticos para determinísticos, cortando o consumo de tokens de ~10 mil para 2–4 mil por request.",
+      ],
+      education: [
+        "Bacharelado em Engenharia de Software na Faculdade Descomplica (2024–2028).",
+        "Técnico em Informática pelo Senac RJ, com nota 10.",
+      ],
+      contact: [
+        "LinkedIn: linkedin.com/in/lucas-de-sousa-dantas",
+        "GitHub: github.com/lucassdantas",
+        "Base: Rio de Janeiro, Brasil — aberto a oportunidades remotas.",
+      ],
+    },
+    backToMenu: "Quer saber mais alguma coisa?",
+    resetLabel: "Limpar conversa",
+    closeLabel: "Fechar",
+    invalidName: "Pode digitar um nome válido pra eu te chamar? 🙂",
+    typing: "digitando…",
+  },
 };
 
 const en: Translation = {
@@ -132,6 +182,56 @@ const en: Translation = {
     ["French", "A1", 25],
   ],
   all: "All",
+  chat: {
+    launcher: "Open chat",
+    title: "Chat with the assistant",
+    greeting: "Hi! I'm Lucas's virtual assistant 👋",
+    askName: "Before we start, what should I call you?",
+    namePlaceholder: "Your name…",
+    sendLabel: "Send",
+    menuPrompt: "Nice to meet you, {name}! What would you like to know about Lucas?",
+    optionLabels: {
+      about: "About Lucas",
+      exp: "Experience",
+      skills: "Skills",
+      projects: "Projects",
+      education: "Education",
+      contact: "Contact",
+    },
+    answers: {
+      about: [
+        "Lucas is a full stack developer based in Rio de Janeiro, with 4+ years building web apps, APIs, automations and mission-critical systems.",
+        "He currently works at CMEXX, migrating corporate chatbots from probabilistic flows (n8n) to deterministic Python flows.",
+      ],
+      exp: [
+        "Currently a full stack developer at CMEXX, working on critical healthcare systems and migrating chatbots to a deterministic architecture.",
+        "He also freelances for national and international clients, and spent 3+ years as a mid-level WordPress developer at RD Exclusive.",
+      ],
+      skills: [
+        "Back-end: Python, FastAPI, Laravel, Node.js, PHP.",
+        "Front-end: React, Next.js, TypeScript, Tailwind CSS.",
+        "Infra & AI: Docker, Linux, Nginx, automations with n8n and LLM integrations.",
+      ],
+      projects: [
+        "Shipped 40+ projects — systems, sites and MVPs — including international clients.",
+        "The featured case is migrating corporate AI chatbots from probabilistic flows to deterministic ones, cutting token usage from ~10k to 2–4k per request.",
+      ],
+      education: [
+        "Bachelor's in Software Engineering at Faculdade Descomplica (2024–2028).",
+        "Technical degree in IT from Senac RJ, with a perfect grade.",
+      ],
+      contact: [
+        "LinkedIn: linkedin.com/in/lucas-de-sousa-dantas",
+        "GitHub: github.com/lucassdantas",
+        "Based in Rio de Janeiro, Brazil — open to remote opportunities.",
+      ],
+    },
+    backToMenu: "Want to know anything else?",
+    resetLabel: "Clear conversation",
+    closeLabel: "Close",
+    invalidName: "Could you type a valid name for me to call you? 🙂",
+    typing: "typing…",
+  },
 };
 
 const es: Translation = {
@@ -196,6 +296,56 @@ const es: Translation = {
     ["Francés", "A1", 25],
   ],
   all: "Todos",
+  chat: {
+    launcher: "Abrir chat",
+    title: "Habla con el asistente",
+    greeting: "¡Hola! Soy el asistente virtual de Lucas 👋",
+    askName: "Antes de empezar, ¿cómo puedo llamarte?",
+    namePlaceholder: "Tu nombre…",
+    sendLabel: "Enviar",
+    menuPrompt: "¡Un gusto, {name}! ¿Qué te gustaría saber sobre Lucas?",
+    optionLabels: {
+      about: "Sobre Lucas",
+      exp: "Experiencia",
+      skills: "Habilidades",
+      projects: "Proyectos",
+      education: "Formación",
+      contact: "Contacto",
+    },
+    answers: {
+      about: [
+        "Lucas es desarrollador full stack en Río de Janeiro, con más de 4 años construyendo aplicaciones web, APIs, automatizaciones y sistemas críticos.",
+        "Actualmente trabaja en CMEXX, migrando chatbots corporativos de flujos probabilísticos (n8n) a flujos deterministas en Python.",
+      ],
+      exp: [
+        "Actualmente es desarrollador full stack en CMEXX, en sistemas críticos de salud y en la migración de chatbots a una arquitectura determinista.",
+        "También trabaja como freelancer para clientes nacionales e internacionales, y fue desarrollador WordPress semi-senior en RD Exclusive durante más de 3 años.",
+      ],
+      skills: [
+        "Back-end: Python, FastAPI, Laravel, Node.js, PHP.",
+        "Front-end: React, Next.js, TypeScript, Tailwind CSS.",
+        "Infra e IA: Docker, Linux, Nginx, automatizaciones con n8n e integraciones con LLMs.",
+      ],
+      projects: [
+        "Ya entregó más de 40 proyectos — sistemas, sitios y MVPs — incluyendo clientes internacionales.",
+        "El caso destacado es la migración de chatbots corporativos de flujos probabilísticos a deterministas, reduciendo el consumo de tokens de ~10 mil a 2–4 mil por solicitud.",
+      ],
+      education: [
+        "Ingeniería de Software en Faculdade Descomplica (2024–2028).",
+        "Técnico en Informática por Senac RJ, con nota máxima.",
+      ],
+      contact: [
+        "LinkedIn: linkedin.com/in/lucas-de-sousa-dantas",
+        "GitHub: github.com/lucassdantas",
+        "Con base en Río de Janeiro, Brasil — abierto a oportunidades remotas.",
+      ],
+    },
+    backToMenu: "¿Quieres saber algo más?",
+    resetLabel: "Limpiar conversación",
+    closeLabel: "Cerrar",
+    invalidName: "¿Puedes escribir un nombre válido para llamarte? 🙂",
+    typing: "escribiendo…",
+  },
 };
 
 const fr: Translation = {
@@ -260,6 +410,56 @@ const fr: Translation = {
     ["Français", "A1", 25],
   ],
   all: "Tous",
+  chat: {
+    launcher: "Ouvrir le chat",
+    title: "Discutez avec l'assistant",
+    greeting: "Salut ! Je suis l'assistant virtuel de Lucas 👋",
+    askName: "Avant de commencer, comment puis-je vous appeler ?",
+    namePlaceholder: "Votre prénom…",
+    sendLabel: "Envoyer",
+    menuPrompt: "Ravi de vous rencontrer, {name} ! Que voulez-vous savoir sur Lucas ?",
+    optionLabels: {
+      about: "À propos de Lucas",
+      exp: "Expérience",
+      skills: "Compétences",
+      projects: "Projets",
+      education: "Formation",
+      contact: "Contact",
+    },
+    answers: {
+      about: [
+        "Lucas est développeur full stack à Rio de Janeiro, avec 4+ ans à construire des applications web, APIs, automatisations et systèmes critiques.",
+        "Il travaille actuellement chez CMEXX, où il migre les chatbots d'entreprise de flux probabilistes (n8n) vers des flux déterministes en Python.",
+      ],
+      exp: [
+        "Actuellement développeur full stack chez CMEXX, sur des systèmes critiques de santé et la migration de chatbots vers une architecture déterministe.",
+        "Il travaille aussi en freelance pour des clients nationaux et internationaux, et a été développeur WordPress confirmé chez RD Exclusive pendant plus de 3 ans.",
+      ],
+      skills: [
+        "Back-end : Python, FastAPI, Laravel, Node.js, PHP.",
+        "Front-end : React, Next.js, TypeScript, Tailwind CSS.",
+        "Infra & IA : Docker, Linux, Nginx, automatisations avec n8n et intégrations LLM.",
+      ],
+      projects: [
+        "A livré plus de 40 projets — systèmes, sites et MVP — y compris pour des clients internationaux.",
+        "Le projet phare est la migration de chatbots d'entreprise de flux probabilistes vers des flux déterministes, réduisant l'usage de tokens de ~10k à 2–4k par requête.",
+      ],
+      education: [
+        "Licence en génie logiciel à la Faculdade Descomplica (2024–2028).",
+        "Diplôme technique en informatique du Senac RJ, avec la note maximale.",
+      ],
+      contact: [
+        "LinkedIn : linkedin.com/in/lucas-de-sousa-dantas",
+        "GitHub : github.com/lucassdantas",
+        "Basé à Rio de Janeiro, Brésil — ouvert aux opportunités à distance.",
+      ],
+    },
+    backToMenu: "Autre chose à savoir ?",
+    resetLabel: "Effacer la conversation",
+    closeLabel: "Fermer",
+    invalidName: "Pouvez-vous saisir un prénom valide pour que je vous appelle ? 🙂",
+    typing: "en train d'écrire…",
+  },
 };
 
 export const translations: Record<Lang, Translation> = { pt, en, es, fr };

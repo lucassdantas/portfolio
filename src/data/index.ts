@@ -14,3 +14,4 @@ export { books } from "./books";
 export { marquee } from "./marquee";
 export { site } from "./site";
 export { privacyPolicy } from "./privacy";
+export { chatOptions, chatFlow } from "./chatbot";

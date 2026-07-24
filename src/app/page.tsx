@@ -11,6 +11,7 @@ import { Playground } from "@/components/Playground";
 import { EducationSection } from "@/components/EducationSection";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
+import { ChatWidget } from "@/components/ChatWidget";
 
 export default function Home() {
   return (
@@ -30,6 +31,7 @@ export default function Home() {
         <ContactSection />
         <Footer />
       </div>
+      <ChatWidget />
     </>
   );
 }
