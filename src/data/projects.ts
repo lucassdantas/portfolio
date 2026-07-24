@@ -104,6 +104,15 @@ export const projects: Project[] = [
     tech: ["React", "Tailwind"],
   },
   {
+    name: "Pure Detail",
+    cat: "Sites",
+    desc: "Site institucional e de orçamento para uma prestadora de serviços automotivos na Nova Zelândia (cliente gringo). Reproduzi o design pixel-perfect, incluindo cards com recortes diagonais via SVG customizado, e arquitetei um formulário de orçamento complexo (contato, veículo, lista de serviços e upload de fotos) com boa separação de responsabilidades entre as etapas.",
+    img: IMG + "sites/pure-detail/pure-detail-main.jpg",
+    live: "https://puredetail.co.nz/",
+    repo: "",
+    tech: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
+  },
+  {
     name: "Minha Biblioteca Católica",
     cat: "Sites",
     desc: "Recriação de e-commerce como estudo de front-end.",

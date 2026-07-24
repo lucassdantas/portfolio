@@ -1,5 +1,6 @@
 // Utilitários puros do chatbot: sanitização de input, TTL e persistência.
 // Sem dependência de React — testável isoladamente (src/tests/unit/chat.test.ts).
+import type { ChatOptionId } from "@/types";
 
 export const CHAT_STORAGE_KEY = "ldp-chat";
 /** Conversa expira após 1h sem interação. */
@@ -43,6 +44,8 @@ export interface ChatState {
   name: string | null;
   messages: ChatMessage[];
   lastInteractionAt: number;
+  /** Quantas vezes cada opção do menu já foi clicada — usado pra alternar a variante de resposta. */
+  visits: Partial<Record<ChatOptionId, number>>;
 }
 
 function isChatState(value: unknown): value is ChatState {

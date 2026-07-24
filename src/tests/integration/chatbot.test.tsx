@@ -5,6 +5,9 @@ import userEvent from "@testing-library/user-event";
 import { ChatWidget } from "@/components/ChatWidget";
 import { renderWithProviders } from "../helpers";
 import { CHAT_STORAGE_KEY } from "@/lib/chat";
+import { translations } from "@/data";
+
+const copy = translations.pt.chat;
 
 // next/dynamic(..., { ssr: false }) faz "bailout to CSR" via runtime do Next —
 // não existe fora de um app Next real, então sob Vitest/jsdom o import trava
@@ -64,9 +67,12 @@ describe("Chatbot (widget flutuante)", () => {
 
     await userEvent.click(screen.getByRole("button", { name: /Habilidades/ }));
     await waitFor(
-      () => expect(screen.getByText(/Python, FastAPI, Laravel/)).toBeInTheDocument(),
+      () => expect(screen.getByText(/Back-end/)).toBeInTheDocument(),
       TYPING_TIMEOUT
     );
+    // não deve mencionar o nome de nenhuma empresa das experiências
+    expect(screen.queryByText(/CMEXX/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/RD Exclusive/)).not.toBeInTheDocument();
     // volta pro menu (as opções continuam visíveis) e pergunta se quer saber mais algo
     expect(screen.getByText("Quer saber mais alguma coisa?")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Experiência/ })).toBeInTheDocument();
@@ -119,5 +125,34 @@ describe("Chatbot (widget flutuante)", () => {
     await openChat();
     expect(screen.getByText(/assistente virtual do Lucas/)).toBeInTheDocument();
     expect(screen.queryByText("Pedro")).not.toBeInTheDocument();
+  });
+
+  it("clicar 2x na mesma opção mostra textos diferentes sobre o mesmo assunto", async () => {
+    renderWithProviders(<ChatWidget />);
+    const input = await openChat();
+    await userEvent.type(input, "Ana{Enter}");
+    await waitFor(() => expect(screen.getByText(/Prazer, Ana!/)).toBeInTheDocument(), TYPING_TIMEOUT);
+
+    await userEvent.click(screen.getByRole("button", { name: /Sobre o Lucas/ }));
+    await waitFor(() => expect(screen.getAllByText(copy.backToMenu)).toHaveLength(1), TYPING_TIMEOUT);
+
+    await userEvent.click(screen.getByRole("button", { name: /Sobre o Lucas/ }));
+    await waitFor(() => expect(screen.getAllByText(copy.backToMenu)).toHaveLength(2), TYPING_TIMEOUT);
+
+    // as duas variantes de "about" são diferentes — não pode repetir a 1ª linha
+    expect(screen.getAllByText(copy.answers.about[0][0])).toHaveLength(1);
+    expect(screen.getByText(copy.answers.about[1][0])).toBeInTheDocument();
+  });
+
+  it("encerrar e recomeçar limpa a conversa e volta a pedir o nome", async () => {
+    renderWithProviders(<ChatWidget />);
+    const input = await openChat();
+    await userEvent.type(input, "Ana{Enter}");
+    await waitFor(() => expect(screen.getByText(/Prazer, Ana!/)).toBeInTheDocument(), TYPING_TIMEOUT);
+
+    await userEvent.click(screen.getByRole("button", { name: copy.resetLabel }));
+    expect(screen.queryByText(/Prazer, Ana!/)).not.toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Seu nome…")).toBeInTheDocument();
+    expect(screen.getByText(/assistente virtual do Lucas/)).toBeInTheDocument();
   });
 });

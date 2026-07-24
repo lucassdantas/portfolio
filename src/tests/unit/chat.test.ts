@@ -68,6 +68,7 @@ describe("loadChatState / saveChatState", () => {
     name: "Lucas",
     messages: [{ id: "m1", role: "bot", text: "oi" }],
     lastInteractionAt: Date.now(),
+    visits: { skills: 1 },
   };
 
   it("faz round-trip: salva e lê de volta igual", () => {

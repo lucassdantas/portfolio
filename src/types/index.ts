@@ -135,7 +135,14 @@ export interface ChatCopy {
   /** Usa "{name}" como placeholder — substituído em runtime. */
   menuPrompt: string;
   optionLabels: Record<ChatOptionId, string>;
-  answers: Record<ChatOptionId, string[]>;
+  /**
+   * Variantes de resposta por opção — mini-RAG: cada linha pode usar
+   * placeholders "{chave}" resolvidos com fatos reais de src/data
+   * (src/lib/chatFacts.ts). Ao clicar de novo na mesma opção, o motor
+   * roda pra próxima variante da lista (respostas diferentes sobre o
+   * mesmo assunto em vez de repetir o texto).
+   */
+  answers: Record<ChatOptionId, string[][]>;
   backToMenu: string;
   resetLabel: string;
   closeLabel: string;

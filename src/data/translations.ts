@@ -86,34 +86,47 @@ const pt: Translation = {
     },
     answers: {
       about: [
-        "Lucas é desenvolvedor full stack no Rio de Janeiro, com 4+ anos construindo aplicações web, APIs, automações e sistemas críticos.",
-        "Hoje ele atua na CMEXX, migrando chatbots corporativos de fluxos probabilísticos (n8n) para fluxos determinísticos em Python.",
+        [
+          "Sou desenvolvedor full stack focado em arquitetura limpa, automação e uso prático de IA.",
+          "{years} de experiência e {projectCount} projetos entregues até agora.",
+        ],
+        [
+          "Curto resolver problemas de estoque, integração de sistemas legados e redução de custo com IA aplicada.",
+          "Tecnologias que mais uso hoje: {techTop}.",
+        ],
       ],
       exp: [
-        "Atualmente é dev full stack na CMEXX, em sistemas críticos de saúde e na migração de chatbots para arquitetura determinística.",
-        "Também atende como freelancer para clientes nacionais e internacionais, e foi dev WordPress pleno na RD Exclusive por mais de 3 anos.",
+        ["Minha experiência recente, por cargo e tecnologias:", "{expList}"],
+        [
+          "Também atendo projetos via freelance para clientes nacionais e internacionais.",
+          "Tecnologias mais recorrentes no dia a dia: {techTop}.",
+        ],
       ],
       skills: [
-        "Back-end: Python, FastAPI, Laravel, Node.js, PHP.",
-        "Front-end: React, Next.js, TypeScript, Tailwind CSS.",
-        "Infra & IA: Docker, Linux, Nginx, automações com n8n e integrações com LLMs.",
+        ["Minha stack por área:", "{stackList}"],
+        ["No dia a dia, sigo algumas práticas fixas de arquitetura e código:", "{principlesList}"],
       ],
       projects: [
-        "Já entregou mais de 40 projetos — sistemas, sites e MVPs — incluindo clientes internacionais.",
-        "O case em destaque é a migração de chatbots corporativos de fluxos probabilísticos para determinísticos, cortando o consumo de tokens de ~10 mil para 2–4 mil por request.",
+        ["Já entreguei {projectCount} projetos — sistemas, sites e MVPs.", "Categorias: {projectCategories}."],
+        [
+          "Um destaque recente foi migrar uma arquitetura de IA de fluxos probabilísticos para determinísticos, cortando bastante o custo por execução.",
+          "Gosto de projetos assim: mais previsibilidade, menos custo.",
+        ],
       ],
       education: [
-        "Bacharelado em Engenharia de Software na Faculdade Descomplica (2024–2028).",
-        "Técnico em Informática pelo Senac RJ, com nota 10.",
+        ["Minha formação:", "{eduList}"],
+        ["Também estudo por conta própria — alguns livros que marcaram meu código:", "{bookList}"],
       ],
       contact: [
-        "LinkedIn: linkedin.com/in/lucas-de-sousa-dantas",
-        "GitHub: github.com/lucassdantas",
-        "Base: Rio de Janeiro, Brasil — aberto a oportunidades remotas.",
+        ["LinkedIn: linkedin.com/in/lucas-de-sousa-dantas", "GitHub: github.com/lucassdantas"],
+        [
+          "Baseado no Rio de Janeiro, aberto a oportunidades remotas.",
+          "Chama no LinkedIn que a gente conversa 🙂",
+        ],
       ],
     },
     backToMenu: "Quer saber mais alguma coisa?",
-    resetLabel: "Limpar conversa",
+    resetLabel: "Encerrar e recomeçar",
     closeLabel: "Fechar",
     invalidName: "Pode digitar um nome válido pra eu te chamar? 🙂",
     typing: "digitando…",
@@ -200,34 +213,47 @@ const en: Translation = {
     },
     answers: {
       about: [
-        "Lucas is a full stack developer based in Rio de Janeiro, with 4+ years building web apps, APIs, automations and mission-critical systems.",
-        "He currently works at CMEXX, migrating corporate chatbots from probabilistic flows (n8n) to deterministic Python flows.",
+        [
+          "I'm a full stack developer focused on clean architecture, automation and practical AI usage.",
+          "{years} of experience and {projectCount} projects shipped so far.",
+        ],
+        [
+          "I enjoy solving inventory problems, legacy system integration and cutting cost with applied AI.",
+          "Technologies I use most today: {techTop}.",
+        ],
       ],
       exp: [
-        "Currently a full stack developer at CMEXX, working on critical healthcare systems and migrating chatbots to a deterministic architecture.",
-        "He also freelances for national and international clients, and spent 3+ years as a mid-level WordPress developer at RD Exclusive.",
+        ["My recent experience, by role and technologies:", "{expList}"],
+        [
+          "I also take on freelance projects for national and international clients.",
+          "Most recurring technologies day-to-day: {techTop}.",
+        ],
       ],
       skills: [
-        "Back-end: Python, FastAPI, Laravel, Node.js, PHP.",
-        "Front-end: React, Next.js, TypeScript, Tailwind CSS.",
-        "Infra & AI: Docker, Linux, Nginx, automations with n8n and LLM integrations.",
+        ["My stack by area:", "{stackList}"],
+        ["Day to day, I follow a few fixed architecture and code practices:", "{principlesList}"],
       ],
       projects: [
-        "Shipped 40+ projects — systems, sites and MVPs — including international clients.",
-        "The featured case is migrating corporate AI chatbots from probabilistic flows to deterministic ones, cutting token usage from ~10k to 2–4k per request.",
+        ["I've shipped {projectCount} projects — systems, sites and MVPs.", "Categories: {projectCategories}."],
+        [
+          "A recent highlight was migrating an AI architecture from probabilistic to deterministic flows, cutting cost per run significantly.",
+          "I like projects like that: more predictability, less cost.",
+        ],
       ],
       education: [
-        "Bachelor's in Software Engineering at Faculdade Descomplica (2024–2028).",
-        "Technical degree in IT from Senac RJ, with a perfect grade.",
+        ["My education:", "{eduList}"],
+        ["I also study on my own — a few books that shaped my code:", "{bookList}"],
       ],
       contact: [
-        "LinkedIn: linkedin.com/in/lucas-de-sousa-dantas",
-        "GitHub: github.com/lucassdantas",
-        "Based in Rio de Janeiro, Brazil — open to remote opportunities.",
+        ["LinkedIn: linkedin.com/in/lucas-de-sousa-dantas", "GitHub: github.com/lucassdantas"],
+        [
+          "Based in Rio de Janeiro, Brazil — open to remote opportunities.",
+          "Ping me on LinkedIn and let's talk 🙂",
+        ],
       ],
     },
     backToMenu: "Want to know anything else?",
-    resetLabel: "Clear conversation",
+    resetLabel: "End & start over",
     closeLabel: "Close",
     invalidName: "Could you type a valid name for me to call you? 🙂",
     typing: "typing…",
@@ -314,34 +340,47 @@ const es: Translation = {
     },
     answers: {
       about: [
-        "Lucas es desarrollador full stack en Río de Janeiro, con más de 4 años construyendo aplicaciones web, APIs, automatizaciones y sistemas críticos.",
-        "Actualmente trabaja en CMEXX, migrando chatbots corporativos de flujos probabilísticos (n8n) a flujos deterministas en Python.",
+        [
+          "Soy desarrollador full stack enfocado en arquitectura limpia, automatización y uso práctico de IA.",
+          "{years} de experiencia y {projectCount} proyectos entregados hasta ahora.",
+        ],
+        [
+          "Me gusta resolver problemas de inventario, integración de sistemas legados y reducción de costos con IA aplicada.",
+          "Tecnologías que más uso hoy: {techTop}.",
+        ],
       ],
       exp: [
-        "Actualmente es desarrollador full stack en CMEXX, en sistemas críticos de salud y en la migración de chatbots a una arquitectura determinista.",
-        "También trabaja como freelancer para clientes nacionales e internacionales, y fue desarrollador WordPress semi-senior en RD Exclusive durante más de 3 años.",
+        ["Mi experiencia reciente, por cargo y tecnologías:", "{expList}"],
+        [
+          "También trabajo en proyectos freelance para clientes nacionales e internacionales.",
+          "Tecnologías más recurrentes en el día a día: {techTop}.",
+        ],
       ],
       skills: [
-        "Back-end: Python, FastAPI, Laravel, Node.js, PHP.",
-        "Front-end: React, Next.js, TypeScript, Tailwind CSS.",
-        "Infra e IA: Docker, Linux, Nginx, automatizaciones con n8n e integraciones con LLMs.",
+        ["Mi stack por área:", "{stackList}"],
+        ["En el día a día, sigo algunas prácticas fijas de arquitectura y código:", "{principlesList}"],
       ],
       projects: [
-        "Ya entregó más de 40 proyectos — sistemas, sitios y MVPs — incluyendo clientes internacionales.",
-        "El caso destacado es la migración de chatbots corporativos de flujos probabilísticos a deterministas, reduciendo el consumo de tokens de ~10 mil a 2–4 mil por solicitud.",
+        ["Ya entregué {projectCount} proyectos — sistemas, sitios y MVPs.", "Categorías: {projectCategories}."],
+        [
+          "Un caso reciente fue migrar una arquitectura de IA de flujos probabilísticos a deterministas, reduciendo bastante el costo por ejecución.",
+          "Me gustan proyectos así: más previsibilidad, menos costo.",
+        ],
       ],
       education: [
-        "Ingeniería de Software en Faculdade Descomplica (2024–2028).",
-        "Técnico en Informática por Senac RJ, con nota máxima.",
+        ["Mi formación:", "{eduList}"],
+        ["También estudio por mi cuenta — algunos libros que moldearon mi código:", "{bookList}"],
       ],
       contact: [
-        "LinkedIn: linkedin.com/in/lucas-de-sousa-dantas",
-        "GitHub: github.com/lucassdantas",
-        "Con base en Río de Janeiro, Brasil — abierto a oportunidades remotas.",
+        ["LinkedIn: linkedin.com/in/lucas-de-sousa-dantas", "GitHub: github.com/lucassdantas"],
+        [
+          "Con base en Río de Janeiro, Brasil — abierto a oportunidades remotas.",
+          "Escríbeme por LinkedIn y hablamos 🙂",
+        ],
       ],
     },
     backToMenu: "¿Quieres saber algo más?",
-    resetLabel: "Limpiar conversación",
+    resetLabel: "Terminar y reiniciar",
     closeLabel: "Cerrar",
     invalidName: "¿Puedes escribir un nombre válido para llamarte? 🙂",
     typing: "escribiendo…",
@@ -428,34 +467,47 @@ const fr: Translation = {
     },
     answers: {
       about: [
-        "Lucas est développeur full stack à Rio de Janeiro, avec 4+ ans à construire des applications web, APIs, automatisations et systèmes critiques.",
-        "Il travaille actuellement chez CMEXX, où il migre les chatbots d'entreprise de flux probabilistes (n8n) vers des flux déterministes en Python.",
+        [
+          "Je suis développeur full stack, concentré sur l'architecture propre, l'automatisation et l'usage pratique de l'IA.",
+          "{years} d'expérience et {projectCount} projets livrés à ce jour.",
+        ],
+        [
+          "J'aime résoudre des problèmes d'inventaire, d'intégration de systèmes legacy et de réduction de coûts avec l'IA appliquée.",
+          "Technologies que j'utilise le plus aujourd'hui : {techTop}.",
+        ],
       ],
       exp: [
-        "Actuellement développeur full stack chez CMEXX, sur des systèmes critiques de santé et la migration de chatbots vers une architecture déterministe.",
-        "Il travaille aussi en freelance pour des clients nationaux et internationaux, et a été développeur WordPress confirmé chez RD Exclusive pendant plus de 3 ans.",
+        ["Mon expérience récente, par poste et technologies :", "{expList}"],
+        [
+          "Je prends aussi des projets en freelance pour des clients nationaux et internationaux.",
+          "Technologies les plus récurrentes au quotidien : {techTop}.",
+        ],
       ],
       skills: [
-        "Back-end : Python, FastAPI, Laravel, Node.js, PHP.",
-        "Front-end : React, Next.js, TypeScript, Tailwind CSS.",
-        "Infra & IA : Docker, Linux, Nginx, automatisations avec n8n et intégrations LLM.",
+        ["Ma stack par domaine :", "{stackList}"],
+        ["Au quotidien, je suis quelques pratiques fixes d'architecture et de code :", "{principlesList}"],
       ],
       projects: [
-        "A livré plus de 40 projets — systèmes, sites et MVP — y compris pour des clients internationaux.",
-        "Le projet phare est la migration de chatbots d'entreprise de flux probabilistes vers des flux déterministes, réduisant l'usage de tokens de ~10k à 2–4k par requête.",
+        ["J'ai livré {projectCount} projets — systèmes, sites et MVP.", "Catégories : {projectCategories}."],
+        [
+          "Un projet récent marquant a été de migrer une architecture IA de flux probabilistes vers des flux déterministes, réduisant fortement le coût par exécution.",
+          "J'aime ce genre de projet : plus de prévisibilité, moins de coût.",
+        ],
       ],
       education: [
-        "Licence en génie logiciel à la Faculdade Descomplica (2024–2028).",
-        "Diplôme technique en informatique du Senac RJ, avec la note maximale.",
+        ["Ma formation :", "{eduList}"],
+        ["J'étudie aussi en autodidacte — quelques livres qui ont façonné mon code :", "{bookList}"],
       ],
       contact: [
-        "LinkedIn : linkedin.com/in/lucas-de-sousa-dantas",
-        "GitHub : github.com/lucassdantas",
-        "Basé à Rio de Janeiro, Brésil — ouvert aux opportunités à distance.",
+        ["LinkedIn : linkedin.com/in/lucas-de-sousa-dantas", "GitHub : github.com/lucassdantas"],
+        [
+          "Basé à Rio de Janeiro, Brésil — ouvert aux opportunités à distance.",
+          "Contactez-moi sur LinkedIn, discutons-en 🙂",
+        ],
       ],
     },
     backToMenu: "Autre chose à savoir ?",
-    resetLabel: "Effacer la conversation",
+    resetLabel: "Terminer et recommencer",
     closeLabel: "Fermer",
     invalidName: "Pouvez-vous saisir un prénom valide pour que je vous appelle ? 🙂",
     typing: "en train d'écrire…",
