@@ -19,7 +19,7 @@ export interface Translation {
   statYears: string;
   statProj: string;
   statLangs: string;
-  badge: string;
+  badges: string[];
   termTitle: string;
   termDesc: string;
   stackTitle: string;

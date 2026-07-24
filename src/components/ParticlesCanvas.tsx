@@ -11,7 +11,7 @@ export function ParticlesCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -23,8 +23,8 @@ export function ParticlesCanvas() {
     const pts = Array.from({ length: COUNT }, () => ({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
+      vx: reduced ? 0 : (Math.random() - 0.5) * 0.4,
+      vy: reduced ? 0 : (Math.random() - 0.5) * 0.4,
     }));
     const mouse = { x: -999, y: -999 };
 

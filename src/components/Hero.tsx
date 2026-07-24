@@ -1,12 +1,72 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { site } from "@/data";
+
+const TYPE_MS = 55;
+const DELETE_MS = 30;
+const HOLD_MS = 2200;
+const GAP_MS = 400;
+
+function useTypedCycle(phrases: string[]) {
+  const [text, setText] = useState(phrases[0] ?? "");
+
+  useEffect(() => {
+    if (phrases.length === 0) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      let phraseIndex = 0;
+      setText(phrases[phraseIndex]);
+      const interval = setInterval(() => {
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        setText(phrases[phraseIndex]);
+      }, HOLD_MS);
+      return () => clearInterval(interval);
+    }
+
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+    let timer: ReturnType<typeof setTimeout>;
+
+    const tick = () => {
+      const current = phrases[phraseIndex % phrases.length];
+
+      if (!deleting) {
+        charIndex++;
+        setText(current.slice(0, charIndex));
+        if (charIndex === current.length) {
+          deleting = true;
+          timer = setTimeout(tick, HOLD_MS);
+          return;
+        }
+        timer = setTimeout(tick, TYPE_MS);
+        return;
+      }
+
+      charIndex--;
+      setText(current.slice(0, charIndex));
+      if (charIndex === 0) {
+        deleting = false;
+        phraseIndex++;
+        timer = setTimeout(tick, GAP_MS);
+        return;
+      }
+      timer = setTimeout(tick, DELETE_MS);
+    };
+
+    timer = setTimeout(tick, TYPE_MS);
+    return () => clearTimeout(timer);
+  }, [phrases]);
+
+  return text;
+}
 
 export function Hero() {
   const { t } = useLanguage();
   const photoRef = useRef<HTMLDivElement>(null);
+  const typedBadge = useTypedCycle(t.badges);
 
   const onMove = (e: React.MouseEvent) => {
     const el = photoRef.current;
@@ -80,7 +140,8 @@ export function Hero() {
             className="relative block h-[340px] w-[300px] border border-bord object-cover grayscale-[60%] transition hover:grayscale-0"
           />
           <div className="absolute -left-[34px] bottom-3.5 rounded-lg border border-bord bg-card px-3.5 py-2 font-mono text-xs text-txt shadow-[0_8px_24px_rgba(0,0,0,.35)]">
-            <span className="text-[#22C55E]">●</span> {t.badge}
+            <span className="text-[#22C55E]">●</span> {typedBadge}
+            <span className="ml-px text-accent motion-safe:animate-pulse">▍</span>
           </div>
         </div>
       </div>
