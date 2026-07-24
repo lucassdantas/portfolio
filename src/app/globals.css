@@ -1,8 +1,113 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+/* Design tokens — temas via CSS vars (data-theme no <html>) */
+:root {
+  --bg: #04080f;
+  --bg2: #081120;
+  --card: #0b1524;
+  --border: #16233a;
+  --text: #e2e8f0;
+  --muted: #8c98ab;
+  --accent: #1d94e3;
+  --navbg: rgba(4, 8, 15, 0.82);
+}
 
-.title{
-  font-family:'Mina', 'sans-serif';
+html[data-theme="light"] {
+  --bg: #eef1f5;
+  --bg2: #ffffff;
+  --card: #ffffff;
+  --border: #d7dce5;
+  --text: #111b29;
+  --muted: #4e5d74;
+  --navbg: rgba(238, 241, 245, 0.85);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg2: var(--bg2);
+  --color-card: var(--card);
+  --color-bord: var(--border);
+  --color-txt: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-navbg: var(--navbg);
+  --font-sans: var(--font-space-grotesk), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+  --breakpoint-nav: 920px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-space-grotesk), sans-serif;
+    transition: background 0.3s, color 0.3s;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--text);
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 5px;
+  }
+
+  input,
+  textarea,
+  button {
+    font-family: inherit;
+  }
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }

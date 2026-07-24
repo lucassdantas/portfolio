@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lucas Dantas — Desenvolvedor Full Stack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#04080F;--bg2:#081120;--card:#0B1524;--border:#16233A;--text:#E2E8F0;--muted:#8C98AB;--accent:#1D94E3;--navbg:rgba(4,8,15,.82)}
+html[data-theme='light']{--bg:#EEF1F5;--bg2:#FFFFFF;--card:#FFFFFF;--border:#D7DCE5;--text:#111B29;--muted:#4E5D74;--navbg:rgba(238,241,245,.85)}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;transition:background .3s,color .3s;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{color:var(--text)}
+*{box-sizing:border-box}
+::selection{background:var(--accent);color:#fff}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:5px}
+input,textarea,button{font-family:inherit}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@media (max-width:920px){[data-hm]{display:none !important}}
+</style>
+</helmet>
+<canvas ref="{{ canvasRef }}" style="position:fixed;inset:0;z-index:0;pointer-events:none"></canvas>
+<div style="position:relative;z-index:1">
+<nav data-screen-label="Nav" style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 32px;background:var(--navbg);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)">
+  <a href="#top" style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:16px;color:var(--accent)">&lt;lucas.dantas /&gt;</a>
+  <div data-hm="1" style="display:flex;gap:26px;align-items:center">
+    <sc-for list="{{ navLinks }}" as="nl" hint-placeholder-count="6">
+      <a href="{{ nl.href }}" style="color:var(--muted);font-size:15px;font-weight:500" style-hover="color:var(--accent)">{{ nl.label }}</a>
+    </sc-for>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <div style="display:flex;gap:2px;border:1px solid var(--border);border-radius:6px;padding:2px;font-family:'JetBrains Mono',monospace">
+      <sc-for list="{{ langBtns }}" as="lb" hint-placeholder-count="4">
+        <button onClick="{{ lb.onClick }}" style="{{ lb.style }}">{{ lb.code }}</button>
+      </sc-for>
+    </div>
+    <button onClick="{{ toggleTheme }}" title="Tema" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer;font-size:15px;padding:5px 10px" style-hover="border-color:var(--accent)">{{ themeIcon }}</button>
+  </div>
+</nav>
+
+<section id="top" data-screen-label="Hero" style="max-width:1200px;margin:0 auto;padding:150px 32px 60px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:56px;align-items:center;min-height:88vh">
+  <div>
+    <p style="font-family:'JetBrains Mono',monospace;color:var(--accent);margin:0 0 14px;font-size:15px">{{ t.role }}</p>
+    <h1 style="font-size:clamp(52px,8vw,96px);line-height:.98;margin:0 0 22px;font-weight:700;letter-spacing:-.03em">Lucas Dantas<span style="color:var(--accent)">.</span></h1>
+    <p style="color:var(--muted);font-size:19px;line-height:1.6;margin:0 0 32px;max-width:540px;text-wrap:pretty">{{ t.tagline }}</p>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:44px">
+      <a href="#projetos" style="background:var(--accent);color:#fff;padding:13px 26px;border-radius:8px;font-weight:600;font-size:15px" style-hover="opacity:.85;color:#fff">{{ t.cta1 }}</a>
+      <a href="https://www.linkedin.com/in/lucas-de-sousa-dantas/" target="_blank" style="border:1px solid var(--border);color:var(--text);padding:13px 26px;border-radius:8px;font-weight:600;font-size:15px" style-hover="border-color:var(--accent);color:var(--accent)">{{ t.cta2 }}</a>
+    </div>
+    <div style="display:flex;gap:36px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace">
+      <div><div style="font-size:26px;font-weight:700;color:var(--accent)">4+</div><div style="font-size:12px;color:var(--muted)">{{ t.statYears }}</div></div>
+      <div><div style="font-size:26px;font-weight:700;color:var(--accent)">40+</div><div style="font-size:12px;color:var(--muted)">{{ t.statProj }}</div></div>
+      <div><div style="font-size:26px;font-weight:700;color:var(--accent)">4</div><div style="font-size:12px;color:var(--muted)">{{ t.statLangs }}</div></div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:center">
+    <div ref="{{ photoRef }}" style="position:relative;width:300px;transition:transform .15s ease-out;transform-style:preserve-3d">
+      <div style="position:absolute;top:-24px;left:-24px;width:110px;height:110px;background:var(--accent);opacity:.85"></div>
+      <div style="position:absolute;bottom:-24px;right:-24px;width:90px;height:90px;background:linear-gradient(135deg,#1E1D3F,var(--accent));animation:floaty 5s ease-in-out infinite"></div>
+      <img src="src/assets/desenvolvedor-web-lucas-dantas.jpg" alt="Lucas Dantas" style="position:relative;width:300px;height:340px;object-fit:cover;display:block;border:1px solid var(--border);filter:grayscale(60%)" style-hover="filter:grayscale(0%)">
+      <div style="position:absolute;bottom:14px;left:-34px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);box-shadow:0 8px 24px rgba(0,0,0,.35)"><span style="color:#22C55E">●</span> {{ t.badge }}</div>
+    </div>
+  </div>
+</section>
+
+<div data-screen-label="Marquee" style="overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:16px 0;background:var(--bg2)">
+  <div style="display:flex;gap:48px;width:max-content;animation:marquee 36s linear infinite;font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--muted);white-space:nowrap">
+    <sc-for list="{{ marqueeItems }}" as="mi" hint-placeholder-count="10">
+      <span>{{ mi }} <span style="color:var(--accent)">✦</span></span>
+    </sc-for>
+  </div>
+</div>
+
+<section id="terminal" data-screen-label="Terminal" style="max-width:1000px;margin:0 auto;padding:100px 32px 40px">
+  <p style="font-family:'JetBrains Mono',monospace;color:var(--accent);margin:0 0 8px;font-size:14px">01 — {{ t.termTitle }}</p>
+  <p style="color:var(--muted);margin:0 0 24px;font-size:16px">{{ t.termDesc }}</p>
+  <div style="background:#060D18;border:1px solid #16233A;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4)">
+    <div style="display:flex;align-items:center;gap:8px;padding:12px 16px;background:#0B1524;border-bottom:1px solid #16233A">
+      <span style="width:12px;height:12px;border-radius:50%;background:#FF5F57"></span>
+      <span style="width:12px;height:12px;border-radius:50%;background:#FEBC2E"></span>
+      <span style="width:12px;height:12px;border-radius:50%;background:#28C840"></span>
+      <span style="margin-left:12px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#8C98AB">lucas@portfolio: ~</span>
+    </div>
+    <div ref="{{ termBodyRef }}" onClick="{{ focusTerm }}" style="padding:18px;height:340px;overflow-y:auto;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7;cursor:text">
+      <sc-for list="{{ termLines }}" as="tl" hint-placeholder-count="3">
+        <div style="white-space:pre-wrap;word-break:break-word;color:{{ tl.color }}">{{ tl.text }}</div>
+      </sc-for>
+      <div style="display:flex;gap:8px;align-items:baseline">
+        <span style="color:#22C55E">lucas@portfolio</span><span style="color:#8C98AB">:~$</span>
+        <input ref="{{ termInputRef }}" onKeyDown="{{ onTermKey }}" spellCheck="false" autoComplete="off" style="flex:1;background:none;border:none;outline:none;color:#E2E8F0;font-family:'JetBrains Mono',monospace;font-size:13.5px;caret-color:#1D94E3">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stack" data-screen-label="Stack" style="max-width:1200px;margin:0 auto;padding:100px 32px 40px">
+  <p style="font-family:'JetBrains Mono',monospace;color:var(--accent);margin:0 0 8px;font-size:14px">02 — {{ t.stackTitle }}</p>
+  <p style="color:var(--muted);margin:0 0 36px;font-size:16px;max-width:640px">{{ t.stackDesc }}</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px">
+    <sc-for list="{{ stackGroups }}" as="sg" hint-placeholder-count="6">
+      <div data-reveal="1" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px" style-hover="border-color:var(--accent)">
+        <h3 style="margin:0 0 16px;font-size:15px;font-family:'JetBrains Mono',monospace;color:var(--accent)">{{ sg.label }}</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <sc-for list="{{ sg.items }}" as="si" hint-placeholder-count="5">
+            <span style="display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);border-radius:6px;padding:6px 11px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--text);background:var(--bg2)" style-hover="border-color:var(--accent)">
+              <sc-if value="{{ si.img }}" hint-placeholder-val="{{ false }}"><img src="{{ si.img }}" alt="" style="width:16px;height:16px;object-fit:contain"></sc-if>
+              {{ si.name }}
+            </span>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+  <div style="margin-top:56px">
+    <p style="font-family:'JetBrains Mono',monospace;color:var(--accent);margin:0 0 20px;font-size:14px">// {{ t.engTitle }}</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px">
+      <sc-for list="{{ principles }}" as="pr" hint-placeholder-count="4">
+        <div data-reveal="1" style="border:1px solid var(--border);border-radius:12px;padding:22px;background:var(--bg2)" style-hover="border-color:var(--accent)">
+          <div style="font-size:24px;margin-bottom:12px">{{ pr.icon }}</div>
+          <h3 style="margin:0 0 8px;font-size:16.5px">{{ pr.title }}</h3>
+          <p style="margin:0;color:var(--muted);font-size:13.5px;line-height:1.55;text-wrap:pretty">{{ pr.desc }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section id="experiencia" data-screen-label="Experiencia" style="max-width:1000px;margin:0 auto;padding:100px 32px 40px">
+  <p style="font-family:'JetBrains Mono',monospace;color:var(--accent);margin:0 0 8px;font-size:14px">03 — {{ t.expTitle }}</p>
+  <p style="color:var(--muted);margin:0 0 40px;font-size:16px;max-width:640px">{{ t.expDesc }}</p>
+  <div style="display:flex;flex-direction:column">
+    <sc-for list="{{ exps }}" as="ex" hint-placeholder-count="3">
+      <div style="display:grid;grid-template-columns:24px 1fr;gap:22px">
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <span style="width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid var(--bg);box-shadow:0 0 0 2px var(--accent);margin-top:6px"></span>
+          <span style="flex:1;width:2px;background:var(--border)"></span>
+        </div>
+        <div data-reveal="1" style="padding-bottom:36px">
+          <button onClick="{{ ex.toggle }}" style="display:flex;width:100%;justify-content:space-between;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 20px;cursor:pointer;text-align:left;color:var(--text)" style-hover="border-color:var(--accent)">
+            <span>
+              <span style="display:block;font-size:18px;font-weight:700">{{ ex.title }} <span style="color:var(--accent)">@ {{ ex.company }}</span></span>
+              <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--muted);margin-top:5px">{{ ex.period }} · {{ ex.mode }}</span>
+            </span>
+            <span style="font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:18px">{{ ex.chevron }}</span>
+          </button>
+          <sc-if value="{{ ex.open }}" hint-placeholder-val="{{ false }}">
+            <div style="border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;padding:20px 22px;background:var(--bg2);margin:0 8px">
+              <ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:9px;color:var(--muted);font-size:14.5px;line-height:1.55">
+                <sc-for list="{{ ex.bullets }}" as="b" hint-placeholder-count="4"><li>{{ b }}</li></sc-for>
+              </ul>
+              <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:18px">
+                <sc-for list="{{ ex.tech }}" as="tc" hint-placeholder-count="5">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--accent);border:1px solid var(--border);border-radius:20px;padding:4px 11px">{{ tc }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<section id="projetos" data-screen-label="Projetos" style="max-width:1200px;margin:0 auto;padding:100px 32px 40px">
+  <p style="font-family:'JetBrains Mono',monospace;color:var(--accent);margin:0 0 8px;font-size:14px">04 — {{ t.projTitle }}</p>
+  <p style="color:var(--muted);margin:0 0 36px;font-size:16px;max-width:640px">{{ t.projDesc }}</p>
+  <div data-reveal="1" style="background:#060D18;border:1px solid #16233A;border-radius:14px;padding:34px;margin-bottom:44px;position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;right:0;width:280px;height:280px;background:radial-gradient(circle at top right,rgba(29,148,227,.18),transparent 70%)"></div>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#1D94E3;margin:0 0 10px">// {{ t.featured }}</p>
+    <h3 style="margin:0 0 12px;font-size:26px;color:#E2E8F0">Chatbots corporativos com IA — CMEXX</h3>
+    <p style="color:#8C98AB;font-size:15.5px;line-height:1.6;max-width:720px;margin:0 0 26px;text-wrap:pretty">{{ t.featDesc }}</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+      <div style="border:1px solid #16233A;border-radius:10px;padding:16px;background:#0B1524"><div style="font-family:'JetBrains Mono',monospace;font-size:21px;font-weight:700;color:#22C55E">~10k → 2–4k</div><div style="font-size:12.5px;color:#8C98AB;margin-top:5px">{{ t.featM1 }}</div></div>
+      <div style="border:1px solid #16233A;border-radius:10px;padding:16px;background:#0B1524"><div style="font-family:'JetBrains Mono',monospace;font-size:21px;font-weight:700;color:#1D94E3">n8n → Python</div><div style="font-size:12.5px;color:#8C98AB;margin-top:5px">{{ t.featM2 }}</div></div>
+      <div style="border:1px solid #16233A;border-radius:10px;padding:16px;background:#0B1524"><div style="font-family:'JetBrains Mono',monospace;font-size:21px;font-weight:700;color:#A78BFA">MCP + LLM</div><div style="font-size:12.5px;color:#8C98AB;margin-top:5px">{{ t.featM3 }}</div></div>
+    </div>
+  </div>
+  <div style="display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap">
+    <sc-for list="{{ cats }}" as="c" hint-placeholder-count="3">
+      <button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
+    </sc-for>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:24px">
+    <sc-for list="{{ projs }}" as="p" hint-placeholder-count="6">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;transition:transform .25s,border-color .25s" style-hover="transform:translateY(-5px);border-color:var(--accent)">
+        <div style="height:180px;overflow:hidden;background:var(--bg2)">
+          <img src="{{ p.img }}" alt="{{ p.name }}" style="width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(35%);transition:filter .3s,transform .4s" style-hover="filter:grayscale(0%);transform:scale(1.04)">
+        </div>
+        <div style="padding:18px 20px;display:flex;flex-direction:column;gap:10px;flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+            <h3 style="margin:0;font-size:17px">{{ p.name }}</h3>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--accent);border:1px solid var(--border);border-radius:20px;padding:3px 9px;white-space:nowrap">{{ p.cat }}</span>
+          </div>
+          <p style="margin:0;color:var(--muted);font-size:13.5px;line-height:1.5;flex:1">{{ p.desc }}</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <sc-for list="{{ p.tech }}" as="pt" hint-placeholder-count="3">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted)">#{{ pt }}</span>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:14px;font-family:'JetBrains Mono',monospace;font-size:12.5px">
+            <sc-if value="{{ p.live }}" hint-placeholder-val="{{ false }}"><a href="{{ p.live }}" target="_blank" style-hover="color:var(--text)">↗ live</a></sc-if>
+            <sc-if value="{{ p.repo }}" hint-placeholder-val="{{ false }}"><a href="{{ p.repo }}" target="_blank" style-hover="color:var(--text)">↗ github</a></sc-if>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<section id="github" data-screen-label="GitHub" style="max-width:1000px;margin:0 auto;padding:100px 32px 40px">
+  <p style="font-family:'JetBrains Mono',monospace;color:var(--accent);margin:0 0 8px;font-size:14px">05 — {{ t.ghTitle }}</p>
+  <p style="color:var(--muted);margin:0 0 32px;font-size:16px">{{ t.ghDesc }}</p>
+  <sc-if value="{{ ghLoaded }}" hint-placeholder-val="{{ false }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center"><div style="font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;color:var(--accent)">{{ gh.repos }}</div><div style="font-size:12.5px;color:var(--muted);margin-top:5px">{{ t.ghRepos }}</div></div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center"><div style="font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;color:var(--accent)">{{ gh.followers }}</div><div style="font-size:12.5px;color:var(--muted);margin-top:5px">{{ t.ghFollowers }}</div></div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center"><div style="font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;color:var(--accent)">{{ gh.stars }}</div><div style="font-size:12.5px;color:var(--muted);margin-top:5px">{{ t.ghStars }}</div></div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center"><div style="font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;color:var(--accent)">{{ gh.gists }}</div><div style="font-size:12.5px;color:var(--muted);margin-top:5px">gists</div></div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px">
+      <p style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);margin:0 0 16px">{{ t.ghLangs }}</p>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <sc-for list="{{ ghLangs }}" as="gl" hint-placeholder-count="5">
+          <div style="display:grid;grid-template-columns:120px 1fr 46px;gap:12px;align-items:center">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12.5px">{{ gl.name }}</span>
+            <div style="height:8px;background:var(--bg2);border-radius:4px;overflow:hidden"><div style="{{ gl.barStyle }}"></div></div>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);text-align:right">{{ gl.pct }}%</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ ghLoading }}" hint-placeholder-val="{{ true }}">
+    <p style="font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:13.5px">$ fetch api.github.com/users/lucassdantas <span style="animation:blink 1s infinite">▊</span></p>
+  </sc-if>
+  <p style="margin-top:20px;font-family:'JetBrains Mono',monospace;font-size:13px"><a href="https://github.com/lucassdantas" target="_blank">↗ github.com/lucassdantas</a></p>
+</section>
+
+<section id="playground" data-screen-label="Playground" style="max-width:1000px;margin:0 auto;padding:100px 32px 40px">
+  <p style="font-family:'JetBrains Mono',monospace;color:var(--accent);margin:0 0 8px;font-size:14px">06 — {{ t.playTitle }}</p>
+  <p style="color:var(--muted);margin:0 0 24px;font-size:16px">{{ t.playDesc }}</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:0;border:1px solid #16233A;border-radius:12px;overflow:hidden">
+    <div style="background:#060D18;display:flex;flex-direction:column">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:#0B1524;border-bottom:1px solid #16233A">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8C98AB">editor.js</span>
+        <button onClick="{{ runPlay }}" style="background:#1D94E3;color:#fff;border:none;border-radius:6px;padding:6px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;cursor:pointer;font-weight:700" style-hover="opacity:.85">{{ t.run }}</button>
+      </div>
+      <textarea value="{{ playCode }}" onChange="{{ onPlayChange }}" spellCheck="false" style="flex:1;min-height:220px;background:transparent;border:none;outline:none;resize:vertical;padding:16px;color:#E2E8F0;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.6"></textarea>
+    </div>
+    <div style="background:#04080F;border-left:1px solid #16233A;display:flex;flex-direction:column">
+      <div style="padding:10px 16px;background:#0B1524;border-bottom:1px solid #16233A"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8C98AB">console</span></div>
+      <div style="padding:16px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.7;overflow-y:auto;min-height:220px">
+        <sc-for list="{{ playOut }}" as="po" hint-placeholder-count="1">
+          <div style="white-space:pre-wrap;color:#22C55E">&gt; {{ po }}</div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="educacao" data-screen-label="Educacao" style="max-width:1200px;margin:0 auto;padding:100px 32px 40px">
+  <p style="font-family:'JetBrains Mono',monospace;color:var(--accent);margin:0 0 8px;font-size:14px">07 — {{ t.eduTitle }}</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;margin:32px 0 48px">
+    <sc-for list="{{ edus }}" as="ed" hint-placeholder-count="2">
+      <div data-reveal="1" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:26px" style-hover="border-color:var(--accent)">
+        <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);margin:0 0 10px">{{ ed.period }}</p>
+        <h3 style="margin:0 0 4px;font-size:18px">{{ ed.course }}</h3>
+        <p style="margin:0 0 14px;color:var(--muted);font-size:14px">{{ ed.institution }} · {{ ed.grade }}</p>
+        <p style="margin:0;color:var(--muted);font-size:13.5px;line-height:1.55;text-wrap:pretty">{{ ed.desc }}</p>
+      </div>
+    </sc-for>
+  </div>
+  <p style="font-family:'JetBrains Mono',monospace;color:var(--accent);margin:0 0 20px;font-size:14px">// {{ t.certTitle }}</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:48px">
+    <sc-for list="{{ certs }}" as="ce" hint-placeholder-count="6">
+      <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;border:1px solid var(--border);border-radius:10px;padding:14px 18px;background:var(--bg2)" style-hover="border-color:var(--accent)">
+        <div>
+          <sc-if value="{{ ce.url }}" hint-placeholder-val="{{ false }}"><a href="{{ ce.url }}" target="_blank" style="color:var(--text);font-size:14px;font-weight:600" style-hover="color:var(--accent)">{{ ce.title }} ↗</a></sc-if>
+          <sc-if value="{{ ce.noUrl }}" hint-placeholder-val="{{ false }}"><span style="color:var(--text);font-size:14px;font-weight:600">{{ ce.title }}</span></sc-if>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);margin-top:4px">{{ ce.institution }} · {{ ce.period }}</div>
+        </div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);white-space:nowrap">{{ ce.hours }}h</span>
+      </div>
+    </sc-for>
+  </div>
+  <p style="font-family:'JetBrains Mono',monospace;color:var(--accent);margin:0 0 20px;font-size:14px">// {{ t.booksTitle }}</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:48px">
+    <sc-for list="{{ books }}" as="bk" hint-placeholder-count="4">
+      <div style="display:flex;gap:14px;align-items:center;border:1px solid var(--border);border-radius:10px;padding:14px 16px;background:var(--card)" style-hover="border-color:var(--accent)">
+        <div style="width:40px;height:56px;flex-shrink:0;background:var(--bg2);border-left:3px solid var(--accent);border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--accent)">{{ bk.initials }}</div>
+        <div>
+          <div style="font-weight:600;font-size:14.5px">{{ bk.title }}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);margin-top:3px">{{ bk.author }}</div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+  <p style="font-family:'JetBrains Mono',monospace;color:var(--accent);margin:0 0 20px;font-size:14px">// {{ t.langTitle }}</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px">
+    <sc-for list="{{ spokenLangs }}" as="sl" hint-placeholder-count="4">
+      <div style="border:1px solid var(--border);border-radius:10px;padding:18px;background:var(--card)">
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span style="font-weight:600;font-size:15px">{{ sl.name }}</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent)">{{ sl.level }}</span></div>
+        <div style="height:7px;background:var(--bg2);border-radius:4px;overflow:hidden"><div style="{{ sl.barStyle }}"></div></div>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<section id="contato" data-screen-label="Contato" style="max-width:1000px;margin:0 auto;padding:110px 32px 90px;text-align:center">
+  <p style="font-family:'JetBrains Mono',monospace;color:var(--accent);margin:0 0 12px;font-size:14px">08 — {{ t.contactTitle }}</p>
+  <h2 style="font-size:clamp(34px,5vw,56px);margin:0 0 18px;letter-spacing:-.02em">{{ t.contactHead }}</h2>
+  <p style="color:var(--muted);font-size:17px;max-width:520px;margin:0 auto 36px;line-height:1.6;text-wrap:pretty">{{ t.contactDesc }}</p>
+  <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+    <a href="https://www.linkedin.com/in/lucas-de-sousa-dantas/" target="_blank" style="background:var(--accent);color:#fff;padding:14px 30px;border-radius:8px;font-weight:600;font-size:15px" style-hover="opacity:.85;color:#fff">LinkedIn ↗</a>
+    <a href="https://github.com/lucassdantas" target="_blank" style="border:1px solid var(--border);color:var(--text);padding:14px 30px;border-radius:8px;font-weight:600;font-size:15px" style-hover="border-color:var(--accent);color:var(--accent)">GitHub ↗</a>
+  </div>
+  <p style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--muted);margin-top:36px">📍 Rio de Janeiro, Brasil · {{ t.remote }}</p>
+</section>
+
+<footer style="border-top:1px solid var(--border);padding:26px 32px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)">
+  <span>© 2026 Lucas Dantas — {{ t.footer }}</span>
+  <span>code: <a href="https://github.com/lucassdantas" target="_blank">github.com/lucassdantas</a></span>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#1D94E3&quot;,&quot;options&quot;:[&quot;#1D94E3&quot;,&quot;#22D3A5&quot;,&quot;#A78BFA&quot;,&quot;#F59E0B&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Visual&quot;},&quot;particles&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Visual&quot;},&quot;particleCount&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:60,&quot;min&quot;:0,&quot;max&quot;:150,&quot;step&quot;:10,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Visual&quot;}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.db = null;
+    this.canvasRef = React.createRef();
+    this.photoRef = React.createRef();
+    this.termBodyRef = React.createRef();
+    this.termInputRef = React.createRef();
+    this.termHistory = [];
+    this.histIdx = -1;
+    this.state = {
+      theme: 'dark', lang: 'pt', openExp: 0, cat: 'all',
+      termLines: [
+        { text: '██ lucas.dantas — portfolio v2.0', color: '#1D94E3' },
+        { text: "Digite 'help' para ver os comandos disponíveis.", color: '#8C98AB' },
+      ],
+      playCode: "// Edite e clique em RUN ▶\nconst dev = {\n  nome: 'Lucas Dantas',\n  stack: ['Next.js', 'Python', 'Laravel', 'Docker'],\n  foco: 'arquitetura limpa + custo baixo'\n};\nconsole.log(JSON.stringify(dev, null, 2));",
+      playOut: ['aguardando execução...'],
+      gh: null, ghLangs: [], ghErr: false,
+    };
+  }
+  T() { return (this.db && this.db.translations[this.state.lang]) || { langs: [] }; }
+  expsData() { return this.db ? this.db.experiences : []; }
+  projsData() { return this.db ? this.db.projects : []; }
+  certsData() { return this.db ? this.db.certifications : []; }
+  stackData() { return this.db ? this.db.stackGroups : []; }
+  principlesData() { return this.db ? this.db.principles : []; }
+  componentDidMount() {
+    const savedTheme = localStorage.getItem('ldp-theme');
+    const savedLang = localStorage.getItem('ldp-lang');
+    if (savedTheme || savedLang) this.setState({ theme: savedTheme || 'dark', lang: savedLang || 'pt' });
+    this.applyTheme(savedTheme || 'dark');
+    this.initParticles();
+    this.initReveal();
+    this.initTilt();
+    this.fetchGithub();
+    import('./portfolio-data.js').then(m => { this.db = m.db; this.forceUpdate(); });
+  }
+  applyTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.setProperty('--accent', this.props.accent ?? '#1D94E3');
+  }
+  componentDidUpdate() { this.applyTheme(this.state.theme); }
+  initTilt() {
+    const el = this.photoRef.current; if (!el) return;
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+      el.style.transform = `perspective(700px) rotateY(${x * 10}deg) rotateX(${-y * 10}deg)`;
+    });
+    el.addEventListener('mouseleave', () => { el.style.transform = 'perspective(700px)'; });
+  }
+  initReveal() {
+    const els = document.querySelectorAll('[data-reveal]');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => { if (en.isIntersecting) { en.target.style.opacity = '1'; en.target.style.transform = 'translateY(0)'; io.unobserve(en.target); } });
+    }, { threshold: 0.12 });
+    els.forEach(el => {
+      if (el.getBoundingClientRect().top > window.innerHeight) {
+        el.style.opacity = '0'; el.style.transform = 'translateY(26px)';
+        el.style.transition = 'opacity .7s ease, transform .7s ease';
+        io.observe(el);
+      }
+    });
+    setTimeout(() => els.forEach(el => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }), 6000);
+  }
+  initParticles() {
+    if (this.props.particles === false) return;
+    const canvas = this.canvasRef.current; if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let w, h, pts = [];
+    const N = Math.round(this.props.particleCount ?? 60);
+    const resize = () => { w = canvas.width = innerWidth; h = canvas.height = innerHeight; };
+    resize(); addEventListener('resize', resize);
+    for (let i = 0; i < N; i++) pts.push({ x: Math.random() * innerWidth, y: Math.random() * innerHeight, vx: (Math.random() - .5) * .4, vy: (Math.random() - .5) * .4 });
+    const mouse = { x: -999, y: -999 };
+    addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+    const hex = () => (this.props.accent ?? '#1D94E3');
+    const loop = () => {
+      ctx.clearRect(0, 0, w, h);
+      const light = document.documentElement.dataset.theme === 'light';
+      const base = light ? 0.25 : 0.5;
+      pts.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > w) p.vx *= -1;
+        if (p.y < 0 || p.y > h) p.vy *= -1;
+        const dm = Math.hypot(p.x - mouse.x, p.y - mouse.y);
+        if (dm < 110) { p.x += (p.x - mouse.x) / dm * 1.1; p.y += (p.y - mouse.y) / dm * 1.1; }
+        ctx.fillStyle = hex() + '66'; ctx.fillRect(p.x - 1, p.y - 1, 2, 2);
+      });
+      for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) {
+        const a = pts[i], b = pts[j], d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (d < 130) {
+          ctx.strokeStyle = hex() + Math.floor((1 - d / 130) * base * 255).toString(16).padStart(2, '0');
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        }
+      }
+      this._raf = requestAnimationFrame(loop);
+    };
+    loop();
+  }
+  componentWillUnmount() { cancelAnimationFrame(this._raf); }
+  fetchGithub() {
+    Promise.all([
+      fetch('https://api.github.com/users/lucassdantas').then(r => r.json()),
+      fetch('https://api.github.com/users/lucassdantas/repos?per_page=100').then(r => r.json()),
+    ]).then(([u, repos]) => {
+      if (!u || !u.public_repos || !Array.isArray(repos)) throw 0;
+      const stars = repos.reduce((s, r) => s + (r.stargazers_count || 0), 0);
+      const langs = {};
+      repos.forEach(r => { if (r.language) langs[r.language] = (langs[r.language] || 0) + 1; });
+      const total = Object.values(langs).reduce((a, b) => a + b, 0) || 1;
+      const top = Object.entries(langs).sort((a, b) => b[1] - a[1]).slice(0, 5)
+        .map(([name, n]) => ({ name, pct: Math.round(n / total * 100) }));
+      this.setState({ gh: { repos: u.public_repos, followers: u.followers, stars, gists: u.public_gists || 0 }, ghLangs: top });
+    }).catch(() => this.setState({ ghErr: true }));
+  }
+  termPush(lines) {
+    this.setState(s => ({ termLines: [...s.termLines, ...lines] }), () => {
+      const el = this.termBodyRef.current; if (el) el.scrollTop = el.scrollHeight;
+    });
+  }
+  runCmd(raw) {
+    const cmd = raw.trim().toLowerCase();
+    const [c, arg] = cmd.split(/\s+/);
+    const out = (t, color = '#8C98AB') => ({ text: t, color });
+    const echo = { text: 'lucas@portfolio:~$ ' + raw, color: '#E2E8F0' };
+    if (!cmd) return;
+    if (c === 'clear') { this.setState({ termLines: [] }); return; }
+    let res;
+    switch (c) {
+      case 'help': res = [out('help        — lista de comandos'), out('whoami      — quem sou eu'), out('stack       — tecnologias'), out('arch        — arquitetura & práticas'), out('exp         — experiência profissional'), out('projects    — projetos'), out('langs       — idiomas'), out('github      — perfil no GitHub'), out('contact     — contato'), out('theme       — alterna dark/light'), out('lang [pt|en|es|fr] — muda o idioma'), out('clear       — limpa o terminal'), out('books       — estante do dev'), out('sudo hire-me — ...tente')]; break;
+      case 'whoami': res = [out('Lucas Dantas — Desenvolvedor Full Stack, Rio de Janeiro/BR.', '#E2E8F0'), out('4+ anos entregando web apps, APIs, automações e sistemas críticos de saúde.'), out('Foco: arquitetura limpa, redução de custo e automação com IA.')]; break;
+      case 'stack': res = this.stackData().map(g => out(g.label.padEnd(24, ' ') + '→ ' + g.items.map(x => x.name).join(', '))); break;
+      case 'arch': res = [out('System Design · Clean Architecture · SOLID · Design Patterns', '#E2E8F0'), out('Filas & mensageria, MCPs, APIs REST bem versionadas'), out('Testes: unitários, integração e regressão · CI/CD no GitHub'), out('Ex.: chatbot re-arquitetado → tokens de ~10k para 2–4k por fluxo 💸')]; break;
+      case 'exp': res = this.expsData().flatMap(e => [out(`${e.period} · ${e.title} @ ${e.company}`, '#E2E8F0'), ...e.bullets.slice(0, 3).map(b => out('  · ' + b))]); break;
+      case 'projects': res = this.projsData().map(p => out(`${p.name} [${p.cat}] — ${p.desc}`)); break;
+      case 'langs': res = [out('Português — Nativo', '#E2E8F0'), out('Inglês — C1 (cliente gringo aprova ✔)'), out('Espanhol — B1'), out('Francês — A1')]; break;
+      case 'github': res = [out('github.com/lucassdantas', '#1D94E3'), out(this.state.gh ? `${this.state.gh.repos} repos · ${this.state.gh.followers} followers · ${this.state.gh.stars} stars` : 'stats carregando...')]; break;
+      case 'contact': res = [out('LinkedIn: linkedin.com/in/lucas-de-sousa-dantas', '#1D94E3'), out('GitHub:   github.com/lucassdantas', '#1D94E3'), out('Base:     Rio de Janeiro, Brasil (remoto 🌎)')]; break;
+      case 'theme': this.toggleThemeFn(); res = [out('tema alterado ✔', '#22C55E')]; break;
+      case 'lang': if (['pt', 'en', 'es', 'fr'].includes(arg)) { this.setLang(arg); res = [out('idioma: ' + arg + ' ✔', '#22C55E')]; } else res = [out('uso: lang pt|en|es|fr', '#FF5F57')]; break;
+      case 'sudo': res = [out(arg === 'hire-me' ? 'Permissão concedida. Iniciando onboarding... 🚀 (me chama no LinkedIn)' : 'sudo: permissão negada — mas "sudo hire-me" funciona', '#22C55E')]; break;
+      case 'books': res = (this.db ? this.db.books : []).map(b => out(`📖 ${b.title} — ${b.author}`)); break;
+      case 'coffee': res = [out('☕ compilando cafeína... pronto.', '#FEBC2E')]; break;
+      case 'ls': res = [out('stack/  experiencia/  projetos/  educacao/  contato.md')]; break;
+      default: res = [out(`comando não encontrado: ${c}. Digite 'help'.`, '#FF5F57')];
+    }
+    this.termPush([echo, ...res]);
+  }
+  renderVals() {
+    const t = this.T();
+    const s = this.state;
+    const navLinks = [
+      { label: t.navStack, href: '#stack' }, { label: t.navExp, href: '#experiencia' },
+      { label: t.navProj, href: '#projetos' }, { label: 'GitHub', href: '#github' },
+      { label: t.navEdu, href: '#educacao' }, { label: t.navContact, href: '#contato' },
+    ];
+    const btnBase = 'border:none;border-radius:4px;padding:4px 8px;font-size:11px;cursor:pointer;font-family:inherit;';
+    const langBtns = ['pt', 'en', 'es', 'fr'].map(code => ({
+      code: code.toUpperCase(),
+      onClick: () => this.setLang(code),
+      style: btnBase + (s.lang === code ? 'background:var(--accent);color:#fff;font-weight:700' : 'background:none;color:var(--muted)'),
+    }));
+    const catBase = "font-family:'JetBrains Mono',monospace;font-size:13px;cursor:pointer;border-radius:20px;padding:8px 18px;";
+    const catList = [{ v: 'all', l: t.all }, { v: 'Sistemas', l: 'Sistemas' }, { v: 'Sites', l: 'Sites' }];
+    const cats = catList.map(cc => ({
+      label: cc.l, onClick: () => this.setState({ cat: cc.v }),
+      style: catBase + (s.cat === cc.v ? 'background:var(--accent);color:#fff;border:1px solid var(--accent)' : 'background:none;color:var(--muted);border:1px solid var(--border)'),
+    }));
+    const marq = this.db ? this.db.marquee : [];
+    return {
+      t, navLinks, langBtns, cats,
+      themeIcon: s.theme === 'dark' ? '☀' : '☾',
+      toggleTheme: () => this.toggleThemeFn(),
+      canvasRef: this.canvasRef, photoRef: this.photoRef, termBodyRef: this.termBodyRef, termInputRef: this.termInputRef,
+      marqueeItems: [...marq, ...marq],
+      termLines: s.termLines,
+      focusTerm: () => this.termInputRef.current && this.termInputRef.current.focus(),
+      onTermKey: (e) => {
+        if (e.key === 'Enter') {
+          const v = e.target.value; e.target.value = '';
+          this.termHistory.push(v); this.histIdx = this.termHistory.length;
+          this.runCmd(v);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (this.histIdx > 0) { this.histIdx--; e.target.value = this.termHistory[this.histIdx] || ''; }
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          this.histIdx = Math.min(this.histIdx + 1, this.termHistory.length);
+          e.target.value = this.termHistory[this.histIdx] || '';
+        }
+      },
+      stackGroups: this.stackData(),
+      principles: this.principlesData(),
+      exps: this.expsData().map((e, i) => ({
+        ...e, open: s.openExp === i, chevron: s.openExp === i ? '−' : '+',
+        toggle: () => this.setState({ openExp: s.openExp === i ? -1 : i }),
+      })),
+      projs: this.projsData().filter(p => s.cat === 'all' || p.cat === s.cat),
+      gh: s.gh || {}, ghLoaded: !!s.gh, ghLoading: !s.gh && !s.ghErr,
+      ghLangs: s.ghLangs.map(l => ({ ...l, barStyle: `height:100%;width:${l.pct}%;background:var(--accent);border-radius:4px;transition:width 1s ease` })),
+      playCode: s.playCode,
+      onPlayChange: (e) => this.setState({ playCode: e.target.value }),
+      runPlay: () => {
+        const logs = [];
+        const fake = { log: (...a) => logs.push(a.map(x => typeof x === 'object' ? JSON.stringify(x, null, 2) : String(x)).join(' ')), error: (...a) => logs.push('✖ ' + a.join(' ')), warn: (...a) => logs.push('⚠ ' + a.join(' ')) };
+        try { new Function('console', this.state.playCode)(fake); if (!logs.length) logs.push('(sem output — use console.log)'); }
+        catch (err) { logs.push('✖ ' + err.message); }
+        this.setState({ playOut: logs });
+      },
+      playOut: s.playOut,
+      edus: this.db ? this.db.educations : [],
+      certs: this.certsData().map(c => ({ ...c, noUrl: !c.url })),
+      books: this.db ? this.db.books : [],
+      spokenLangs: t.langs.map(([name, level, pct]) => ({ name, level, barStyle: `height:100%;width:${pct}%;background:var(--accent);border-radius:4px` })),
+    };
+  }
+  toggleThemeFn() {
+    const theme = this.state.theme === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('ldp-theme', theme);
+    this.setState({ theme }, () => this.applyTheme(theme));
+  }
+  setLang(lang) {
+    localStorage.setItem('ldp-lang', lang);
+    this.setState({ lang });
+  }
+}
+</script>
+</body>
+</html>

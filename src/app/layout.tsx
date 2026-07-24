@@ -1,46 +1,39 @@
 import type { Metadata } from "next";
-import { Inter, Mina } from 'next/font/google'
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { Sidebar } from "@/components/Sidebar";
-import { Limiter } from "@/components/Limiter";
-import { LanguageProvider } from "@/contexts/LanguageContext";
+import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import "./globals.css";
 
-const inter = Inter({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-space-grotesk",
 });
 
-const mina = Mina({
-  weight:'700',
-  
-  subsets:['latin']
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-jetbrains-mono",
 });
 
 export const metadata: Metadata = {
-  title: "Dev Dantas - Portfólio",
-  description: "Portfólio de desenvolvedor web Lucas Dantas",
+  title: "Lucas Dantas — Desenvolvedor Full Stack",
+  description:
+    "Portfólio de Lucas Dantas, desenvolvedor full stack — aplicações web, APIs, automações e sistemas críticos com arquitetura limpa.",
 };
 
-export default function RootLayout({children}:Readonly<{children: React.ReactNode;}>) {
+const themeInit = `(function(){try{var t=localStorage.getItem('ldp-theme');document.documentElement.dataset.theme=(t==='light'?'light':'dark')}catch(e){}})()`;
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt">
-      <body className={`${inter.className} overflow-x-hidden antialiased bg-base_1-a3 dark:bg-gradient-to-br dark:from-primary-darkBlue dark:to-base_2-c1 text-black dark:text-white w-screen transition-colors duration-300`}>
-        <LanguageProvider>
-          <ThemeProvider>
-          <Limiter className='max-w-[1350px]'>
-            <Header/>
-            <div className="flex gap-12 lg:pt-0 pt-20 overflo-x-hidden lg:h-full h-screen">
-              <Sidebar/>
-              <main className='relative overflow-x-hidden'>
-                {children}
-              </main>
-            </div>
-            <Footer/>
-          </Limiter>
-          </ThemeProvider>
-        </LanguageProvider>
+    <html lang="pt" data-theme="dark" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
+      </head>
+      <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+        <ThemeProvider>
+          <LanguageProvider>{children}</LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
