@@ -1,6 +1,7 @@
 // Camada de conteúdo — dados gerais do site (links, perfil, destaque)
 export const site = {
   name: "Lucas Dantas",
+  url: "https://portfolio.devdantas.com.br",
   logo: "<lucas.dantas />",
   githubUser: "lucassdantas",
   githubUrl: "https://github.com/lucassdantas",
