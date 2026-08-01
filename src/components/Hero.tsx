@@ -134,9 +134,14 @@ export function Hero() {
           <div className="absolute -left-6 -top-6 h-[110px] w-[110px] bg-accent opacity-85" />
           <div className="absolute -bottom-6 -right-6 h-[90px] w-[90px] animate-[floaty_5s_ease-in-out_infinite] bg-gradient-to-br from-[#1E1D3F] to-accent" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
+          {/* LCP da página: carrega cedo e com prioridade, sem lazy */}
           <img
             src={site.heroImage}
             alt="Lucas Dantas"
+            width={300}
+            height={340}
+            fetchPriority="high"
+            decoding="async"
             className="relative block h-[340px] w-[300px] border border-bord object-cover grayscale-[60%] transition hover:grayscale-0"
           />
           <div className="absolute -left-[34px] bottom-3.5 rounded-lg border border-bord bg-card px-3.5 py-2 font-mono text-xs text-txt shadow-[0_8px_24px_rgba(0,0,0,.35)]">

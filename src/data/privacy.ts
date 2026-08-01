@@ -18,7 +18,7 @@ export const privacyPolicy: {
       body: [
         "Este site não possui formulários de cadastro, login ou coleta direta de dados pessoais. Nenhum dado pessoal identificável é armazenado em servidores próprios.",
         "As preferências de tema (claro/escuro) e idioma são salvas apenas no seu navegador (localStorage) e nunca saem do seu dispositivo.",
-        "O assistente de chat (chatbot) deste site é determinístico (não usa IA/LLM) e roda inteiramente no seu navegador: o nome que você informa e o histórico da conversa ficam salvos apenas no seu localStorage, nunca são enviados a nenhum servidor, e são apagados automaticamente após 1 hora sem interação.",
+        "O assistente de chat (chatbot) deste site é determinístico — uma máquina de estados finitos (FSM), sem IA/LLM — e roda inteiramente no seu navegador: o nome que você informa e o histórico da conversa ficam salvos apenas no seu localStorage, nunca são enviados a nenhum servidor, e são apagados automaticamente após 1 hora sem interação.",
       ],
     },
     {

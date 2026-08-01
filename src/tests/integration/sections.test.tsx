@@ -5,12 +5,35 @@ import { ProjectsSection } from "@/components/ProjectsSection";
 import { ExperienceSection } from "@/components/ExperienceSection";
 import { Playground } from "@/components/Playground";
 import { Navbar } from "@/components/Navbar";
-import { projects, experiences } from "@/data";
+import { projects, experiences, translations } from "@/data";
+import { stripMarks } from "@/lib/richText";
 import { renderWithProviders } from "../helpers";
 
+// O bullet é renderizado em pedaços (destaque em <strong>), então getByText não
+// casa: comparamos o textContent do <li> com o texto sem marcação.
+const bulletVisible = (i: number) =>
+  screen
+    .queryAllByRole("listitem")
+    .some((li) => li.textContent === stripMarks(experiences[i].bullets[0]));
+
 describe("ProjectsSection — filtros", () => {
-  it("mostra todos os projetos por padrão", () => {
+  it("abre nos destaques, não na lista inteira", () => {
     renderWithProviders(<ProjectsSection />);
+    const destaques = projects.filter((p) => p.featured);
+    expect(destaques.length).toBeGreaterThan(0);
+    destaques.forEach((p) => {
+      expect(screen.getByRole("heading", { name: p.name })).toBeInTheDocument();
+    });
+    projects
+      .filter((p) => !p.featured)
+      .forEach((p) => {
+        expect(screen.queryByRole("heading", { name: p.name })).not.toBeInTheDocument();
+      });
+  });
+
+  it("mostra todos os projetos no filtro 'todos'", async () => {
+    renderWithProviders(<ProjectsSection />);
+    await userEvent.click(screen.getByRole("button", { name: translations.pt.all }));
     projects.forEach((p) => {
       expect(screen.getByRole("heading", { name: p.name })).toBeInTheDocument();
     });
@@ -33,15 +56,15 @@ describe("ProjectsSection — filtros", () => {
 describe("ExperienceSection — acordeão", () => {
   it("primeira experiência aberta por padrão", () => {
     renderWithProviders(<ExperienceSection />);
-    expect(screen.getByText(experiences[0].bullets[0])).toBeInTheDocument();
-    expect(screen.queryByText(experiences[1].bullets[0])).not.toBeInTheDocument();
+    expect(bulletVisible(0)).toBe(true);
+    expect(bulletVisible(1)).toBe(false);
   });
 
   it("clicar em outro cargo abre e fecha o anterior", async () => {
     renderWithProviders(<ExperienceSection />);
     await userEvent.click(screen.getByText(`@ ${experiences[1].company}`));
-    expect(screen.getByText(experiences[1].bullets[0])).toBeInTheDocument();
-    expect(screen.queryByText(experiences[0].bullets[0])).not.toBeInTheDocument();
+    expect(bulletVisible(1)).toBe(true);
+    expect(bulletVisible(0)).toBe(false);
   });
 });
 

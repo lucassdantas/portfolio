@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { experiences } from "@/data";
 import { Reveal } from "./Reveal";
+import { RichLine } from "./RichLine";
 
 export function ExperienceSection() {
   const { t } = useLanguage();
@@ -41,7 +42,9 @@ export function ExperienceSection() {
                   <div className="mx-2 rounded-b-[10px] border border-t-0 border-bord bg-bg2 px-[22px] py-5">
                     <ul className="flex list-disc flex-col gap-[9px] pl-5 text-[14.5px] leading-[1.55] text-muted">
                       {ex.bullets.map((b, j) => (
-                        <li key={j}>{b}</li>
+                        <li key={j}>
+                          <RichLine text={b} />
+                        </li>
                       ))}
                     </ul>
                     <div className="mt-[18px] flex flex-wrap gap-[7px]">

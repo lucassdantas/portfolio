@@ -44,8 +44,27 @@ describe("camada de dados", () => {
     projects.forEach((p) => {
       expect(["Sistemas", "Sites"]).toContain(p.cat);
       expect(p.name).toBeTruthy();
-      expect(p.desc).toBeTruthy();
       expect(p.tech.length).toBeGreaterThan(0);
+    });
+  });
+
+  it("descrições de projeto existem nos 4 idiomas", () => {
+    projects.forEach((p) => {
+      LANGS.forEach((lang) => {
+        const lines = p.desc[lang];
+        expect(lines.length, `${p.name} sem descrição em ${lang}`).toBeGreaterThan(0);
+        lines.forEach((line) => {
+          expect(line.trim(), `${p.name} [${lang}] tem linha vazia`).toBeTruthy();
+          expect(
+            (line.match(/\*\*/g) ?? []).length % 2,
+            `${p.name} [${lang}]: destaque ** sem fechamento`,
+          ).toBe(0);
+        });
+      });
+      // tradução esquecida costuma aparecer como cópia literal do pt
+      LANGS.filter((l) => l !== "pt").forEach((lang) => {
+        expect(p.desc[lang], `${p.name}: ${lang} é cópia do pt`).not.toEqual(p.desc.pt);
+      });
     });
   });
 
@@ -63,6 +82,12 @@ describe("camada de dados", () => {
   it("experiências têm bullets e tecnologias", () => {
     experiences.forEach((e) => {
       expect(e.bullets.length).toBeGreaterThan(0);
+      e.bullets.forEach((b) => {
+        expect(
+          (b.match(/\*\*/g) ?? []).length % 2,
+          `${e.company}: destaque ** sem fechamento`,
+        ).toBe(0);
+      });
       expect(e.tech.length).toBeGreaterThan(0);
     });
   });

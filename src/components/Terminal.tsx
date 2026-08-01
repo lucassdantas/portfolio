@@ -5,6 +5,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage, LANGS } from "@/contexts/LanguageContext";
 import { experiences, projects, stackGroups, books } from "@/data";
 import { fetchGithubStats, type GithubStats } from "@/lib/github";
+import { stripMarks } from "@/lib/richText";
 import type { Lang } from "@/types";
 
 interface TermLine {
@@ -24,7 +25,7 @@ const out = (text: string, color: string = GRAY): TermLine => ({ text, color });
 export function Terminal() {
   const { t } = useLanguage();
   const { toggleTheme } = useTheme();
-  const { setLang } = useLanguage();
+  const { lang, setLang } = useLanguage();
   const [lines, setLines] = useState<TermLine[]>([
     out("██ lucas.dantas — portfolio v2.0", BLUE),
     out("Digite 'help' para ver os comandos disponíveis.", GRAY),
@@ -100,11 +101,13 @@ export function Terminal() {
       case "exp":
         res = experiences.flatMap((e) => [
           out(`${e.period} · ${e.title} @ ${e.company}`, WHITE),
-          ...e.bullets.slice(0, 3).map((b) => out("  · " + b)),
+          ...e.bullets.slice(0, 3).map((b) => out("  · " + stripMarks(b))),
         ]);
         break;
       case "projects":
-        res = projects.map((p) => out(`${p.name} [${p.cat}] — ${p.desc}`));
+        res = projects.map((p) =>
+          out(`${p.name} [${p.cat}] — ${p.desc[lang].map(stripMarks).join(" ")}`),
+        );
         break;
       case "langs":
         res = [

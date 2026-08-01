@@ -8,7 +8,7 @@ Coleções: `translations`, `experiences`, `projects`, `certifications`, `educat
 
 ## Temas (dark/light)
 
-- Tokens de design são CSS vars definidas em `src/app/globals.css` (`--bg`, `--bg2`, `--card`, `--border`, `--text`, `--muted`, `--accent`, `--navbg`).
+- Tokens de design são CSS vars definidas em `src/app/globals.css` (`--bg`, `--bg2`, `--card`, `--border`, `--text`, `--muted`, `--strong`, `--accent`, `--navbg`).
 - O tema ativo é o atributo `data-theme` no `<html>`; `ThemeContext` alterna e persiste em `localStorage` (`ldp-theme`).
 - Um script inline no `<head>` (em `layout.tsx`) aplica o tema salvo antes do primeiro paint, evitando flash.
 - No Tailwind 4 os tokens são expostos como utilities via `@theme inline` (`bg-card`, `border-bord`, `text-muted`, `text-accent`…).

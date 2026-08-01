@@ -8,6 +8,8 @@
   --border: #16233a;
   --text: #e2e8f0;
   --muted: #8c98ab;
+  /* destaque dentro de texto muted: acima do muted, abaixo do branco do --text */
+  --strong: #bac5d4;
   --accent: #1d94e3;
   --navbg: rgba(4, 8, 15, 0.82);
 }
@@ -19,6 +21,7 @@ html[data-theme="light"] {
   --border: #d7dce5;
   --text: #111b29;
   --muted: #4e5d74;
+  --strong: #2f3c4e;
   --navbg: rgba(238, 241, 245, 0.85);
 }
 
@@ -29,6 +32,7 @@ html[data-theme="light"] {
   --color-bord: var(--border);
   --color-txt: var(--text);
   --color-muted: var(--muted);
+  --color-strong: var(--strong);
   --color-accent: var(--accent);
   --color-navbg: var(--navbg);
   --font-sans: var(--font-space-grotesk), sans-serif;

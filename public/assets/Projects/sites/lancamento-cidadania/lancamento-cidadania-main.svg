@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="660" height="360" viewBox="0 0 660 360" role="img" aria-label="Blog de lançamento — cidadania espanhola, fora do ar">
+  <rect width="660" height="360" fill="#0B1524"/>
+  <rect x="0.5" y="0.5" width="659" height="359" fill="none" stroke="#16233A"/>
+  <g fill="#1D94E3" font-family="ui-monospace, 'JetBrains Mono', monospace">
+    <text x="330" y="170" font-size="22" text-anchor="middle">blog de lançamento</text>
+    <text x="330" y="205" font-size="14" fill="#7A8CA6" text-anchor="middle">campanha encerrada · fora do ar</text>
+  </g>
+</svg>

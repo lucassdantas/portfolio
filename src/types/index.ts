@@ -29,6 +29,7 @@ export interface Translation {
   expDesc: string;
   projTitle: string;
   projDesc: string;
+  projFeatured: string;
   featured: string;
   featDesc: string;
   featM1: string;
@@ -69,10 +70,26 @@ export interface Experience {
 
 export type ProjectCategory = "Sistemas" | "Sites";
 
+/**
+ * Texto de conteúdo escrito nos 4 idiomas. Diferente de `Translation`
+ * (strings de UI, criadas por spread sobre `pt`): aqui cada idioma é
+ * obrigatório, então um projeto novo não passa no compilador sem tradução.
+ *
+ * Cada idioma é uma lista de linhas curtas (renderizadas uma por linha),
+ * e dentro da linha `**termo**` marca destaque — ver `src/lib/richText.ts`.
+ */
+export type Localized = Record<Lang, string[]>;
+
 export interface Project {
   name: string;
   cat: ProjectCategory;
-  desc: string;
+  /**
+   * Destaque é flag, não categoria: o projeto continua sendo Sistema ou Site
+   * e aparece também no filtro "Destaques". Se fosse uma terceira categoria,
+   * destacar um projeto o tiraria da sua própria categoria.
+   */
+  featured?: boolean;
+  desc: Localized;
   img: string;
   live: string;
   repo: string;
@@ -124,7 +141,7 @@ export interface ChatOption {
   icon: string;
 }
 
-/** Textos do chatbot determinístico (widget flutuante). */
+/** Textos do chatbot determinístico — máquina de estados finitos (FSM), sem IA. */
 export interface ChatCopy {
   launcher: string;
   title: string;

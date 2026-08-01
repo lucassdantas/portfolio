@@ -25,7 +25,7 @@ Textos, experiências, projetos, certificados, traduções e a política de priv
 ## Design (handoff em design_handoff/)
 
 - Referência canônica de layout/estilo: `design_handoff/Portfolio Lucas Dantas.dc.html` (hifi, pixel-perfect). Em dúvida visual, consulte o protótipo.
-- Tokens de tema são CSS vars em `globals.css`, expostos como utilities via `@theme inline`: `bg-bg`, `bg-bg2`, `bg-card`, `border-bord`, `text-txt`, `text-muted`, `text-accent`.
+- Tokens de tema são CSS vars em `globals.css`, expostos como utilities via `@theme inline`: `bg-bg`, `bg-bg2`, `bg-card`, `border-bord`, `text-txt`, `text-muted`, `text-strong`, `text-accent`. `text-strong` é o meio-termo entre `muted` e `txt`, usado para destacar termo dentro de texto muted (ver `src/lib/richText.ts`).
 - Fontes: Space Grotesk (corpo/títulos, `font-sans`) e JetBrains Mono (labels/código, `font-mono`), via `next/font`.
 - **Sempre dark, independente do tema**: terminal, playground e case em destaque (hex literais `#060D18`/`#0B1524`/`#16233A`).
 - Radius: cards 12px, botões 8px, chips 6px, pills 20px. Verde de status `#22C55E`.

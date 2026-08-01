@@ -40,21 +40,37 @@ export function ParticlesCanvas() {
     window.addEventListener("resize", resize);
     window.addEventListener("mousemove", onMouse);
 
-    const accent = () =>
-      getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#1D94E3";
+    // Ler o tema a cada frame forçaria recálculo de estilo 60x/s; em vez
+    // disso, cacheamos e revalidamos só quando data-theme muda.
+    let hex = "#1D94E3";
+    let base = 0.5;
+    const readTheme = () => {
+      hex =
+        getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#1D94E3";
+      base = document.documentElement.dataset.theme === "light" ? 0.25 : 0.5;
+    };
+    readTheme();
+    const themeObserver = new MutationObserver(readTheme);
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    const LINK_DIST2 = LINK_DIST * LINK_DIST;
+    const REPEL_DIST2 = REPEL_DIST * REPEL_DIST;
 
     const loop = () => {
       ctx.clearRect(0, 0, w, h);
-      const light = document.documentElement.dataset.theme === "light";
-      const base = light ? 0.25 : 0.5;
-      const hex = accent();
       pts.forEach((p) => {
         p.x += p.vx;
         p.y += p.vy;
         if (p.x < 0 || p.x > w) p.vx *= -1;
         if (p.y < 0 || p.y > h) p.vy *= -1;
-        const dm = Math.hypot(p.x - mouse.x, p.y - mouse.y);
-        if (dm < REPEL_DIST && dm > 0) {
+        const mx = p.x - mouse.x;
+        const my = p.y - mouse.y;
+        const dm2 = mx * mx + my * my;
+        if (dm2 < REPEL_DIST2 && dm2 > 0) {
+          const dm = Math.sqrt(dm2);
           p.x += ((p.x - mouse.x) / dm) * 1.1;
           p.y += ((p.y - mouse.y) / dm) * 1.1;
         }
@@ -65,8 +81,11 @@ export function ParticlesCanvas() {
         for (let j = i + 1; j < pts.length; j++) {
           const a = pts[i];
           const b = pts[j];
-          const d = Math.hypot(a.x - b.x, a.y - b.y);
-          if (d < LINK_DIST) {
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < LINK_DIST2) {
+            const d = Math.sqrt(d2);
             ctx.strokeStyle =
               hex +
               Math.floor((1 - d / LINK_DIST) * base * 255)
@@ -85,6 +104,7 @@ export function ParticlesCanvas() {
 
     return () => {
       cancelAnimationFrame(raf);
+      themeObserver.disconnect();
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMouse);
     };

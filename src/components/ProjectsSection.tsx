@@ -4,19 +4,26 @@ import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { projects, site } from "@/data";
 import { Reveal } from "./Reveal";
+import { RichLine } from "./RichLine";
 
-type Cat = "all" | "Sistemas" | "Sites";
+type Cat = "featured" | "all" | "Sistemas" | "Sites";
 
 export function ProjectsSection() {
-  const { t } = useLanguage();
-  const [cat, setCat] = useState<Cat>("all");
+  const { t, lang } = useLanguage();
+  // abre nos destaques: a lista completa é longa demais para ser a primeira coisa
+  const [cat, setCat] = useState<Cat>("featured");
 
   const cats: { v: Cat; l: string }[] = [
-    { v: "all", l: t.all },
+    { v: "featured", l: t.projFeatured },
     { v: "Sistemas", l: "Sistemas" },
     { v: "Sites", l: "Sites" },
+    { v: "all", l: t.all },
   ];
-  const filtered = projects.filter((p) => cat === "all" || p.cat === cat);
+  const filtered = projects.filter((p) => {
+    if (cat === "all") return true;
+    if (cat === "featured") return p.featured;
+    return p.cat === cat;
+  });
   const metricLabels = [t.featM1, t.featM2, t.featM3];
 
   return (
@@ -73,6 +80,10 @@ export function ProjectsSection() {
               <img
                 src={p.img}
                 alt={p.name}
+                width={800}
+                height={365}
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover object-top grayscale-[35%] transition-[filter,transform] duration-300 group-hover:scale-[1.04] group-hover:grayscale-0"
               />
             </div>
@@ -83,7 +94,16 @@ export function ProjectsSection() {
                   {p.cat}
                 </span>
               </div>
-              <p className="flex-1 text-[13.5px] leading-[1.5] text-muted">{p.desc}</p>
+              <div className="flex flex-1 flex-col gap-[5px]">
+                {p.desc[lang].map((line, i) => (
+                  <p
+                    key={i}
+                    className="text-[13.5px] leading-[1.5] text-muted [text-wrap:pretty]"
+                  >
+                    <RichLine text={line} />
+                  </p>
+                ))}
+              </div>
               <div className="flex flex-wrap gap-1.5">
                 {p.tech.map((tech) => (
                   <span key={tech} className="font-mono text-[10.5px] text-muted">

@@ -35,11 +35,12 @@ const pt: Translation = {
   expDesc: "Clique em cada cargo para expandir os detalhes.",
   projTitle: "projetos",
   projDesc: "Uma seleção de sistemas, sites e aplicações entregues em produção.",
+  projFeatured: "Destaques",
   featured: "case em destaque",
   featDesc:
-    "Migração da arquitetura de chatbots corporativos de fluxos probabilísticos (n8n) para fluxos determinísticos em Python com FastAPI, SQLAlchemy e Pytest — mais previsibilidade, menos custo e integração com a base de conhecimento da empresa via MCP.",
-  featM1: "tokens de IA por fluxo completo",
-  featM2: "arquitetura determinística",
+    "Migração da arquitetura de chatbots corporativos de fluxos probabilísticos (n8n) para fluxos determinísticos em Python, modelados como máquina de estados finitos (FSM), com FastAPI, SQLAlchemy e Pytest — mais previsibilidade, menos custo e integração com a base de conhecimento da empresa via MCP.",
+  featM1: "consumo de tokens por fluxo de conversa",
+  featM2: "arquitetura determinística (FSM)",
   featM3: "consulta inteligente com controle de acesso",
   ghTitle: "github em tempo real",
   ghDesc: "Dados carregados ao vivo da API do GitHub.",
@@ -109,7 +110,7 @@ const pt: Translation = {
       projects: [
         ["Já entreguei {projectCount} projetos — sistemas, sites e MVPs.", "Categorias: {projectCategories}."],
         [
-          "Um destaque recente foi migrar uma arquitetura de IA de fluxos probabilísticos para determinísticos, cortando bastante o custo por execução.",
+          "Um destaque recente foi migrar uma arquitetura de IA de fluxos probabilísticos para determinísticos, modelados como máquina de estados finitos (FSM), cortando bastante o custo por execução.",
           "Gosto de projetos assim: mais previsibilidade, menos custo.",
         ],
       ],
@@ -163,11 +164,12 @@ const en: Translation = {
   expDesc: "Click each role to expand the details.",
   projTitle: "projects",
   projDesc: "A selection of systems, sites and applications shipped to production.",
+  projFeatured: "Highlights",
   featured: "featured case",
   featDesc:
-    "Migrated corporate chatbot architecture from probabilistic flows (n8n) to deterministic Python flows with FastAPI, SQLAlchemy and Pytest — more predictability, less cost, plus MCP-powered knowledge base access.",
-  featM1: "AI tokens per full flow",
-  featM2: "deterministic architecture",
+    "Migrated corporate chatbot architecture from probabilistic flows (n8n) to deterministic Python flows modeled as a finite state machine (FSM), with FastAPI, SQLAlchemy and Pytest — more predictability, less cost, plus MCP-powered knowledge base access.",
+  featM1: "token usage per conversation flow",
+  featM2: "deterministic architecture (FSM)",
   featM3: "smart retrieval with access control",
   ghTitle: "live github stats",
   ghDesc: "Data loaded live from the GitHub API.",
@@ -236,7 +238,7 @@ const en: Translation = {
       projects: [
         ["I've shipped {projectCount} projects — systems, sites and MVPs.", "Categories: {projectCategories}."],
         [
-          "A recent highlight was migrating an AI architecture from probabilistic to deterministic flows, cutting cost per run significantly.",
+          "A recent highlight was migrating an AI architecture from probabilistic to deterministic flows modeled as a finite state machine (FSM), cutting cost per run significantly.",
           "I like projects like that: more predictability, less cost.",
         ],
       ],
@@ -290,11 +292,12 @@ const es: Translation = {
   expDesc: "Haz clic en cada cargo para ver los detalles.",
   projTitle: "proyectos",
   projDesc: "Una selección de sistemas, sitios y aplicaciones en producción.",
+  projFeatured: "Destacados",
   featured: "caso destacado",
   featDesc:
-    "Migración de la arquitectura de chatbots corporativos de flujos probabilísticos (n8n) a flujos deterministas en Python con FastAPI, SQLAlchemy y Pytest — más previsibilidad, menos costo y acceso a la base de conocimiento vía MCP.",
-  featM1: "tokens de IA por flujo completo",
-  featM2: "arquitectura determinista",
+    "Migración de la arquitectura de chatbots corporativos de flujos probabilísticos (n8n) a flujos deterministas en Python, modelados como máquina de estados finitos (FSM), con FastAPI, SQLAlchemy y Pytest — más previsibilidad, menos costo y acceso a la base de conocimiento vía MCP.",
+  featM1: "consumo de tokens por flujo de conversación",
+  featM2: "arquitectura determinista (FSM)",
   featM3: "consulta inteligente con control de acceso",
   ghTitle: "github en vivo",
   ghDesc: "Datos cargados en vivo desde la API de GitHub.",
@@ -363,7 +366,7 @@ const es: Translation = {
       projects: [
         ["Ya entregué {projectCount} proyectos — sistemas, sitios y MVPs.", "Categorías: {projectCategories}."],
         [
-          "Un caso reciente fue migrar una arquitectura de IA de flujos probabilísticos a deterministas, reduciendo bastante el costo por ejecución.",
+          "Un caso reciente fue migrar una arquitectura de IA de flujos probabilísticos a deterministas, modelados como máquina de estados finitos (FSM), reduciendo bastante el costo por ejecución.",
           "Me gustan proyectos así: más previsibilidad, menos costo.",
         ],
       ],
@@ -417,11 +420,12 @@ const fr: Translation = {
   expDesc: "Cliquez sur chaque poste pour voir les détails.",
   projTitle: "projets",
   projDesc: "Une sélection de systèmes, sites et applications en production.",
+  projFeatured: "En vedette",
   featured: "projet phare",
   featDesc:
-    "Migration de l'architecture des chatbots d'entreprise de flux probabilistes (n8n) vers des flux déterministes en Python avec FastAPI, SQLAlchemy et Pytest — plus de prévisibilité, moins de coûts, avec accès à la base de connaissances via MCP.",
-  featM1: "tokens IA par flux complet",
-  featM2: "architecture déterministe",
+    "Migration de l'architecture des chatbots d'entreprise de flux probabilistes (n8n) vers des flux déterministes en Python, modélisés comme une machine à états finis (FSM), avec FastAPI, SQLAlchemy et Pytest — plus de prévisibilité, moins de coûts, avec accès à la base de connaissances via MCP.",
+  featM1: "consommation de tokens par flux",
+  featM2: "architecture déterministe (FSM)",
   featM3: "recherche intelligente avec contrôle d'accès",
   ghTitle: "github en direct",
   ghDesc: "Données chargées en direct depuis l'API GitHub.",
@@ -490,7 +494,7 @@ const fr: Translation = {
       projects: [
         ["J'ai livré {projectCount} projets — systèmes, sites et MVP.", "Catégories : {projectCategories}."],
         [
-          "Un projet récent marquant a été de migrer une architecture IA de flux probabilistes vers des flux déterministes, réduisant fortement le coût par exécution.",
+          "Un projet récent marquant a été de migrer une architecture IA de flux probabilistes vers des flux déterministes, modélisés comme une machine à états finis (FSM), réduisant fortement le coût par exécution.",
           "J'aime ce genre de projet : plus de prévisibilité, moins de coût.",
         ],
       ],

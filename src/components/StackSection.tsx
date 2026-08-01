@@ -24,7 +24,15 @@ export function StackSection() {
                   >
                     {si.img && (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={si.img} alt="" className="h-4 w-4 object-contain" />
+                      <img
+                        src={si.img}
+                        alt=""
+                        width={16}
+                        height={16}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-4 w-4 object-contain"
+                      />
                     )}
                     {si.name}
                   </span>

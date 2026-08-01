@@ -12,7 +12,7 @@ export const site = {
   featuredCase: {
     title: "Chatbots corporativos com IA — CMEXX",
     metrics: [
-      { value: "~10k → 2–4k", color: "#22C55E" },
+      { value: "−90%", color: "#22C55E" },
       { value: "n8n → Python", color: "#1D94E3" },
       { value: "MCP + LLM", color: "#A78BFA" },
     ],
