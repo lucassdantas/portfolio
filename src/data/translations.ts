@@ -89,7 +89,7 @@ const pt: Translation = {
       about: [
         [
           "Sou desenvolvedor full stack focado em arquitetura limpa, automação e uso prático de IA.",
-          "{years} de experiência e {projectCount} projetos entregues até agora.",
+          "{years} de experiência, com {projectCount} projetos publicados aqui no portfólio.",
         ],
         [
           "Curto resolver problemas de estoque, integração de sistemas legados e redução de custo com IA aplicada.",
@@ -108,7 +108,7 @@ const pt: Translation = {
         ["No dia a dia, sigo algumas práticas fixas de arquitetura e código:", "{principlesList}"],
       ],
       projects: [
-        ["Já entreguei {projectCount} projetos — sistemas, sites e MVPs.", "Categorias: {projectCategories}."],
+        ["Aqui no site tem {projectCount} projetos publicados — sistemas, sites e MVPs.", "Categorias: {projectCategories}."],
         [
           "Um destaque recente foi migrar uma arquitetura de IA de fluxos probabilísticos para determinísticos, modelados como máquina de estados finitos (FSM), cortando bastante o custo por execução.",
           "Gosto de projetos assim: mais previsibilidade, menos custo.",
@@ -217,7 +217,7 @@ const en: Translation = {
       about: [
         [
           "I'm a full stack developer focused on clean architecture, automation and practical AI usage.",
-          "{years} of experience and {projectCount} projects shipped so far.",
+          "{years} of experience, with {projectCount} projects published in this portfolio.",
         ],
         [
           "I enjoy solving inventory problems, legacy system integration and cutting cost with applied AI.",
@@ -236,7 +236,7 @@ const en: Translation = {
         ["Day to day, I follow a few fixed architecture and code practices:", "{principlesList}"],
       ],
       projects: [
-        ["I've shipped {projectCount} projects — systems, sites and MVPs.", "Categories: {projectCategories}."],
+        ["There are {projectCount} projects published here — systems, sites and MVPs.", "Categories: {projectCategories}."],
         [
           "A recent highlight was migrating an AI architecture from probabilistic to deterministic flows modeled as a finite state machine (FSM), cutting cost per run significantly.",
           "I like projects like that: more predictability, less cost.",
@@ -345,7 +345,7 @@ const es: Translation = {
       about: [
         [
           "Soy desarrollador full stack enfocado en arquitectura limpia, automatización y uso práctico de IA.",
-          "{years} de experiencia y {projectCount} proyectos entregados hasta ahora.",
+          "{years} de experiencia, con {projectCount} proyectos publicados en este portafolio.",
         ],
         [
           "Me gusta resolver problemas de inventario, integración de sistemas legados y reducción de costos con IA aplicada.",
@@ -364,7 +364,7 @@ const es: Translation = {
         ["En el día a día, sigo algunas prácticas fijas de arquitectura y código:", "{principlesList}"],
       ],
       projects: [
-        ["Ya entregué {projectCount} proyectos — sistemas, sitios y MVPs.", "Categorías: {projectCategories}."],
+        ["Aquí hay {projectCount} proyectos publicados — sistemas, sitios y MVPs.", "Categorías: {projectCategories}."],
         [
           "Un caso reciente fue migrar una arquitectura de IA de flujos probabilísticos a deterministas, modelados como máquina de estados finitos (FSM), reduciendo bastante el costo por ejecución.",
           "Me gustan proyectos así: más previsibilidad, menos costo.",
@@ -473,7 +473,7 @@ const fr: Translation = {
       about: [
         [
           "Je suis développeur full stack, concentré sur l'architecture propre, l'automatisation et l'usage pratique de l'IA.",
-          "{years} d'expérience et {projectCount} projets livrés à ce jour.",
+          "{years} d'expérience, avec {projectCount} projets publiés dans ce portfolio.",
         ],
         [
           "J'aime résoudre des problèmes d'inventaire, d'intégration de systèmes legacy et de réduction de coûts avec l'IA appliquée.",
@@ -492,7 +492,7 @@ const fr: Translation = {
         ["Au quotidien, je suis quelques pratiques fixes d'architecture et de code :", "{principlesList}"],
       ],
       projects: [
-        ["J'ai livré {projectCount} projets — systèmes, sites et MVP.", "Catégories : {projectCategories}."],
+        ["Il y a {projectCount} projets publiés ici — systèmes, sites et MVP.", "Catégories : {projectCategories}."],
         [
           "Un projet récent marquant a été de migrer une architecture IA de flux probabilistes vers des flux déterministes, modélisés comme une machine à états finis (FSM), réduisant fortement le coût par exécution.",
           "J'aime ce genre de projet : plus de prévisibilité, moins de coût.",

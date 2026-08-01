@@ -10,7 +10,7 @@ export const principles: Principle[] = [
   {
     icon: "💰",
     title: "Custo sob controle",
-    desc: "Otimização que aparece na fatura: de queries SQL a consumo de tokens de IA reduzido em mais de 70% num fluxo de chatbot.",
+    desc: "Otimização que aparece na fatura: de queries SQL a consumo de tokens de IA reduzido em cerca de 90% num fluxo de chatbot.",
   },
   {
     icon: "⚙️",

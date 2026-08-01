@@ -1,7 +1,12 @@
 // Camada de conteúdo — experiências profissionais
-// Bullets aceitam `**termo**` para destaque, igual às descrições de projeto
-// (ver src/lib/richText.ts). Marque o resultado e a tecnologia, não a frase
-// inteira: destaque demais é o mesmo que destaque nenhum.
+//
+// Regra editorial desta seção (vale ao adicionar bullet novo):
+// o CARD de projeto conta *o que foi construído*; o BULLET de experiência
+// conta *o que mudou porque você estava lá* — escala, responsabilidade,
+// resultado, padrão introduzido. Se a frase cabe no card, ela não repete aqui.
+//
+// Bullets aceitam `**termo**` para destaque (ver src/lib/richText.ts).
+// Marque resultado e tecnologia, nunca a frase inteira.
 import type { Experience } from "@/types";
 
 export const experiences: Experience[] = [
@@ -14,17 +19,13 @@ export const experiences: Experience[] = [
       "Atuo em **sistemas críticos da área da saúde** (gestão e rastreabilidade de CME), garantindo **estabilidade, disponibilidade e confiabilidade em produção**",
       "Lidero a migração da arquitetura de chatbots corporativos de fluxos probabilísticos (n8n) para fluxos determinísticos modelados como **máquina de estados finitos (FSM)** em **Python**, com FastAPI, SQLAlchemy e Pytest",
       "Reduzi em **cerca de 90%** o consumo de tokens por fluxo de conversa: antes cada fluxo disparava várias chamadas ao modelo, e hoje apenas uma etapa consome token — o custo mensal da operação caiu na mesma proporção",
-      "Projetei um **módulo de controle de estoque** de insumos hospitalares que substitui o lote por **código de produto como parâmetro de rastreio**, eliminando divergências causadas pela instabilidade desse dado no fluxo físico de solicitação",
-      "Implementei registro de movimentações e saldo mensal, **baixa de insumo por leitura de QR code** e **transferência entre unidades de CME**, reduzindo o atraso entre o uso do insumo e o registro da baixa",
-      "Re-arquitetei a aplicação de monitoramento das conversas dos chatbots de WhatsApp (**Laravel** + **TypeScript**): refatoração completa, **observabilidade** numa aplicação que não registrava nada, middlewares de segurança com **autenticação OAuth2** e um canal de **envio ativo de mensagens** ao usuário, orquestrado via **integração com n8n**",
-      "Instrumentei **logging estruturado** em aplicações que rodavam sem nenhum registro de execução, dando **rastreabilidade** para auditar o histórico e diagnosticar incidentes em produção em vez de depender de relato do usuário",
-      "**Otimizei queries SQL** críticas, melhorando o desempenho das aplicações",
-      "Participo da modernização do sistema legado: de jQuery + Bootstrap + PHP para **Next.js + TypeScript**, com documentação **Swagger**, testes unitários e de integração e testes end-to-end em **Cypress**",
+      "Projetei o **módulo de controle de estoque** de insumos hospitalares: troquei o lote pelo **código de produto como parâmetro de rastreio**, eliminando divergências causadas pela instabilidade desse dado no fluxo físico, e implementei **saldo mensal**, **baixa por leitura de QR code** e **transferência entre unidades de CME**",
+      "Re-arquitetei a aplicação de monitoramento das conversas dos chatbots de WhatsApp (**Laravel** + **TypeScript**): refatoração completa, middlewares de segurança com **autenticação OAuth2** e um canal de **envio ativo de mensagens** ao usuário, orquestrado via **integração com n8n**. Instrumentei nela o **logging estruturado** que não existia, dando **rastreabilidade** para auditar o histórico e diagnosticar incidentes em produção em vez de depender de relato do usuário",
+      "Participo da modernização do sistema legado, de jQuery + Bootstrap + PHP para **Next.js + TypeScript**, com documentação **Swagger**, testes unitários, de integração e **end-to-end em Cypress**, além da **otimização de queries SQL** críticas",
       "Implementei **MCPs** para consulta à base de conhecimento da empresa via IA e contribuo com a construção do **MCP de comunicação com a IA**",
-      "Modelei o **controle de autorização** da base de conhecimento consultada por IA, aplicando o **princípio de menor privilégio**: cada resposta respeita o nível de acesso do usuário, de modo que conteúdo restrito nunca chega a quem não tem permissão",
-      "Configurei **exposição controlada de aplicações** com **proxy reverso** e roteamento em Linux/Nginx",
-      "**Automatizo tarefas** dos setores (RH, financeiro) em contato direto com gestores; implanto e monitoro aplicações em **Linux com Docker e Nginx**",
-      "Participo de dailies e rituais ágeis, análises técnicas e planejamento de soluções",
+      "Modelei o **controle de autorização** da intranet corporativa que conversa com o bot, aplicando o **princípio de menor privilégio**: a resposta é montada a partir do **nível de acesso de quem perguntou**, de modo que conteúdo restrito nunca chega a quem não tem permissão de vê-lo",
+      "Cuido da infraestrutura das aplicações: **exposição controlada via proxy reverso**, roteamento e monitoramento em **Linux com Docker e Nginx**",
+      "**Automatizo tarefas** de RH e financeiro em contato direto com os gestores de cada setor",
     ],
     tech: ["Python", "FastAPI", "Laravel", "CodeIgniter", "React", "TypeScript", "SQL Server", "PostgreSQL", "Docker", "Linux", "Nginx", "n8n", "Cypress"],
   },
@@ -34,16 +35,12 @@ export const experiences: Experience[] = [
     period: "jun/2024 — atual",
     mode: "Remoto · clientes nacionais e internacionais",
     bullets: [
-      "Entreguei sistemas, landing pages e MVPs para clientes nacionais e internacionais — incluindo **cliente da Nova Zelândia** (puredetail.co.nz) — com **100% das entregas dentro do prazo**",
-      "Desenvolvo e mantenho **mais de 10 sites** com responsividade, segurança e otimização",
+      "Entrego e mantenho **mais de 10 sites, sistemas e MVPs** para clientes nacionais e internacionais — incluindo **cliente da Nova Zelândia** (puredetail.co.nz) — com **100% das entregas dentro do prazo**",
+      "**Lidero equipes** (design e desenvolvimento) e faço o **atendimento direto ao cliente**, do levantamento ao aceite",
       "Landing pages otimizadas entregues em **2 dias**, permitindo ao cliente antecipar campanhas",
-      "Orientei contratação e configurei hospedagens (**VPS, CloudPanel, PM2, Nginx**), reduzindo custos e maximizando eficiência",
-      "**Reestruturei e recuperei sites comprometidos por malware**, restaurando a operação dos clientes",
-      "**Liderei equipes de desenvolvimento**, planejando projetos e cumprindo prazos estimados",
-      "**Fórum social completo**: CRUD de posts, rede de amizades, **upload e storage de imagens** e área administrativa — além da landing page do mesmo cliente em **Next.js + Tailwind**. Coordenei a equipe (**design + 1 dev**) e fiz o atendimento direto",
-      "**Portal de imóveis** para compra e locação, que mantenho e evoluo há mais de um ano: **plugin próprio em PHP** com widgets para Elementor e **exportação do catálogo em XML** para portais parceiros, busca em **JetEngine + JetSmartFilters** e eventos de usuário no **GTM**",
-      "**Site institucional para escritório de contabilidade**: reproduzi o design entregue no **Figma** e **coordenei a equipe de devs** do projeto",
-      "**Site de clínica de fisioterapia**, cliente há mais de 3 anos: **Next.js** só front-end, arquitetado para **custo de infraestrutura próximo de zero**, com **deploy**, hospedagem e **SMTP do domínio** configurados por mim",
+      "Orientei contratação e configurei hospedagens (**VPS, CloudPanel, PM2, Nginx**), reduzindo o custo de infraestrutura dos clientes",
+      "**Recuperei sites comprometidos por malware**, restaurando a operação de clientes que estavam com o negócio parado",
+      "Mantenho relações longas: um **portal de imóveis** que evoluo há mais de um ano — onde criei um **plugin próprio em PHP** que exporta o catálogo em **XML** para portais parceiros — e uma clínica que atendo há **mais de 3 anos**",
     ],
     tech: ["Next.js", "React", "TypeScript", "PHP", "Node.js", "Tailwind CSS", "PM2", "Linux"],
   },
@@ -54,25 +51,14 @@ export const experiences: Experience[] = [
     mode: "Rio de Janeiro · Híbrido",
     bullets: [
       "Otimizei **mais de 30 projetos**, reduzindo o tempo de carregamento entre **50% e 90%**",
-      "Construí **blogs de lançamento** multi-página para campanhas de alto ticket: uma de **cidadania europeia** (**R$ 80 mil em 1 semana**) e uma de **certificação profissional** (**R$ 100 mil em 1 semana**, case premiado)",
-      "Nessas campanhas, implementei os **scripts de rastreamento** e a **distribuição round-robin de leads**, dividindo o volume em partes iguais entre os vendedores",
-      "Utilizei **metodologias ágeis** no dia a dia",
-      "Desenvolvi e mantive diversos sites, incluindo atualizações, otimizações e prevenção de bugs",
-      "**Removi vírus** de hospedagens e sites, com análises, ajustes e **melhorias de segurança**",
-      "Realizei configurações e correções de bugs em **registros DNS**",
-      "Desenvolvi sites, landing pages, **e-commerces** e alguns **sistemas personalizados**",
-      "Realizei cerca de **150 tarefas por mês**, garantindo entregas no prazo e alta satisfação dos clientes",
-      "Desenvolvi **integrações com APIs** customizadas para **metrificação de leads em CRMs**",
-      "Criei **plugins WordPress personalizados**, garantindo recursos exclusivos aos clientes e reduzindo custos com ferramentas de terceiros",
-      "Realizei deploy de sites com técnicas para **reduzir o tempo de propagação de domínio**",
-      "Desenvolvi sistemas sem uso de WordPress quando necessário, garantindo total adequação às funcionalidades solicitadas",
-      "Configurei **AWS S3 Storage**",
-      "**Site de investimento em precatórios**: plugin em PHP que consome a **API da plataforma** e renderiza os ativos direto no conteúdo, mais o **simulador de investimento** em JavaScript",
-      "Site das lojas **Italínea Rio** (móveis planejados) em WordPress com Elementor, além de **diversas landing pages** de campanha para a marca",
-      "**Manutenção e configuração de hospedagem** do site da **Guaraviton**",
-      "**E-commerce de baterias automotivas** em WooCommerce, com **plugin próprio** para campos customizados e **regras condicionais de entrega** — cada modalidade se habilita conforme o produto e o momento da compra; mantive também o **site institucional em CodeIgniter** do mesmo cliente",
-      "**Manutenção ativa** do site de um hotel, com **diversas landing pages sazonais** (réveillon, carnaval e outras datas)",
+      "Sustentei um ritmo de cerca de **150 tarefas por mês** com entregas no prazo",
+      "Construí os **blogs de lançamento** de campanhas de alto ticket — uma de **cidadania europeia** (**R$ 80 mil em 1 semana**) e uma de **certificação profissional** (**R$ 100 mil em 1 semana**, case premiado) — incluindo os **scripts de rastreamento** e a **distribuição round-robin de leads**, que dividia o volume em partes iguais entre os vendedores",
+      "Criei **plugins WordPress sob medida** quando o mercado não resolvia: **regras condicionais de entrega** em WooCommerce e **consumo de API externa** renderizado direto no conteúdo — eliminando custo de licença de ferramentas de terceiros",
+      "Desenvolvi **sistemas sob medida fora do WordPress**, com **React** no front e **PHP** no back-end, quando o CMS limitava o escopo do que o cliente precisava",
+      "Desenvolvi **integrações com APIs** para **metrificação de leads em CRMs**",
+      "Atendi marcas de **bebidas, hotelaria, móveis planejados, autopeças e investimentos**, entre sites institucionais, **e-commerces** e **landing pages sazonais** de campanha",
+      "Cuidei de **segurança e infraestrutura**: remoção de malware com **hardening** posterior, correções em **registros DNS**, deploy com **propagação de domínio acelerada** e configuração de **AWS S3**",
     ],
-    tech: ["WordPress", "PHP", "JavaScript", "MySQL", "AWS S3", "DNS", "Elementor"],
+    tech: ["WordPress", "PHP", "React", "JavaScript", "MySQL", "AWS S3", "DNS", "Elementor"],
   },
 ];
