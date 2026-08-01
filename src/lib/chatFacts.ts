@@ -43,7 +43,10 @@ export function getChatFacts(): ChatFacts {
 
   return {
     years: site.stats.years,
-    projectCount: site.stats.projects,
+    // Conta os cards publicados, não `site.stats.projects` ("40+", total de
+    // carreira): as respostas falam em "projetos publicados aqui", então o
+    // número precisa bater com o que a pessoa consegue ver na tela.
+    projectCount: String(projects.length),
     techTop,
     expList,
     stackList,

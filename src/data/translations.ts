@@ -89,7 +89,7 @@ const pt: Translation = {
       about: [
         [
           "Sou desenvolvedor full stack focado em arquitetura limpa, automação e uso prático de IA.",
-          "{years} de experiência, com {projectCount} projetos publicados aqui no portfólio.",
+          "{years} anos de experiência, com {projectCount} projetos publicados aqui no portfólio.",
         ],
         [
           "Curto resolver problemas de estoque, integração de sistemas legados e redução de custo com IA aplicada.",
@@ -217,7 +217,7 @@ const en: Translation = {
       about: [
         [
           "I'm a full stack developer focused on clean architecture, automation and practical AI usage.",
-          "{years} of experience, with {projectCount} projects published in this portfolio.",
+          "{years} years of experience, with {projectCount} projects published in this portfolio.",
         ],
         [
           "I enjoy solving inventory problems, legacy system integration and cutting cost with applied AI.",
@@ -345,7 +345,7 @@ const es: Translation = {
       about: [
         [
           "Soy desarrollador full stack enfocado en arquitectura limpia, automatización y uso práctico de IA.",
-          "{years} de experiencia, con {projectCount} proyectos publicados en este portafolio.",
+          "{years} años de experiencia, con {projectCount} proyectos publicados en este portafolio.",
         ],
         [
           "Me gusta resolver problemas de inventario, integración de sistemas legados y reducción de costos con IA aplicada.",
@@ -473,7 +473,7 @@ const fr: Translation = {
       about: [
         [
           "Je suis développeur full stack, concentré sur l'architecture propre, l'automatisation et l'usage pratique de l'IA.",
-          "{years} d'expérience, avec {projectCount} projets publiés dans ce portfolio.",
+          "{years} ans d'expérience, avec {projectCount} projets publiés dans ce portfolio.",
         ],
         [
           "J'aime résoudre des problèmes d'inventaire, d'intégration de systèmes legacy et de réduction de coûts avec l'IA appliquée.",
