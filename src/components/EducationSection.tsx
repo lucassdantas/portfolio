@@ -10,7 +10,7 @@ export function EducationSection() {
   return (
     <section id="educacao" data-stg="4" className="border-t border-bord px-5 py-[clamp(70px,13vh,150px)] sm:px-8">
       <p className="m-0 mb-[clamp(24px,4vh,48px)] font-mono text-[11px] tracking-[.2em] text-dim uppercase">
-        09 — {t.eduTitle}
+        10 — {t.eduTitle}
       </p>
 
       <div className="mb-[clamp(40px,7vh,88px)] grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-px border border-bord bg-bord">

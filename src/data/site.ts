@@ -10,11 +10,15 @@ export const site = {
   coords: "22°54′S 43°10′W",
   heroImage: "/assets/desenvolvedor-web-lucas-dantas.jpg",
   stats: { years: "4+", projects: "40+", languages: "4" },
-  /** Régua de métricas da ExperienceSection — valores na ordem m1..m4 de translations.ts. */
+  /**
+   * Régua de métricas da ExperienceSection — valores na ordem m1..m4 de translations.ts.
+   * Só entra aqui número que algum bullet de `experiences.ts` sustenta; os demais
+   * (30+ projetos otimizados, ~150 tarefas/mês) ficam no bullet, sem virar manchete.
+   */
   expMetrics: [
     { value: "−90%", accent: true },
-    { value: "30+" },
-    { value: "~150" },
+    { value: "31" },
+    { value: "−71%" },
     { value: "100%", warm: true },
   ] as { value: string; accent?: boolean; warm?: boolean }[],
   featuredCase: {

@@ -9,6 +9,7 @@ import { StackSection } from "@/components/StackSection";
 import { ExperienceSection } from "@/components/ExperienceSection";
 import { CoreSection } from "@/components/CoreSection";
 import { CaseSection } from "@/components/CaseSection";
+import { SystemsSection } from "@/components/SystemsSection";
 import { ProjectsSection } from "@/components/ProjectsSection";
 import { GithubSection } from "@/components/GithubSection";
 import { Playground } from "@/components/Playground";
@@ -31,6 +32,7 @@ export default function Home() {
         <ExperienceSection />
         <CoreSection />
         <CaseSection />
+        <SystemsSection />
         <ProjectsSection />
         <GithubSection />
         <Terminal />

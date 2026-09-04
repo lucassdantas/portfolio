@@ -29,7 +29,7 @@ export function GithubSection() {
     <section id="github" data-stg="3.4" className="border-t border-bord px-5 py-[clamp(70px,13vh,150px)] sm:px-8">
       <div className="mb-[clamp(24px,4vh,48px)] flex flex-wrap items-baseline justify-between gap-6">
         <p className="m-0 font-mono text-[11px] tracking-[.2em] text-dim uppercase">
-          06 — {t.ghTitle}
+          07 — {t.ghTitle}
         </p>
         <a href={site.githubUrl} target="_blank" rel="noreferrer" className="font-mono text-[11.5px] tracking-[.08em]">
           ↗ github.com/{site.githubUser}

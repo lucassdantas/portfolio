@@ -12,6 +12,7 @@ export function Navbar() {
   const navLinks = [
     { label: t.navStack, href: "#stack" },
     { label: t.navExp, href: "#experiencia" },
+    { label: t.navSys, href: "#sistemas" },
     { label: t.navProj, href: "#projetos" },
     { label: "GitHub", href: "#github" },
     { label: t.navEdu, href: "#educacao" },

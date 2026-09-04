@@ -90,7 +90,7 @@ export function ProjectsSection() {
     <section id="projetos" ref={sectionRef} data-stg="3" className="relative py-[clamp(70px,14vh,150px)]">
       <div className="mb-[clamp(20px,4vh,50px)] flex flex-wrap items-baseline justify-between gap-6 px-5 sm:px-8">
         <p className="m-0 font-mono text-[11px] tracking-[.2em] text-dim uppercase">
-          05 — {t.projTitle}
+          06 — {t.projTitle}
         </p>
         <p className="m-0 max-w-[46ch] text-sm leading-[1.55] text-muted">{t.projDesc}</p>
       </div>

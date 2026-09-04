@@ -15,9 +15,15 @@ npm run test:watch
 
 Textos, experiências, projetos, certificados, traduções e a política de privacidade estão em `src/data/*` (coleções tipadas por `src/types/index.ts`, estilo NoSQL). **Nunca hardcode conteúdo em componentes** — se um texto novo aparecer, ele entra em `src/data/` (e em `translations.ts` se for string de UI, nos 4 idiomas: pt/en/es/fr). Ver [docs/conteudo.md](docs/conteudo.md).
 
+Duas regras editoriais que os testes cobram:
+
+- **`**termo**` no máximo duas vezes por texto** (bullet de experiência, parágrafo de `systems.ts`), sempre sobre o resultado ou a decisão — nunca sobre a tecnologia nem sobre a frase inteira.
+- **Conteúdo sobre trabalho de cliente/empregador é genérico**: sistemas internos são descritos pela função ("o ERP da empresa", "o sistema legado"), nunca pelo nome de produto interno; valores de política, nomes de pessoas/clientes/tabelas/endpoints ficam fora. O texto conta a decisão de engenharia, não o dado da empresa.
+
 ## Arquitetura (resumo)
 
-- `src/app/page.tsx` monta as seções na ordem do design; um client component por seção em `src/components/`.
+- `src/app/page.tsx` monta as seções na ordem do design; um client component por seção em `src/components/`. A numeração exibida (`01 —`, `02 —` …) é hardcoded no JSX de cada seção: inserir uma no meio obriga a renumerar as seguintes à mão, e a conferir se a `Navbar` ainda cabe no breakpoint `nav:`.
+- `CaseSection` e `SystemsSection` são complementares e não devem se sobrepor: o case abre **um** trabalho em profundidade (com diagrama antes/depois); `SystemsSection` mostra a **largura** das outras entregas de plataforma, em cards problema → solução → resultado (`src/data/systems.ts`).
 - Estado global mínimo: só `LanguageContext` (localStorage `ldp-lang`) — **o site é sempre dark, não existe mais tema claro/`ThemeContext`**. Estado de seção fica local; Navbar e Terminal se comunicam pelo evento global `TERMINAL_OPEN_EVENT` (botão `_shell` abre o terminal em tela cheia) em vez de um context novo.
 - `src/lib/github.ts`: única fonte de fetch da API do GitHub (promise cacheada em módulo).
 - `src/shaders/particles.ts` e `src/shaders/core.ts`: os dois programas WebGL do site (campo de partículas de fundo e o núcleo raymarched da `CoreSection`), portados do protótipo. Mudar a matemática do shader é editar essas strings GLSL, não os componentes que os montam.
@@ -31,7 +37,7 @@ Textos, experiências, projetos, certificados, traduções e a política de priv
 - Fontes: Schibsted Grotesk (corpo/títulos, `font-sans`) e DM Mono (labels/código, `font-mono`), via `next/font` — CSS vars `--font-schibsted`/`--font-dm-mono`.
 - **Sempre dark** (o site inteiro já é dark, mas estes três continuam mais escuros que o fundo, de propósito): terminal, playground e o painel do case em destaque usam `#070605`/`#0F0E0C` fixos.
 - Bordas de 1px (`border-bord`) no lugar de cards com sombra; grades usam `gap-px` + `bg-bord` para criar as linhas divisórias. Raio de borda nunca maior que 3px.
-- Breakpoint da nav: variante custom `nav:` (920px); abaixo disso, menu hambúrguer. `SectionRail` (trilha vertical de seções) só aparece `≥1100px` (`min-[1100px]:`).
+- Breakpoint da nav: variante custom `nav:` (1040px); abaixo disso, menu hambúrguer. Era 920px e subiu quando a nav passou a ter 7 links — link novo na nav pede reconferir esse valor. `SectionRail` (trilha vertical de seções) só aparece `≥1100px` (`min-[1100px]:`).
 - Efeitos que dependem de mouse (`Cursor`, campo de partículas) checam `matchMedia("(hover: none)")`/largura antes de montar — não é CSS escondendo, é não instanciar em touch.
 
 ## Padrões de código

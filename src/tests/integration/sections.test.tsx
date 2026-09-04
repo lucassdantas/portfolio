@@ -3,9 +3,10 @@ import { screen, within, fireEvent, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ProjectsSection } from "@/components/ProjectsSection";
 import { ExperienceSection } from "@/components/ExperienceSection";
+import { SystemsSection } from "@/components/SystemsSection";
 import { Playground } from "@/components/Playground";
 import { Navbar } from "@/components/Navbar";
-import { projects, experiences } from "@/data";
+import { projects, experiences, systems } from "@/data";
 import { stripMarks } from "@/lib/richText";
 import { renderWithProviders } from "../helpers";
 
@@ -90,6 +91,20 @@ describe("ExperienceSection — acordeão", () => {
     await userEvent.click(screen.getByRole("button", { name: new RegExp(experiences[1].company) }));
     expect(bulletVisible(1)).toBe(true);
     expect(bulletVisible(0)).toBe(false);
+  });
+});
+
+describe("SystemsSection — sistemas em produção", () => {
+  it("renderiza um card por entrega, com título e resultado", () => {
+    renderWithProviders(<SystemsSection />);
+    systems.forEach((s) => {
+      expect(screen.getByRole("heading", { name: s.title })).toBeInTheDocument();
+    });
+    // o resultado é a linha que justifica o card existir — se sumir, o card
+    // vira lista de features
+    const first = systems[0];
+    const card = screen.getByRole("heading", { name: first.title }).closest("article");
+    expect(card!.textContent).toContain(stripMarks(first.result));
   });
 });
 

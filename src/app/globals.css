@@ -36,7 +36,10 @@
   --color-navbg: var(--navbg);
   --font-sans: var(--font-schibsted), sans-serif;
   --font-mono: var(--font-dm-mono), monospace;
-  --breakpoint-nav: 920px;
+  /* Subiu de 920px para 1040px quando a seção "sistemas" entrou na nav:
+     com 7 links + seletor de idioma + _shell, a barra estourava a largura
+     entre 920 e ~1020px. Abaixo disso os links viram menu hambúrguer. */
+  --breakpoint-nav: 1040px;
 }
 
 @layer base {

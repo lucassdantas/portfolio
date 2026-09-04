@@ -4,7 +4,7 @@
 
 Todo o conteúdo do site vive em `src/data/` — um "banco de dados" em módulos TypeScript tipados, estilo coleções NoSQL. Componentes apenas consomem essas coleções via `import { ... } from "@/data"`. **Editar conteúdo nunca deve exigir tocar em componentes.**
 
-Coleções: `translations`, `experiences`, `projects`, `certifications`, `educations`, `stackGroups`, `principles`, `books`, `site`, `privacyPolicy`. As interfaces correspondentes estão em `src/types/index.ts` — o compilador garante que nenhum campo obrigatório falte. (`marquee.ts`/`Marquee.tsx` foram removidos no redesign v3 — a faixa animada não existe mais no novo design.)
+Coleções: `translations`, `experiences`, `projects`, `certifications`, `educations`, `stackGroups`, `principles`, `systems`, `books`, `site`, `privacyPolicy`. As interfaces correspondentes estão em `src/types/index.ts` — o compilador garante que nenhum campo obrigatório falte. (`marquee.ts`/`Marquee.tsx` foram removidos no redesign v3 — a faixa animada não existe mais no novo design.)
 
 ## Tema: sempre dark
 
@@ -32,7 +32,9 @@ Notas:
 - `Reveal` encapsula o reveal-on-scroll (IntersectionObserver + fallback de 6s). CSS global fica em `@layer base` — no Tailwind 4, estilos fora de layer venceriam as utilities.
 - `ParticlesCanvas` usa canvas puro (sem lib) e respeita `prefers-reduced-motion`.
 - GitHub sem token tem rate limit baixo; em erro, a seção esconde os cards e mantém só o link (comportamento do protótipo).
-- O breakpoint da nav é custom: `--breakpoint-nav: 920px` → variante `nav:`; abaixo disso os links viram menu hambúrguer.
+- O breakpoint da nav é custom: `--breakpoint-nav: 1040px` → variante `nav:`; abaixo disso os links viram menu hambúrguer. Era 920px até a seção "sistemas" entrar na nav — com 7 links, mais o seletor de idioma e o `_shell`, a barra estourava a largura entre 920 e ~1020px. Link novo na nav = reconferir esse valor.
+- `SystemsSection` ("sistemas em produção") fica entre `CaseSection` e `ProjectsSection` e existe para dar **largura** ao que o case dá em **profundidade**: o case abre um único trabalho com diagrama; a seção nova mostra as outras entregas de plataforma em cards problema → solução → resultado. Conteúdo em `data/systems.ts`, só em PT (ver [Conteúdo](./conteudo.md)).
+- A numeração das seções (`01 —`, `02 —` …) é **hardcoded no JSX** de cada componente. Inserir uma seção no meio obriga a renumerar as seguintes à mão — foi o que a entrada de "sistemas" (05) exigiu de projetos até contato.
 
 ## LGPD
 

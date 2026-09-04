@@ -39,7 +39,7 @@ export function Playground() {
     <section id="playground" data-stg="3.8" className="border-t border-bord px-5 py-[clamp(70px,13vh,150px)] sm:px-8">
       <div className="mb-[clamp(24px,4vh,48px)] flex flex-wrap items-baseline justify-between gap-6">
         <p className="m-0 font-mono text-[11px] tracking-[.2em] text-dim uppercase">
-          08 — {t.playTitle}
+          09 — {t.playTitle}
         </p>
         <p className="m-0 max-w-[46ch] text-sm leading-[1.55] text-muted">{t.playDesc}</p>
       </div>

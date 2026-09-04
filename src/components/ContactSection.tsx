@@ -14,7 +14,7 @@ export function ContactSection() {
       className="flex min-h-[88svh] flex-col justify-center border-t border-bord px-5 py-[clamp(70px,13vh,150px)] sm:px-8"
     >
       <p className="m-0 mb-[clamp(26px,5vh,54px)] font-mono text-[11px] tracking-[.2em] text-dim uppercase">
-        10 — {t.contactTitle}
+        11 — {t.contactTitle}
       </p>
       <Reveal>
         <h2 className="m-0 text-[clamp(38px,9vw,150px)] leading-[.92] font-bold tracking-[-.045em]">

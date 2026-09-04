@@ -7,6 +7,7 @@ export interface Translation {
   navAbout: string;
   navStack: string;
   navExp: string;
+  navSys: string;
   navProj: string;
   navEdu: string;
   navContact: string;
@@ -29,7 +30,6 @@ export interface Translation {
   statProj: string;
   statLangs: string;
   scrollCue: string;
-  badges: string[];
   termTitle: string;
   termDesc: string;
   stackTitle: string;
@@ -75,6 +75,10 @@ export interface Translation {
   featM1: string;
   featM2: string;
   featM3: string;
+  sysTitle: string;
+  sysDesc: string;
+  sysProblem: string;
+  sysBuilt: string;
   ghTitle: string;
   ghDesc: string;
   ghRepos: string;
@@ -89,7 +93,6 @@ export interface Translation {
   langTitle: string;
   booksTitle: string;
   contactTitle: string;
-  contactHead: string;
   ctA: string;
   ctB: string;
   contactDesc: string;
@@ -175,6 +178,29 @@ export interface Principle {
   icon: string;
   title: string;
   desc: string;
+}
+
+/**
+ * Entrega de plataforma da seção "sistemas em produção" (src/data/systems.ts).
+ *
+ * Conteúdo só em PT, como os bullets de experiência: são textos longos e
+ * específicos demais para manter em 4 idiomas sem apodrecer. O que é traduzido
+ * são os rótulos da seção (`sysTitle`, `sysDesc`, `sysProblem`, `sysBuilt`).
+ *
+ * `problem`/`built`/`result` aceitam `**termo**` para destaque (src/lib/richText.ts) —
+ * um destaque por parágrafo, no resultado ou na decisão, nunca na frase inteira.
+ */
+export interface SystemCase {
+  /** Rótulo curto de domínio, ex.: "plataforma · motor de aprovações". */
+  domain: string;
+  title: string;
+  /** O que existia antes — sem isso o card vira lista de features. */
+  problem: string;
+  /** O que foi construído e por quê. */
+  built: string;
+  /** Uma linha: o que mudou. */
+  result: string;
+  tech: string[];
 }
 
 export interface Book {

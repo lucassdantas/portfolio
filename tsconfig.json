@@ -37,7 +37,6 @@
   ],
   "exclude": [
     "node_modules",
-    "old",
-    "design_handoff"
+    "old_versions"
   ]
 }

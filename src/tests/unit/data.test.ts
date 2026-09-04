@@ -11,6 +11,7 @@ import {
   principles,
   books,
   site,
+  systems,
   privacyPolicy,
 } from "@/data";
 import type { Lang } from "@/types";
@@ -87,6 +88,39 @@ describe("camada de dados", () => {
         ).toBe(0);
       });
       expect(e.tech.length).toBeGreaterThan(0);
+    });
+  });
+
+  // Regra editorial de experiences.ts/systems.ts: destaque é escasso por
+  // design. Sem esse limite o negrito volta a cobrir metade da frase e
+  // deixa de destacar qualquer coisa.
+  it("nenhum texto usa mais de dois destaques", () => {
+    const marks = (s: string) => (s.match(/\*\*/g) ?? []).length / 2;
+    experiences.forEach((e) =>
+      e.bullets.forEach((b) =>
+        expect(marks(b), `${e.company}: bullet com destaque demais — "${b.slice(0, 48)}…"`)
+          .toBeLessThanOrEqual(2),
+      ),
+    );
+    systems.forEach((s) =>
+      [s.problem, s.built, s.result].forEach((p) =>
+        expect(marks(p), `${s.title}: parágrafo com destaque demais`).toBeLessThanOrEqual(2),
+      ),
+    );
+  });
+
+  it("sistemas em produção têm problema, solução, resultado e stack", () => {
+    expect(systems.length).toBeGreaterThan(0);
+    systems.forEach((s) => {
+      expect(s.domain.trim(), `${s.title} sem domínio`).toBeTruthy();
+      [s.problem, s.built, s.result].forEach((p) => {
+        expect(p.trim(), `${s.title} com campo vazio`).toBeTruthy();
+        expect(
+          (p.match(/\*\*/g) ?? []).length % 2,
+          `${s.title}: destaque ** sem fechamento`,
+        ).toBe(0);
+      });
+      expect(s.tech.length, `${s.title} sem stack`).toBeGreaterThan(0);
     });
   });
 

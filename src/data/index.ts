@@ -10,6 +10,7 @@ export { certifications } from "./certifications";
 export { educations } from "./educations";
 export { stackGroups } from "./stack";
 export { principles } from "./principles";
+export { systems } from "./systems";
 export { books } from "./books";
 export { site } from "./site";
 export { privacyPolicy } from "./privacy";

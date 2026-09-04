@@ -9,6 +9,7 @@ const SECTIONS = [
   { id: "stack", key: "navStack" as const },
   { id: "experiencia", key: "navExp" as const },
   { id: "case", key: "featured" as const },
+  { id: "sistemas", key: "sysTitle" as const },
   { id: "projetos", key: "navProj" as const },
   { id: "github", label: "GitHub" },
   { id: "terminal", key: "navTerm" as const },

@@ -1,6 +1,6 @@
 # Portfólio Lucas Dantas — v3
 
-One-page de portfólio editorial, sempre dark: terminal interativo, campo de partículas e núcleo 3D em WebGL, carrossel de projetos, playground de código, stats do GitHub ao vivo e i18n em 4 idiomas.
+One-page de portfólio editorial, sempre dark: terminal interativo, campo de partículas e núcleo 3D em WebGL, seção de sistemas em produção, carrossel de projetos, playground de código, stats do GitHub ao vivo e i18n em 4 idiomas.
 
 ## Stack
 
@@ -39,7 +39,7 @@ O site anterior e os protótipos de design (antigo e o do redesign v3) não est�
 ## Documentação por assunto
 
 - [Arquitetura](./arquitetura.md) — decisões, camada de dados, contexts, tokens de design
-- [Conteúdo](./conteudo.md) — como editar textos, projetos, certificados etc. sem tocar em componentes
+- [Conteúdo](./conteudo.md) — como editar textos, projetos, certificados etc. sem tocar em componentes, e as regras editoriais que os testes cobram (limite de destaque, conteúdo genérico sobre trabalho de cliente)
 - [Testes](./testes.md) — organização da suíte e como escrever novos testes
 
 > O projeto é pequeno; docs em arquivos únicos por assunto. Se crescer, promover cada assunto a subpasta (ex.: `arquitetura/index.md`).
