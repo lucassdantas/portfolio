@@ -43,6 +43,12 @@ export interface Translation {
   projTitle: string;
   projDesc: string;
   projFeatured: string;
+  catSys: string;
+  catSite: string;
+  internal: string;
+  offline: string;
+  /** Contagem hardcoded como no protótipo — atualize se a lista de projetos mudar. */
+  secIndex: string;
   coreEyebrow: string;
   coreHint: string;
   coreA: string;
@@ -127,6 +133,13 @@ export interface Project {
   live: string;
   repo: string;
   tech: string[];
+  /**
+   * Quando `live`/`repo` estão vazios, diz por quê: `internal` (sistema
+   * interno de cliente, nunca teve URL pública) ou `offline` (existiu e
+   * saiu do ar). Sem `live`/`repo` e sem `status`, o índice de projetos
+   * assume `offline`.
+   */
+  status?: "internal" | "offline";
 }
 
 export interface Certification {

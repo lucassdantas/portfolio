@@ -66,6 +66,7 @@ export const projects: Project[] = [
     // sistema interno do cliente: endereço não é divulgado
     live: "",
     repo: "",
+    status: "internal",
     tech: ["PHP", "MySQL"],
   },
   {
@@ -159,6 +160,7 @@ export const projects: Project[] = [
     img: IMG + "systems/blog-breno/blog-breno-silva.jpg",
     live: "",
     repo: "",
+    status: "internal",
     tech: ["React", "TypeScript", "PHP", "MySQL"],
   },
   {
@@ -419,8 +421,10 @@ export const projects: Project[] = [
       ],
     },
     img: IMG + "sites/postfast/postfast-main.jpg",
+    // fora do ar: cliente não usa mais
     live: "",
     repo: "",
+    status: "offline",
     tech: ["Next.js", "Tailwind", "Node.js", "PM2"],
   },
   {
@@ -452,6 +456,7 @@ export const projects: Project[] = [
     // fora do ar: cliente não usa mais — mantido só com o repo
     live: "",
     repo: "", // código de cliente
+    status: "offline",
     tech: ["React", "Tailwind", "PHP"],
   },
   {
@@ -467,6 +472,7 @@ export const projects: Project[] = [
     // fora do ar: cliente não usa mais — mantido só com o repo
     live: "",
     repo: "", // código de cliente
+    status: "offline",
     tech: ["Next.js", "Tailwind"],
   },
   {
@@ -552,6 +558,7 @@ export const projects: Project[] = [
     // fora do ar: cliente não usa mais
     live: "",
     repo: "",
+    status: "offline",
     tech: ["Next.js", "Tailwind"],
   },
   {
@@ -576,8 +583,10 @@ export const projects: Project[] = [
       ],
     },
     img: IMG + "sites/seu-treino-28-dias/seu-treino-28-dias-main.jpg",
+    // fora do ar: cliente não usa mais — mantido só com o repo
     live: "",
     repo: "", // código de cliente
+    status: "offline",
     tech: ["React", "Tailwind"],
   },
   {

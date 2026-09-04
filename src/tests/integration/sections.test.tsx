@@ -1,11 +1,11 @@
-import { describe, it, expect } from "vitest";
-import { screen, within } from "@testing-library/react";
+import { afterEach, beforeEach, describe, it, expect, vi } from "vitest";
+import { screen, within, fireEvent, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ProjectsSection } from "@/components/ProjectsSection";
 import { ExperienceSection } from "@/components/ExperienceSection";
 import { Playground } from "@/components/Playground";
 import { Navbar } from "@/components/Navbar";
-import { projects, experiences, translations } from "@/data";
+import { projects, experiences } from "@/data";
 import { stripMarks } from "@/lib/richText";
 import { renderWithProviders } from "../helpers";
 
@@ -16,40 +16,65 @@ const bulletVisible = (i: number) =>
     .queryAllByRole("listitem")
     .some((li) => li.textContent === stripMarks(experiences[i].bullets[0]));
 
-describe("ProjectsSection — filtros", () => {
-  it("abre nos destaques, não na lista inteira", () => {
-    renderWithProviders(<ProjectsSection />);
-    const destaques = projects.filter((p) => p.featured);
-    expect(destaques.length).toBeGreaterThan(0);
-    destaques.forEach((p) => {
-      expect(screen.getByRole("heading", { name: p.name })).toBeInTheDocument();
-    });
-    projects
-      .filter((p) => !p.featured)
-      .forEach((p) => {
-        expect(screen.queryByRole("heading", { name: p.name })).not.toBeInTheDocument();
-      });
-  });
+describe("ProjectsSection — carrossel", () => {
+  const featured = projects.filter((p) => p.featured);
+  const rest = projects.filter((p) => !p.featured);
 
-  it("mostra todos os projetos no filtro 'todos'", async () => {
+  it("abre no primeiro projeto em destaque e lista o restante abaixo", () => {
     renderWithProviders(<ProjectsSection />);
-    await userEvent.click(screen.getByRole("button", { name: translations.pt.all }));
-    projects.forEach((p) => {
-      expect(screen.getByRole("heading", { name: p.name })).toBeInTheDocument();
-    });
-  });
-
-  it("filtra por Sistemas", async () => {
-    renderWithProviders(<ProjectsSection />);
-    await userEvent.click(screen.getByRole("button", { name: "Sistemas" }));
-    const sistemas = projects.filter((p) => p.cat === "Sistemas");
-    const sites = projects.filter((p) => p.cat === "Sites");
-    sistemas.forEach((p) => {
-      expect(screen.getByRole("heading", { name: p.name })).toBeInTheDocument();
-    });
-    sites.forEach((p) => {
+    expect(screen.getByRole("heading", { name: featured[0].name })).toBeInTheDocument();
+    featured.slice(1).forEach((p) => {
       expect(screen.queryByRole("heading", { name: p.name })).not.toBeInTheDocument();
     });
+    expect(rest.length).toBeGreaterThan(0);
+    rest.forEach((p) => {
+      expect(screen.getByText(p.name)).toBeInTheDocument();
+    });
+  });
+
+  it("a seta → avança para o próximo projeto em destaque", async () => {
+    renderWithProviders(<ProjectsSection />);
+    await userEvent.click(screen.getByRole("button", { name: "próximo" }));
+    expect(screen.getByRole("heading", { name: featured[1].name })).toBeInTheDocument();
+  });
+
+  it("clicar num número da trilha troca direto para aquele projeto", async () => {
+    renderWithProviders(<ProjectsSection />);
+    await userEvent.click(screen.getByRole("button", { name: "03" }));
+    expect(screen.getByRole("heading", { name: featured[2].name })).toBeInTheDocument();
+  });
+
+  it("seta do teclado ArrowRight avança o carrossel", () => {
+    renderWithProviders(<ProjectsSection />);
+    fireEvent.keyDown(window, { key: "ArrowRight" });
+    expect(screen.getByRole("heading", { name: featured[1].name })).toBeInTheDocument();
+  });
+
+  it("projeto sem link publica o status (interno/fora do ar)", () => {
+    renderWithProviders(<ProjectsSection />);
+    const semLink = rest.find((p) => !p.live && !p.repo);
+    expect(semLink).toBeDefined();
+    const row = screen.getByText(semLink!.name).closest("div");
+    expect(within(row!).getByText(/interno|fora do ar/)).toBeInTheDocument();
+  });
+});
+
+describe("ProjectsSection — autoplay", () => {
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
+
+  it("avança sozinho depois do intervalo, mas pausa com o mouse em cima", () => {
+    renderWithProviders(<ProjectsSection />);
+    const featured = projects.filter((p) => p.featured);
+    const stage = screen.getByTestId("proj-stage");
+
+    fireEvent.mouseEnter(stage);
+    act(() => vi.advanceTimersByTime(7000));
+    expect(screen.getByRole("heading", { name: featured[0].name })).toBeInTheDocument();
+
+    fireEvent.mouseLeave(stage);
+    act(() => vi.advanceTimersByTime(7000));
+    expect(screen.getByRole("heading", { name: featured[1].name })).toBeInTheDocument();
   });
 });
 
