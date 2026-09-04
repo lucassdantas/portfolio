@@ -19,6 +19,7 @@ export const site = {
   ] as { value: string; accent?: boolean; warm?: boolean }[],
   featuredCase: {
     title: "Chatbots corporativos com IA — CMEXX",
+    stack: ["Python", "FastAPI", "SQLAlchemy", "Pytest"],
     metrics: [
       { value: "−90%", color: "#22C55E" },
       { value: "n8n → Python", color: "#1D94E3" },

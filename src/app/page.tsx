@@ -5,6 +5,8 @@ import { Manifesto } from "@/components/Manifesto";
 import { Terminal } from "@/components/Terminal";
 import { StackSection } from "@/components/StackSection";
 import { ExperienceSection } from "@/components/ExperienceSection";
+import { CoreSection } from "@/components/CoreSection";
+import { CaseSection } from "@/components/CaseSection";
 import { ProjectsSection } from "@/components/ProjectsSection";
 import { GithubSection } from "@/components/GithubSection";
 import { Playground } from "@/components/Playground";
@@ -23,6 +25,8 @@ export default function Home() {
         <Manifesto />
         <StackSection />
         <ExperienceSection />
+        <CoreSection />
+        <CaseSection />
         <ProjectsSection />
         <GithubSection />
         <Terminal />
