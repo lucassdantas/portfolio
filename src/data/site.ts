@@ -10,6 +10,13 @@ export const site = {
   coords: "22°54′S 43°10′W",
   heroImage: "/assets/desenvolvedor-web-lucas-dantas.jpg",
   stats: { years: "4+", projects: "40+", languages: "4" },
+  /** Régua de métricas da ExperienceSection — valores na ordem m1..m4 de translations.ts. */
+  expMetrics: [
+    { value: "−90%", accent: true },
+    { value: "30+" },
+    { value: "~150" },
+    { value: "100%", warm: true },
+  ] as { value: string; accent?: boolean; warm?: boolean }[],
   featuredCase: {
     title: "Chatbots corporativos com IA — CMEXX",
     metrics: [

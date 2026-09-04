@@ -62,7 +62,7 @@ describe("ExperienceSection — acordeão", () => {
 
   it("clicar em outro cargo abre e fecha o anterior", async () => {
     renderWithProviders(<ExperienceSection />);
-    await userEvent.click(screen.getByText(`@ ${experiences[1].company}`));
+    await userEvent.click(screen.getByRole("button", { name: new RegExp(experiences[1].company) }));
     expect(bulletVisible(1)).toBe(true);
     expect(bulletVisible(0)).toBe(false);
   });

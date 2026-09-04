@@ -82,6 +82,14 @@
   button {
     font-family: inherit;
   }
+
+  /* StackSection — grafo de tecnologias: hover num chip acende só o grupo */
+  #ld-graph.ld-graph-dim .ld-tech {
+    opacity: 0.28;
+  }
+  #ld-graph.ld-graph-dim .ld-tech.ld-lit {
+    opacity: 1;
+  }
 }
 
 @keyframes blink {

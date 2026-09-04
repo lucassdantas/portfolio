@@ -36,6 +36,10 @@ export interface Translation {
   engTitle: string;
   expTitle: string;
   expDesc: string;
+  m1: string;
+  m2: string;
+  m3: string;
+  m4: string;
   projTitle: string;
   projDesc: string;
   projFeatured: string;
