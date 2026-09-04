@@ -1,7 +1,7 @@
-import { ParticlesCanvas } from "@/components/ParticlesCanvas";
+import { ParticlesCanvasLoader as ParticlesCanvas } from "@/components/ParticlesCanvasLoader";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
-import { Marquee } from "@/components/Marquee";
+import { Manifesto } from "@/components/Manifesto";
 import { Terminal } from "@/components/Terminal";
 import { StackSection } from "@/components/StackSection";
 import { ExperienceSection } from "@/components/ExperienceSection";
@@ -20,12 +20,12 @@ export default function Home() {
       <div className="relative z-10">
         <Navbar />
         <Hero />
-        <Marquee />
-        <Terminal />
+        <Manifesto />
         <StackSection />
         <ExperienceSection />
         <ProjectsSection />
         <GithubSection />
+        <Terminal />
         <Playground />
         <EducationSection />
         <ContactSection />

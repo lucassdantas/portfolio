@@ -2,8 +2,17 @@
 
 import { useEffect, useRef } from "react";
 
-/** Reveal on scroll: opacity 0 + translateY(26px) → visível (fallback após 6s). */
-export function Reveal({ children, className }: { children: React.ReactNode; className?: string }) {
+/** Reveal on scroll: opacity 0 + translateY(28px) → visível (fallback após 6s). */
+export function Reveal({
+  children,
+  className,
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  /** Atraso em ms antes da transição — para revelar em cascata (staggered). */
+  delay?: number;
+}) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -16,8 +25,8 @@ export function Reveal({ children, className }: { children: React.ReactNode; cla
       el.style.transform = "translateY(0)";
     };
     el.style.opacity = "0";
-    el.style.transform = "translateY(26px)";
-    el.style.transition = "opacity .7s ease, transform .7s ease";
+    el.style.transform = "translateY(28px)";
+    el.style.transition = `opacity .9s cubic-bezier(.16,1,.3,1) ${delay}ms, transform .9s cubic-bezier(.16,1,.3,1) ${delay}ms`;
 
     const io = new IntersectionObserver(
       (entries) => {

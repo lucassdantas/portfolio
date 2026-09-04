@@ -7,6 +7,7 @@ export const site = {
   githubUrl: "https://github.com/lucassdantas",
   linkedinUrl: "https://www.linkedin.com/in/lucas-de-sousa-dantas/",
   location: "📍 Rio de Janeiro, Brasil",
+  coords: "22°54′S 43°10′W",
   heroImage: "/assets/desenvolvedor-web-lucas-dantas.jpg",
   stats: { years: "4+", projects: "40+", languages: "4" },
   featuredCase: {
