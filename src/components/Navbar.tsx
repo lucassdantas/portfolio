@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useLanguage, LANGS } from "@/contexts/LanguageContext";
 import { site } from "@/data";
+import { TERMINAL_OPEN_EVENT } from "./Terminal";
 
 export function Navbar() {
   const { lang, setLang, t } = useLanguage();
@@ -50,6 +51,12 @@ export function Navbar() {
               </button>
             ))}
           </div>
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent(TERMINAL_OPEN_EVENT))}
+            className="hidden cursor-pointer rounded-md border border-bord bg-transparent px-[13px] py-[7px] font-mono text-[10.5px] tracking-[.14em] text-txt uppercase hover:border-accent hover:text-accent nav:inline-block"
+          >
+            _shell
+          </button>
           <button
             onClick={() => setOpen((o) => !o)}
             aria-label="Menu"

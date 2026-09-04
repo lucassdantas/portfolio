@@ -1,7 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { screen } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Terminal } from "@/components/Terminal";
+import { act } from "react";
+import { Terminal, TERMINAL_OPEN_EVENT } from "@/components/Terminal";
 import { renderWithProviders } from "../helpers";
 
 async function typeCommand(cmd: string) {
@@ -13,7 +14,7 @@ async function typeCommand(cmd: string) {
 describe("Terminal interativo", () => {
   it("mostra o banner inicial", () => {
     renderWithProviders(<Terminal />);
-    expect(screen.getByText(/portfolio v2\.0/)).toBeInTheDocument();
+    expect(screen.getByText(/portfolio v3\.0/)).toBeInTheDocument();
   });
 
   it("help lista os comandos", async () => {
@@ -45,7 +46,7 @@ describe("Terminal interativo", () => {
     renderWithProviders(<Terminal />);
     await typeCommand("help");
     await typeCommand("clear");
-    expect(screen.queryByText(/portfolio v2\.0/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/portfolio v3\.0/)).not.toBeInTheDocument();
     expect(screen.queryByText(/whoami\s+— quem sou eu/)).not.toBeInTheDocument();
   });
 
@@ -62,5 +63,20 @@ describe("Terminal interativo", () => {
     const input = screen.getByRole("textbox") as HTMLInputElement;
     await userEvent.keyboard("{ArrowUp}");
     expect(input.value).toBe("whoami");
+  });
+
+  it("evento global (botão _shell da navbar) abre o terminal em tela cheia", () => {
+    renderWithProviders(<Terminal />);
+    expect(screen.queryByText("lucas@portfolio — shell")).not.toBeInTheDocument();
+    act(() => window.dispatchEvent(new CustomEvent(TERMINAL_OPEN_EVENT)));
+    expect(screen.getByText("lucas@portfolio — shell")).toBeInTheDocument();
+  });
+
+  it("Esc fecha o terminal em tela cheia", () => {
+    renderWithProviders(<Terminal />);
+    act(() => window.dispatchEvent(new CustomEvent(TERMINAL_OPEN_EVENT)));
+    expect(screen.getByText("lucas@portfolio — shell")).toBeInTheDocument();
+    fireEvent.keyDown(window, { key: "Escape" });
+    expect(screen.queryByText("lucas@portfolio — shell")).not.toBeInTheDocument();
   });
 });

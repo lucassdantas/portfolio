@@ -26,49 +26,54 @@ export function GithubSection() {
     : [];
 
   return (
-    <section id="github" className="mx-auto max-w-[1000px] px-8 pb-10 pt-[100px]">
-      <p className="mb-2 font-mono text-sm text-accent">05 — {t.ghTitle}</p>
-      <p className="mb-8 text-base text-muted">{t.ghDesc}</p>
-      {gh && (
-        <>
-          <div className="mb-7 grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-4">
-            {stats.map((s) => (
-              <div key={s.label} className="rounded-xl border border-bord bg-card p-5 text-center">
-                <div className="font-mono text-[30px] font-bold text-accent">{s.value}</div>
-                <div className="mt-[5px] text-[12.5px] text-muted">{s.label}</div>
-              </div>
-            ))}
-          </div>
-          <div className="rounded-xl border border-bord bg-card p-6">
-            <p className="mb-4 font-mono text-[13px] text-muted">{t.ghLangs}</p>
-            <div className="flex flex-col gap-3">
-              {gh.langs.map((gl) => (
-                <div key={gl.name} className="grid grid-cols-[120px_1fr_46px] items-center gap-3">
-                  <span className="font-mono text-[12.5px]">{gl.name}</span>
-                  <div className="h-2 overflow-hidden rounded bg-bg2">
-                    <div
-                      className="h-full rounded bg-accent transition-[width] duration-1000 ease-out"
-                      style={{ width: `${gl.pct}%` }}
-                    />
+    <section id="github" data-stg="3.4" className="border-t border-bord px-5 py-[clamp(70px,13vh,150px)] sm:px-8">
+      <div className="mb-[clamp(24px,4vh,48px)] flex flex-wrap items-baseline justify-between gap-6">
+        <p className="m-0 font-mono text-[11px] tracking-[.2em] text-dim uppercase">
+          06 — {t.ghTitle}
+        </p>
+        <a href={site.githubUrl} target="_blank" rel="noreferrer" className="font-mono text-[11.5px] tracking-[.08em]">
+          ↗ github.com/{site.githubUser}
+        </a>
+      </div>
+      <div className="border border-bord bg-bg2 p-[clamp(18px,2.6vw,32px)]">
+        {gh && (
+          <>
+            <div className="mb-6 grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-px border border-bord bg-bord">
+              {stats.map((s) => (
+                <div key={s.label} className="bg-bg2 px-4 py-5 text-center">
+                  <div className="font-mono text-[26px] font-bold text-accent">{s.value}</div>
+                  <div className="mt-1.5 font-mono text-[10.5px] tracking-[.1em] text-muted uppercase">
+                    {s.label}
                   </div>
-                  <span className="text-right font-mono text-[11.5px] text-muted">{gl.pct}%</span>
                 </div>
               ))}
             </div>
-          </div>
-        </>
-      )}
-      {!gh && !err && (
-        <p className="font-mono text-[13.5px] text-muted">
-          $ fetch api.github.com/users/{site.githubUser}{" "}
-          <span className="animate-[blink_1s_infinite]">▊</span>
-        </p>
-      )}
-      <p className="mt-5 font-mono text-[13px]">
-        <a href={site.githubUrl} target="_blank" rel="noreferrer">
-          ↗ github.com/{site.githubUser}
-        </a>
-      </p>
+            <p className="m-0 mb-3.5 font-mono text-[10.5px] tracking-[.16em] text-dim uppercase">
+              {t.ghLangs}
+            </p>
+            <div className="flex flex-col gap-3">
+              {gh.langs.map((gl) => (
+                <div key={gl.name} className="grid grid-cols-[110px_1fr_44px] items-center gap-3">
+                  <span className="font-mono text-[12px] text-muted">{gl.name}</span>
+                  <div className="h-px bg-bord">
+                    <div
+                      className="h-px bg-accent transition-[width] duration-1000 ease-out"
+                      style={{ width: `${gl.pct}%` }}
+                    />
+                  </div>
+                  <span className="text-right font-mono text-[11px] text-dim">{gl.pct}%</span>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+        {!gh && !err && (
+          <p className="m-0 font-mono text-[13.5px] leading-[1.9] text-muted">
+            $ fetch api.github.com/users/{site.githubUser}{" "}
+            <span className="animate-[blink_1s_infinite] text-accent">▊</span>
+          </p>
+        )}
+      </div>
     </section>
   );
 }
