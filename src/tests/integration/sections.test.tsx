@@ -90,14 +90,7 @@ describe("Playground — executa JS", () => {
   });
 });
 
-describe("Navbar — tema e idioma", () => {
-  it("alterna o tema e persiste em localStorage", async () => {
-    renderWithProviders(<Navbar />);
-    await userEvent.click(screen.getByTitle("Tema"));
-    expect(document.documentElement.dataset.theme).toBe("light");
-    expect(localStorage.getItem("ldp-theme")).toBe("light");
-  });
-
+describe("Navbar — idioma", () => {
   it("troca o idioma para EN e traduz os links", async () => {
     renderWithProviders(<Navbar />);
     await userEvent.click(screen.getByRole("button", { name: "EN" }));

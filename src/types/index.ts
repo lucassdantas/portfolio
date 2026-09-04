@@ -1,7 +1,5 @@
 export type Lang = "pt" | "en" | "es" | "fr";
 
-export type Theme = "dark" | "light";
-
 /** [nome, nível, percentual da barra] */
 export type SpokenLang = [string, string, number];
 
@@ -13,6 +11,7 @@ export interface Translation {
   navEdu: string;
   navContact: string;
   role: string;
+  secManifesto: string;
   tagline: string;
   cta1: string;
   cta2: string;

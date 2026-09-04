@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
-import { ThemeProvider } from "@/contexts/ThemeContext";
+import { Schibsted_Grotesk, DM_Mono } from "next/font/google";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { site } from "@/data";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
+const schibsted = Schibsted_Grotesk({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-space-grotesk",
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-schibsted",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const dmMono = DM_Mono({
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-jetbrains-mono",
+  weight: ["300", "400", "500"],
+  variable: "--font-dm-mono",
 });
 
 const title = "Lucas Dantas — Desenvolvedor Full Stack";
@@ -82,8 +81,6 @@ export const metadata: Metadata = {
   },
 };
 
-const themeInit = `(function(){try{var t=localStorage.getItem('ldp-theme');document.documentElement.dataset.theme=(t==='light'?'light':'dark')}catch(e){}})()`;
-
 const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -100,18 +97,15 @@ const personJsonLd = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt" data-theme="dark" suppressHydrationWarning>
+    <html lang="pt">
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
       </head>
-      <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
-        <ThemeProvider>
-          <LanguageProvider>{children}</LanguageProvider>
-        </ThemeProvider>
+      <body className={`${schibsted.variable} ${dmMono.variable} font-sans antialiased`}>
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );

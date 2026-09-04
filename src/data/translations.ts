@@ -13,6 +13,7 @@ const pt: Translation = {
   navEdu: "Educação",
   navContact: "Contato",
   role: "// desenvolvedor full stack",
+  secManifesto: "manifesto",
   tagline:
     "4+ anos construindo aplicações web, APIs, automações e sistemas críticos — de chatbots com IA a sistemas da área da saúde. Arquitetura limpa, custo sob controle e código que dura.",
   cta1: "Ver projetos",
@@ -142,6 +143,7 @@ const en: Translation = {
   navEdu: "Education",
   navContact: "Contact",
   role: "// full stack developer",
+  secManifesto: "manifesto",
   tagline:
     "4+ years building web apps, APIs, automations and mission-critical systems — from AI chatbots to healthcare software. Clean architecture, cost awareness and code that lasts.",
   cta1: "View projects",
@@ -270,6 +272,7 @@ const es: Translation = {
   navEdu: "Educación",
   navContact: "Contacto",
   role: "// desarrollador full stack",
+  secManifesto: "manifiesto",
   tagline:
     "Más de 4 años construyendo aplicaciones web, APIs, automatizaciones y sistemas críticos — de chatbots con IA a software de salud. Arquitectura limpia, costos bajo control y código que perdura.",
   cta1: "Ver proyectos",
@@ -398,6 +401,7 @@ const fr: Translation = {
   navEdu: "Formation",
   navContact: "Contact",
   role: "// développeur full stack",
+  secManifesto: "manifeste",
   tagline:
     "4+ ans à construire des applications web, APIs, automatisations et systèmes critiques — des chatbots IA aux logiciels de santé. Architecture propre, coûts maîtrisés et code durable.",
   cta1: "Voir les projets",

@@ -56,14 +56,6 @@ describe("Terminal interativo", () => {
     expect(localStorage.getItem("ldp-lang")).toBe("en");
   });
 
-  it("theme alterna o tema no <html>", async () => {
-    renderWithProviders(<Terminal />);
-    const before = document.documentElement.dataset.theme;
-    await typeCommand("theme");
-    expect(screen.getByText(/tema alterado ✔/)).toBeInTheDocument();
-    expect(document.documentElement.dataset.theme).not.toBe(before);
-  });
-
   it("histórico navega com seta para cima", async () => {
     renderWithProviders(<Terminal />);
     await typeCommand("whoami");

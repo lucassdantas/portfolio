@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { screen, waitFor, render } from "@testing-library/react";
-import { ThemeProvider } from "@/contexts/ThemeContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const user = { public_repos: 30, followers: 12, public_gists: 2 };
@@ -25,11 +24,9 @@ describe("GithubSection", () => {
     );
     const { GithubSection } = await import("@/components/GithubSection");
     render(
-      <ThemeProvider>
-        <LanguageProvider>
-          <GithubSection />
-        </LanguageProvider>
-      </ThemeProvider>
+      <LanguageProvider>
+        <GithubSection />
+      </LanguageProvider>
     );
     expect(screen.getByText(/fetch api\.github\.com/)).toBeInTheDocument();
     await waitFor(() => expect(screen.getByText("30")).toBeInTheDocument());
@@ -42,11 +39,9 @@ describe("GithubSection", () => {
     vi.stubGlobal("fetch", vi.fn(() => Promise.reject(new Error("rate limit"))));
     const { GithubSection } = await import("@/components/GithubSection");
     render(
-      <ThemeProvider>
-        <LanguageProvider>
-          <GithubSection />
-        </LanguageProvider>
-      </ThemeProvider>
+      <LanguageProvider>
+        <GithubSection />
+      </LanguageProvider>
     );
     await waitFor(() =>
       expect(screen.queryByText(/fetch api\.github\.com/)).not.toBeInTheDocument()

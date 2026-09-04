@@ -1,12 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage, LANGS } from "@/contexts/LanguageContext";
 import { site } from "@/data";
 
 export function Navbar() {
-  const { theme, toggleTheme } = useTheme();
   const { lang, setLang, t } = useLanguage();
   const [open, setOpen] = useState(false);
 
@@ -52,13 +50,6 @@ export function Navbar() {
               </button>
             ))}
           </div>
-          <button
-            onClick={toggleTheme}
-            title="Tema"
-            className="cursor-pointer rounded-md border border-bord bg-transparent px-2.5 py-[5px] text-[15px] text-txt hover:border-accent"
-          >
-            {theme === "dark" ? "☀" : "☾"}
-          </button>
           <button
             onClick={() => setOpen((o) => !o)}
             aria-label="Menu"

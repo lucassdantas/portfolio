@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage, LANGS } from "@/contexts/LanguageContext";
 import { experiences, projects, stackGroups, books } from "@/data";
 import { fetchGithubStats, type GithubStats } from "@/lib/github";
@@ -23,9 +22,7 @@ const YELLOW = "#FEBC2E";
 const out = (text: string, color: string = GRAY): TermLine => ({ text, color });
 
 export function Terminal() {
-  const { t } = useLanguage();
-  const { toggleTheme } = useTheme();
-  const { lang, setLang } = useLanguage();
+  const { t, lang, setLang } = useLanguage();
   const [lines, setLines] = useState<TermLine[]>([
     out("██ lucas.dantas — portfolio v2.0", BLUE),
     out("Digite 'help' para ver os comandos disponíveis.", GRAY),
@@ -71,7 +68,6 @@ export function Terminal() {
           out("langs       — idiomas"),
           out("github      — perfil no GitHub"),
           out("contact     — contato"),
-          out("theme       — alterna dark/light"),
           out("lang [pt|en|es|fr] — muda o idioma"),
           out("clear       — limpa o terminal"),
           out("books       — estante do dev"),
@@ -133,10 +129,6 @@ export function Terminal() {
           out("GitHub:   github.com/lucassdantas", BLUE),
           out("Base:     Rio de Janeiro, Brasil (remoto 🌎)"),
         ];
-        break;
-      case "theme":
-        toggleTheme();
-        res = [out("tema alterado ✔", GREEN)];
         break;
       case "lang":
         if (LANGS.includes(arg as Lang)) {

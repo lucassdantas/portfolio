@@ -1,28 +1,22 @@
 @import "tailwindcss";
 
-/* Design tokens — temas via CSS vars (data-theme no <html>) */
+/* Design tokens — site é sempre dark (ver CLAUDE.md) */
 :root {
-  --bg: #04080f;
-  --bg2: #081120;
-  --card: #0b1524;
-  --border: #16233a;
-  --text: #e2e8f0;
-  --muted: #8c98ab;
+  --bg: #0a0908;
+  --bg2: #0f0e0c;
+  --card: #0f0e0c;
+  --border: #1e1c19;
+  --text: #edeae5;
+  --muted: #8a857d;
   /* destaque dentro de texto muted: acima do muted, abaixo do branco do --text */
-  --strong: #bac5d4;
+  --strong: #b5afa6;
+  /* piso de contraste do projeto — nada abaixo disso sobre --bg */
+  --dim: #7a746b;
   --accent: #1d94e3;
-  --navbg: rgba(4, 8, 15, 0.82);
-}
-
-html[data-theme="light"] {
-  --bg: #eef1f5;
-  --bg2: #ffffff;
-  --card: #ffffff;
-  --border: #d7dce5;
-  --text: #111b29;
-  --muted: #4e5d74;
-  --strong: #2f3c4e;
-  --navbg: rgba(238, 241, 245, 0.85);
+  --warm: #d7a45a;
+  --ok: #22c55e;
+  --err: #c05b4d;
+  --navbg: rgba(10, 9, 8, 0.86);
 }
 
 @theme inline {
@@ -33,10 +27,14 @@ html[data-theme="light"] {
   --color-txt: var(--text);
   --color-muted: var(--muted);
   --color-strong: var(--strong);
+  --color-dim: var(--dim);
   --color-accent: var(--accent);
+  --color-warm: var(--warm);
+  --color-ok: var(--ok);
+  --color-err: var(--err);
   --color-navbg: var(--navbg);
-  --font-sans: var(--font-space-grotesk), sans-serif;
-  --font-mono: var(--font-jetbrains-mono), monospace;
+  --font-sans: var(--font-schibsted), sans-serif;
+  --font-mono: var(--font-dm-mono), monospace;
   --breakpoint-nav: 920px;
 }
 
@@ -64,7 +62,7 @@ html[data-theme="light"] {
 
   ::selection {
     background: var(--accent);
-    color: #fff;
+    color: var(--bg);
   }
 
   ::-webkit-scrollbar {
