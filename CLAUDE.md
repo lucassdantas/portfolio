@@ -23,9 +23,9 @@ Textos, experiências, projetos, certificados, traduções e a política de priv
 - `src/shaders/particles.ts` e `src/shaders/core.ts`: os dois programas WebGL do site (campo de partículas de fundo e o núcleo raymarched da `CoreSection`), portados do protótipo. Mudar a matemática do shader é editar essas strings GLSL, não os componentes que os montam.
 - Detalhes e decisões: [docs/arquitetura.md](docs/arquitetura.md).
 
-## Design (protótipo em `Lucas Dantas - Portfolio.html`)
+## Design (redesign v3)
 
-- Referência canônica de layout/estilo: `Lucas Dantas - Portfolio.html` na raiz (bundle de artifact — HTML/CSS/JS reais estão compactados dentro; não abrir/editar direto, é só consulta visual). `design_handoff/` é o protótipo do design **anterior** — histórico, não usar mais.
+- O protótipo hi-fi que originou este redesign (bundle de artifact, HTML/CSS/JS compactados dentro) não está no repositório — vive fora, em `old_versions/` (gitignored, referência pessoal do autor). Se precisar consultá-lo, peça o arquivo; não é algo que uma sessão nova encontra no repo.
 - Tokens são CSS vars em `globals.css`, expostos como utilities via `@theme inline`: `bg-bg`, `bg-bg2`, `bg-card`, `border-bord`, `text-txt`, `text-muted`, `text-strong`, `text-dim`, `text-accent`, `text-warm`, `text-ok`, `text-err`. `text-strong` é o meio-termo entre `muted` e `txt` (destaque dentro de texto muted, ver `src/lib/richText.ts`); `text-dim` é o piso de contraste do site (4.5:1 sobre `--bg`/`--bg2` — não usar cor mais escura que `--dim` sobre o fundo).
 - Paleta (dark-only): `--bg:#0A0908`, `--bg2/--card:#0F0E0C`, `--border:#1E1C19`, `--text:#EDEAE5`, `--muted:#8A857D`, `--strong:#B5AFA6`, `--dim:#827C73`, `--accent:#1D94E3`, `--warm:#D7A45A`, `--ok:#22C55E`, `--err:#C05B4D`.
 - Fontes: Schibsted Grotesk (corpo/títulos, `font-sans`) e DM Mono (labels/código, `font-mono`), via `next/font` — CSS vars `--font-schibsted`/`--font-dm-mono`.
@@ -45,7 +45,7 @@ Textos, experiências, projetos, certificados, traduções e a política de priv
 
 ## Cuidados
 
-- `old/` (site anterior) e `design_handoff/` (protótipo do design anterior) são referência: **não importar código de lá e não editar** (estão fora do `tsconfig`).
+- O site anterior e os protótipos de design (antigo e este) ficam em `old_versions/`, fora do repositório (gitignored) — não existem mais aqui, não tente importar código de lá.
 - `public/ads.txt` é do Google AdSense — não remover.
 - API do GitHub sem token tem rate limit: em erro a seção esconde os stats e mantém o link (não quebrar esse fallback).
 - LGPD: o site não coleta dados pessoais próprios; se adicionar formulário/analytics, atualizar `src/data/privacy.ts`.

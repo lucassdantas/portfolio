@@ -32,11 +32,9 @@ src/
   types/        # interfaces TypeScript das coleções de dados
 public/assets/  # fotos e logos
 docs/           # esta documentação
-old/            # site anterior (referência, fora do build)
-design_handoff/ # protótipo hifi do redesign v2 (histórico, não usar mais)
 ```
 
-O protótipo canônico do redesign v3 é `Lucas Dantas - Portfolio.html`, na raiz do repo (bundle de artifact — não editar).
+O site anterior e os protótipos de design (antigo e o do redesign v3) não estão no repositório — ficam em `old_versions/`, fora do repo (gitignored).
 
 ## Documentação por assunto
 
