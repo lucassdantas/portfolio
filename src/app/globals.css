@@ -83,6 +83,12 @@
     font-family: inherit;
   }
 
+  /* Cursor customizado ativo (Cursor.tsx): esconde o cursor nativo do SO */
+  html.ld-cursor-on,
+  html.ld-cursor-on * {
+    cursor: none !important;
+  }
+
   /* StackSection — grafo de tecnologias: hover num chip acende só o grupo */
   #ld-graph.ld-graph-dim .ld-tech {
     opacity: 0.28;

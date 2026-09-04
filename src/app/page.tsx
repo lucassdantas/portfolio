@@ -1,5 +1,7 @@
 import { ParticlesCanvasLoader as ParticlesCanvas } from "@/components/ParticlesCanvasLoader";
 import { Navbar } from "@/components/Navbar";
+import { SectionRail } from "@/components/SectionRail";
+import { Cursor } from "@/components/Cursor";
 import { Hero } from "@/components/Hero";
 import { Manifesto } from "@/components/Manifesto";
 import { Terminal } from "@/components/Terminal";
@@ -19,6 +21,8 @@ export default function Home() {
   return (
     <>
       <ParticlesCanvas />
+      <Cursor />
+      <SectionRail />
       <div className="relative z-10">
         <Navbar />
         <Hero />

@@ -10,12 +10,12 @@ export function Footer() {
   const [showPrivacy, setShowPrivacy] = useState(false);
 
   return (
-    <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-bord px-8 py-[26px] font-mono text-xs text-muted">
+    <footer className="flex flex-wrap items-center justify-between gap-3.5 border-t border-bord px-5 py-[26px] font-mono text-[11px] tracking-[.06em] text-dim sm:px-8">
       <span>© 2026 Lucas Dantas — {t.footer}</span>
-      <span className="flex flex-wrap items-center gap-4">
+      <span className="flex flex-wrap items-center gap-4.5">
         <button
           onClick={() => setShowPrivacy(true)}
-          className="cursor-pointer border-none bg-transparent p-0 font-mono text-xs text-accent hover:text-txt"
+          className="cursor-pointer border-none bg-transparent p-0 font-mono text-[11px] tracking-[.06em] text-accent"
         >
           {t.privacy}
         </button>

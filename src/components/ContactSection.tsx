@@ -2,25 +2,35 @@
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import { site } from "@/data";
+import { Reveal } from "./Reveal";
 
 export function ContactSection() {
   const { t } = useLanguage();
 
   return (
-    <section id="contato" className="mx-auto max-w-[1000px] px-8 pb-[90px] pt-[110px] text-center">
-      <p className="mb-3 font-mono text-sm text-accent">08 — {t.contactTitle}</p>
-      <h2 className="mb-[18px] text-[clamp(34px,5vw,56px)] font-semibold tracking-[-.02em]">
-        {t.contactHead}
-      </h2>
-      <p className="mx-auto mb-9 max-w-[520px] text-[17px] leading-[1.6] text-muted [text-wrap:pretty]">
+    <section
+      id="contato"
+      data-stg="4"
+      className="flex min-h-[88svh] flex-col justify-center border-t border-bord px-5 py-[clamp(70px,13vh,150px)] sm:px-8"
+    >
+      <p className="m-0 mb-[clamp(26px,5vh,54px)] font-mono text-[11px] tracking-[.2em] text-dim uppercase">
+        10 — {t.contactTitle}
+      </p>
+      <Reveal>
+        <h2 className="m-0 text-[clamp(38px,9vw,150px)] leading-[.92] font-bold tracking-[-.045em]">
+          <span className="block text-dim">{t.ctA}</span>
+          <span className="block">{t.ctB}</span>
+        </h2>
+      </Reveal>
+      <p className="m-0 mt-[clamp(26px,4.5vh,52px)] max-w-[54ch] text-[clamp(15px,1.35vw,19px)] leading-[1.6] text-muted [text-wrap:pretty]">
         {t.contactDesc}
       </p>
-      <div className="flex flex-wrap justify-center gap-3.5">
+      <div className="mt-[clamp(28px,5vh,56px)] flex flex-wrap gap-3.5">
         <a
           href={site.linkedinUrl}
           target="_blank"
           rel="noreferrer"
-          className="rounded-lg bg-accent px-[30px] py-3.5 text-[15px] font-semibold text-white hover:text-white hover:opacity-85"
+          className="rounded-[2px] bg-accent px-[30px] py-[15px] font-mono text-[11.5px] tracking-[.16em] text-bg uppercase hover:text-bg hover:opacity-85"
         >
           LinkedIn ↗
         </a>
@@ -28,12 +38,12 @@ export function ContactSection() {
           href={site.githubUrl}
           target="_blank"
           rel="noreferrer"
-          className="rounded-lg border border-bord px-[30px] py-3.5 text-[15px] font-semibold text-txt hover:border-accent hover:text-accent"
+          className="rounded-[2px] border border-bord px-[30px] py-[15px] font-mono text-[11.5px] tracking-[.16em] text-txt uppercase hover:border-accent"
         >
           GitHub ↗
         </a>
       </div>
-      <p className="mt-9 font-mono text-[12.5px] text-muted">
+      <p className="m-0 mt-[clamp(28px,5vh,56px)] font-mono text-[11.5px] tracking-[.14em] text-dim uppercase">
         {site.location} · {t.remote}
       </p>
     </section>

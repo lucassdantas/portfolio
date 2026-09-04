@@ -10,6 +10,7 @@ export interface Translation {
   navProj: string;
   navEdu: string;
   navContact: string;
+  navTerm: string;
   role: string;
   heroLine: string;
   secManifesto: string;
@@ -89,6 +90,8 @@ export interface Translation {
   booksTitle: string;
   contactTitle: string;
   contactHead: string;
+  ctA: string;
+  ctB: string;
   contactDesc: string;
   remote: string;
   footer: string;

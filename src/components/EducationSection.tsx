@@ -8,84 +8,94 @@ export function EducationSection() {
   const { t } = useLanguage();
 
   return (
-    <section id="educacao" className="mx-auto max-w-[1200px] px-8 pb-10 pt-[100px]">
-      <p className="mb-2 font-mono text-sm text-accent">07 — {t.eduTitle}</p>
+    <section id="educacao" data-stg="4" className="border-t border-bord px-5 py-[clamp(70px,13vh,150px)] sm:px-8">
+      <p className="m-0 mb-[clamp(24px,4vh,48px)] font-mono text-[11px] tracking-[.2em] text-dim uppercase">
+        09 — {t.eduTitle}
+      </p>
 
-      <div className="mb-12 mt-8 grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-6">
-        {educations.map((ed) => (
-          <Reveal key={ed.course}>
-            <div className="h-full rounded-xl border border-bord bg-card p-[26px] hover:border-accent">
-              <p className="mb-2.5 font-mono text-xs text-accent">{ed.period}</p>
-              <h3 className="mb-1 text-lg font-semibold">{ed.course}</h3>
-              <p className="mb-3.5 text-sm text-muted">
-                {ed.institution} · {ed.grade}
+      <div className="mb-[clamp(40px,7vh,88px)] grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-px border border-bord bg-bord">
+        {educations.map((ed, i) => (
+          <Reveal key={ed.course} delay={i * 90} className="h-full">
+            <div className="h-full bg-bg p-[clamp(22px,2.8vw,36px)]">
+              <p className="m-0 mb-3 font-mono text-[10.5px] tracking-[.16em] text-accent uppercase">
+                {ed.period}
               </p>
-              <p className="text-[13.5px] leading-[1.55] text-muted [text-wrap:pretty]">{ed.desc}</p>
+              <h3 className="m-0 mb-1.5 text-[clamp(20px,2.1vw,28px)] font-semibold tracking-[-.02em]">
+                {ed.course}
+              </h3>
+              <p className="m-0 mb-3 font-mono text-[11.5px] text-dim">{ed.institution}</p>
+              <p className="m-0 text-[13.5px] leading-[1.6] text-muted">{ed.desc}</p>
             </div>
           </Reveal>
         ))}
       </div>
 
-      <p className="mb-5 font-mono text-sm text-accent">{"// " + t.certTitle}</p>
-      <div className="mb-12 grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3.5">
-        {certifications.map((ce) => (
-          <div
-            key={ce.title}
-            className="flex items-center justify-between gap-3 rounded-[10px] border border-bord bg-bg2 px-[18px] py-3.5 hover:border-accent"
-          >
-            <div>
-              {ce.url ? (
-                <a
-                  href={ce.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-sm font-semibold text-txt hover:text-accent"
-                >
-                  {ce.title} ↗
-                </a>
-              ) : (
-                <span className="text-sm font-semibold text-txt">{ce.title}</span>
-              )}
-              <div className="mt-1 font-mono text-[11.5px] text-muted">
-                {ce.institution} · {ce.period}
+      <p className="m-0 mb-[clamp(16px,2.6vh,28px)] font-mono text-[11px] tracking-[.2em] text-dim uppercase">
+        {"// " + t.certTitle}
+      </p>
+      <div className="mb-[clamp(40px,7vh,88px)] border-t border-bord">
+        {certifications.map((ce) => {
+          const row = (
+            <>
+              <span className="font-mono text-[10.5px] tracking-[.14em] text-dim uppercase">{ce.period}</span>
+              <span className="text-[15px] font-medium tracking-[-.01em] text-txt">{ce.title}</span>
+              <span className="font-mono text-[11px] text-dim">{ce.institution}</span>
+              <span className="text-left font-mono text-[11px] tracking-[.1em] text-accent sm:text-right">
+                {ce.hours}h{ce.url ? " ↗" : ""}
+              </span>
+            </>
+          );
+          const cls =
+            "grid grid-cols-1 items-baseline gap-1 border-b border-bord py-3.5 transition-[padding-left] duration-[.35s] sm:grid-cols-[100px_minmax(0,1fr)_minmax(0,.7fr)_74px] sm:gap-4.5";
+          return ce.url ? (
+            <a key={ce.title} href={ce.url} target="_blank" rel="noreferrer" className={`${cls} hover:pl-3`}>
+              {row}
+            </a>
+          ) : (
+            <div key={ce.title} className={cls}>
+              {row}
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-[clamp(28px,4vw,70px)]">
+        <div>
+          <p className="m-0 mb-[clamp(16px,2.6vh,28px)] font-mono text-[11px] tracking-[.2em] text-dim uppercase">
+            {"// " + t.booksTitle}
+          </p>
+          <div className="flex flex-col gap-px border border-bord bg-bord">
+            {books.map((bk) => (
+              <div key={bk.title} className="flex items-center gap-4 bg-bg px-4.5 py-[15px]">
+                <span className="flex-none border-l-2 border-accent pl-2.5 font-mono text-xs tracking-[.08em] text-accent">
+                  {bk.initials}
+                </span>
+                <span>
+                  <span className="block text-[14.5px] font-medium tracking-[-.01em]">{bk.title}</span>
+                  <span className="mt-[3px] block font-mono text-[10.5px] text-dim">{bk.author}</span>
+                </span>
               </div>
-            </div>
-            <span className="whitespace-nowrap font-mono text-[11px] text-accent">{ce.hours}h</span>
+            ))}
           </div>
-        ))}
-      </div>
-
-      <p className="mb-5 font-mono text-sm text-accent">{"// " + t.booksTitle}</p>
-      <div className="mb-12 grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-3.5">
-        {books.map((bk) => (
-          <div
-            key={bk.title}
-            className="flex items-center gap-3.5 rounded-[10px] border border-bord bg-card px-4 py-3.5 hover:border-accent"
-          >
-            <div className="flex h-14 w-10 shrink-0 items-center justify-center rounded-[3px] border-l-[3px] border-accent bg-bg2 font-mono text-xs font-bold text-accent">
-              {bk.initials}
-            </div>
-            <div>
-              <div className="text-[14.5px] font-semibold">{bk.title}</div>
-              <div className="mt-[3px] font-mono text-[11.5px] text-muted">{bk.author}</div>
-            </div>
+        </div>
+        <div>
+          <p className="m-0 mb-[clamp(16px,2.6vh,28px)] font-mono text-[11px] tracking-[.2em] text-dim uppercase">
+            {"// " + t.langTitle}
+          </p>
+          <div className="flex flex-col gap-[18px]">
+            {t.langs.map(([name, level, pct]) => (
+              <div key={name}>
+                <div className="mb-[7px] flex justify-between font-mono text-[11.5px] tracking-[.08em]">
+                  <span>{name}</span>
+                  <span className="text-dim">{level}</span>
+                </div>
+                <div className="h-px bg-bord">
+                  <div className="h-px bg-accent transition-[width] duration-[1.4s]" style={{ width: `${pct}%` }} />
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-
-      <p className="mb-5 font-mono text-sm text-accent">{"// " + t.langTitle}</p>
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(210px,1fr))] gap-3.5">
-        {t.langs.map(([name, level, pct]) => (
-          <div key={name} className="rounded-[10px] border border-bord bg-card p-[18px]">
-            <div className="mb-2.5 flex justify-between">
-              <span className="text-[15px] font-semibold">{name}</span>
-              <span className="font-mono text-xs text-accent">{level}</span>
-            </div>
-            <div className="h-[7px] overflow-hidden rounded bg-bg2">
-              <div className="h-full rounded bg-accent" style={{ width: `${pct}%` }} />
-            </div>
-          </div>
-        ))}
+        </div>
       </div>
     </section>
   );

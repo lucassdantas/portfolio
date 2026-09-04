@@ -12,6 +12,7 @@ const pt: Translation = {
   navProj: "Projetos",
   navEdu: "Educação",
   navContact: "Contato",
+  navTerm: "Terminal",
   role: "// desenvolvedor full stack",
   heroLine: "Full Stack Developer. Construo sistemas que sobrevivem à produção.",
   secManifesto: "manifesto",
@@ -98,6 +99,8 @@ const pt: Translation = {
   booksTitle: "livros que moldaram meu código",
   contactTitle: "contato",
   contactHead: "Vamos construir algo juntos?",
+  ctA: "Tem um problema difícil?",
+  ctB: "Vamos construir.",
   contactDesc:
     "Aberto a oportunidades como desenvolvedor full stack pleno/sênior. Home office e times com processos bem definidos são o meu habitat.",
   remote: "remoto",
@@ -267,6 +270,8 @@ const en: Translation = {
   booksTitle: "books that shaped my code",
   contactTitle: "contact",
   contactHead: "Shall we build something together?",
+  ctA: "Got a hard problem?",
+  ctB: "Let's build it.",
   contactDesc:
     "Open to mid/senior full stack roles. Remote work and well-defined processes are my natural habitat.",
   remote: "remote",
@@ -436,6 +441,8 @@ const es: Translation = {
   booksTitle: "libros que moldearon mi código",
   contactTitle: "contacto",
   contactHead: "¿Construimos algo juntos?",
+  ctA: "¿Tienes un problema difícil?",
+  ctB: "Vamos a construirlo.",
   contactDesc:
     "Abierto a puestos full stack semi-senior/senior. Trabajo remoto y procesos bien definidos son mi hábitat.",
   remote: "remoto",
@@ -605,6 +612,8 @@ const fr: Translation = {
   booksTitle: "livres qui ont façonné mon code",
   contactTitle: "contact",
   contactHead: "On construit quelque chose ensemble ?",
+  ctA: "Un problème difficile ?",
+  ctB: "Construisons-le.",
   contactDesc:
     "Ouvert aux postes full stack confirmé/senior. Télétravail et processus bien définis sont mon habitat naturel.",
   remote: "à distance",

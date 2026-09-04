@@ -202,7 +202,7 @@ export function ProjectsSection() {
 
       <div className="px-5 pt-[clamp(50px,9vh,110px)] pb-[clamp(30px,5vh,60px)] sm:px-8">
         <p className="m-0 mb-[clamp(18px,3vh,32px)] font-mono text-[11px] tracking-[.2em] text-dim uppercase">
-          // {t.secIndex}
+          {"// " + t.secIndex}
         </p>
         <div className="border-t border-bord">
           {rest.map((p) =>

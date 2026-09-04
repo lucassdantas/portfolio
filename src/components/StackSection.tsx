@@ -125,7 +125,7 @@ export function StackSection() {
       </div>
 
       <p className="m-0 mt-[clamp(52px,9vh,110px)] mb-[clamp(20px,3vh,34px)] font-mono text-[11px] tracking-[.2em] text-dim uppercase">
-        // {t.engTitle}
+        {"// " + t.engTitle}
       </p>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-px border border-bord bg-bord">
         {principles.map((pr, i) => (
