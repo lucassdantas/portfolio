@@ -10,7 +10,6 @@ import {
   stackGroups,
   principles,
   books,
-  marquee,
   site,
   privacyPolicy,
 } from "@/data";
@@ -36,7 +35,6 @@ describe("camada de dados", () => {
     expect(stackGroups.length).toBeGreaterThan(0);
     expect(principles).toHaveLength(4);
     expect(books.length).toBeGreaterThan(0);
-    expect(marquee.length).toBeGreaterThan(0);
     expect(privacyPolicy.sections.length).toBeGreaterThan(0);
   });
 

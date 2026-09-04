@@ -10,8 +10,9 @@
   --muted: #8a857d;
   /* destaque dentro de texto muted: acima do muted, abaixo do branco do --text */
   --strong: #b5afa6;
-  /* piso de contraste do projeto — nada abaixo disso sobre --bg */
-  --dim: #7a746b;
+  /* piso de contraste do projeto — 4.5:1 sobre --bg e --bg2 (WCAG AA);
+     o protótipo original usava #7A746B, que fica em ~4.3:1 sobre --bg */
+  --dim: #827c73;
   --accent: #1d94e3;
   --warm: #d7a45a;
   --ok: #22c55e;
@@ -109,21 +110,3 @@
   }
 }
 
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes floaty {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}

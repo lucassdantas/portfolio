@@ -4,15 +4,13 @@
 
 Todo o conteúdo do site vive em `src/data/` — um "banco de dados" em módulos TypeScript tipados, estilo coleções NoSQL. Componentes apenas consomem essas coleções via `import { ... } from "@/data"`. **Editar conteúdo nunca deve exigir tocar em componentes.**
 
-Coleções: `translations`, `experiences`, `projects`, `certifications`, `educations`, `stackGroups`, `principles`, `books`, `marquee`, `site`, `privacyPolicy`. As interfaces correspondentes estão em `src/types/index.ts` — o compilador garante que nenhum campo obrigatório falte.
+Coleções: `translations`, `experiences`, `projects`, `certifications`, `educations`, `stackGroups`, `principles`, `books`, `site`, `privacyPolicy`. As interfaces correspondentes estão em `src/types/index.ts` — o compilador garante que nenhum campo obrigatório falte. (`marquee.ts`/`Marquee.tsx` foram removidos no redesign v3 — a faixa animada não existe mais no novo design.)
 
-## Temas (dark/light)
+## Tema: sempre dark
 
-- Tokens de design são CSS vars definidas em `src/app/globals.css` (`--bg`, `--bg2`, `--card`, `--border`, `--text`, `--muted`, `--strong`, `--accent`, `--navbg`).
-- O tema ativo é o atributo `data-theme` no `<html>`; `ThemeContext` alterna e persiste em `localStorage` (`ldp-theme`).
-- Um script inline no `<head>` (em `layout.tsx`) aplica o tema salvo antes do primeiro paint, evitando flash.
-- No Tailwind 4 os tokens são expostos como utilities via `@theme inline` (`bg-card`, `border-bord`, `text-muted`, `text-accent`…).
-- **Exceção intencional**: terminal, playground e o case em destaque são SEMPRE dark (cores literais `#060D18`/`#0B1524`/`#16233A`), independente do tema.
+O site não tem mais tema claro — `ThemeContext` foi removido no redesign v3 (protótipo `Lucas Dantas - Portfolio.html`). Tokens de design são CSS vars definidas em `src/app/globals.css` (`--bg`, `--bg2`, `--card`, `--border`, `--text`, `--muted`, `--strong`, `--dim`, `--accent`, `--warm`, `--ok`, `--err`, `--navbg`), expostas como utilities via `@theme inline` (`bg-card`, `border-bord`, `text-muted`, `text-dim`, `text-accent`…). `--dim` é o piso de contraste (4.5:1 sobre `--bg`/`--bg2`) — nada mais escuro que ele sobre o fundo.
+
+**Exceção intencional**: terminal, playground e o painel do case em destaque usam um fundo ainda mais escuro que `--bg` (`#070605`/`#0F0E0C` fixos), de propósito — não é resquício do tema claro.
 
 ## Idiomas (i18n)
 

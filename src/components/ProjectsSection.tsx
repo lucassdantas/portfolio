@@ -113,14 +113,14 @@ export function ProjectsSection() {
         <button
           onClick={() => manual(index - 1)}
           aria-label="anterior"
-          className="h-[34px] w-[34px] cursor-pointer rounded-[2px] border border-bord bg-transparent font-mono text-[13px] text-txt transition-colors hover:border-accent hover:text-accent"
+          className="h-11 w-11 cursor-pointer rounded-[2px] border border-bord bg-transparent font-mono text-[13px] text-txt transition-colors hover:border-accent hover:text-accent"
         >
           ←
         </button>
         <button
           onClick={() => manual(index + 1)}
           aria-label="próximo"
-          className="h-[34px] w-[34px] cursor-pointer rounded-[2px] border border-bord bg-transparent font-mono text-[13px] text-txt transition-colors hover:border-accent hover:text-accent"
+          className="h-11 w-11 cursor-pointer rounded-[2px] border border-bord bg-transparent font-mono text-[13px] text-txt transition-colors hover:border-accent hover:text-accent"
         >
           →
         </button>

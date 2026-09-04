@@ -1,6 +1,6 @@
-# Portfólio Lucas Dantas — v2
+# Portfólio Lucas Dantas — v3
 
-One-page de portfólio com estética "dev moderno minimalista": terminal interativo, partículas em canvas, playground de código, stats do GitHub ao vivo, i18n em 4 idiomas e temas dark/light.
+One-page de portfólio editorial, sempre dark: terminal interativo, campo de partículas e núcleo 3D em WebGL, carrossel de projetos, playground de código, stats do GitHub ao vivo e i18n em 4 idiomas.
 
 ## Stack
 
@@ -22,18 +22,21 @@ npm run test:watch # testes em modo watch
 
 ```
 src/
-  app/          # layout, página única e globals.css (tokens de tema)
+  app/          # layout, página única e globals.css (tokens — site é sempre dark)
   components/   # um componente por seção da página
-  contexts/     # ThemeContext (dark/light) e LanguageContext (pt/en/es/fr)
+  contexts/     # LanguageContext (pt/en/es/fr) — único estado global
   data/         # ★ TODO o conteúdo do site (textos, projetos, certificados…)
-  lib/          # utilitários (fetch cacheado da API do GitHub)
+  lib/          # utilitários (fetch cacheado da API do GitHub, richText, chat)
+  shaders/      # os dois programas WebGL (partículas de fundo e núcleo 3D)
   tests/        # unit/ e integration/
   types/        # interfaces TypeScript das coleções de dados
 public/assets/  # fotos e logos
 docs/           # esta documentação
-old/            # versão anterior do site (referência, fora do build)
-design_handoff/ # protótipo hifi de referência do redesign
+old/            # site anterior (referência, fora do build)
+design_handoff/ # protótipo hifi do redesign v2 (histórico, não usar mais)
 ```
+
+O protótipo canônico do redesign v3 é `Lucas Dantas - Portfolio.html`, na raiz do repo (bundle de artifact — não editar).
 
 ## Documentação por assunto
 

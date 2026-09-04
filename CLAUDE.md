@@ -7,7 +7,7 @@ Portfólio one-page de Lucas Dantas (dev full stack). Next.js 16 (App Router) + 
 ```bash
 npm run dev        # dev server
 npm run build      # build de produção
-npm test           # vitest run (31 testes, unit + integração)
+npm test           # vitest run (76 testes, unit + integração)
 npm run test:watch
 ```
 
@@ -18,31 +18,34 @@ Textos, experiências, projetos, certificados, traduções e a política de priv
 ## Arquitetura (resumo)
 
 - `src/app/page.tsx` monta as seções na ordem do design; um client component por seção em `src/components/`.
-- Estado global mínimo: `ThemeContext` (dark/light, `data-theme` no `<html>`, localStorage `ldp-theme`) e `LanguageContext` (localStorage `ldp-lang`). Estado de seção fica local.
+- Estado global mínimo: só `LanguageContext` (localStorage `ldp-lang`) — **o site é sempre dark, não existe mais tema claro/`ThemeContext`**. Estado de seção fica local; Navbar e Terminal se comunicam pelo evento global `TERMINAL_OPEN_EVENT` (botão `_shell` abre o terminal em tela cheia) em vez de um context novo.
 - `src/lib/github.ts`: única fonte de fetch da API do GitHub (promise cacheada em módulo).
+- `src/shaders/particles.ts` e `src/shaders/core.ts`: os dois programas WebGL do site (campo de partículas de fundo e o núcleo raymarched da `CoreSection`), portados do protótipo. Mudar a matemática do shader é editar essas strings GLSL, não os componentes que os montam.
 - Detalhes e decisões: [docs/arquitetura.md](docs/arquitetura.md).
 
-## Design (handoff em design_handoff/)
+## Design (protótipo em `Lucas Dantas - Portfolio.html`)
 
-- Referência canônica de layout/estilo: `design_handoff/Portfolio Lucas Dantas.dc.html` (hifi, pixel-perfect). Em dúvida visual, consulte o protótipo.
-- Tokens de tema são CSS vars em `globals.css`, expostos como utilities via `@theme inline`: `bg-bg`, `bg-bg2`, `bg-card`, `border-bord`, `text-txt`, `text-muted`, `text-strong`, `text-accent`. `text-strong` é o meio-termo entre `muted` e `txt`, usado para destacar termo dentro de texto muted (ver `src/lib/richText.ts`).
-- Fontes: Space Grotesk (corpo/títulos, `font-sans`) e JetBrains Mono (labels/código, `font-mono`), via `next/font`.
-- **Sempre dark, independente do tema**: terminal, playground e case em destaque (hex literais `#060D18`/`#0B1524`/`#16233A`).
-- Radius: cards 12px, botões 8px, chips 6px, pills 20px. Verde de status `#22C55E`.
-- Breakpoint da nav: variante custom `nav:` (920px); abaixo disso, menu hambúrguer.
+- Referência canônica de layout/estilo: `Lucas Dantas - Portfolio.html` na raiz (bundle de artifact — HTML/CSS/JS reais estão compactados dentro; não abrir/editar direto, é só consulta visual). `design_handoff/` é o protótipo do design **anterior** — histórico, não usar mais.
+- Tokens são CSS vars em `globals.css`, expostos como utilities via `@theme inline`: `bg-bg`, `bg-bg2`, `bg-card`, `border-bord`, `text-txt`, `text-muted`, `text-strong`, `text-dim`, `text-accent`, `text-warm`, `text-ok`, `text-err`. `text-strong` é o meio-termo entre `muted` e `txt` (destaque dentro de texto muted, ver `src/lib/richText.ts`); `text-dim` é o piso de contraste do site (4.5:1 sobre `--bg`/`--bg2` — não usar cor mais escura que `--dim` sobre o fundo).
+- Paleta (dark-only): `--bg:#0A0908`, `--bg2/--card:#0F0E0C`, `--border:#1E1C19`, `--text:#EDEAE5`, `--muted:#8A857D`, `--strong:#B5AFA6`, `--dim:#827C73`, `--accent:#1D94E3`, `--warm:#D7A45A`, `--ok:#22C55E`, `--err:#C05B4D`.
+- Fontes: Schibsted Grotesk (corpo/títulos, `font-sans`) e DM Mono (labels/código, `font-mono`), via `next/font` — CSS vars `--font-schibsted`/`--font-dm-mono`.
+- **Sempre dark** (o site inteiro já é dark, mas estes três continuam mais escuros que o fundo, de propósito): terminal, playground e o painel do case em destaque usam `#070605`/`#0F0E0C` fixos.
+- Bordas de 1px (`border-bord`) no lugar de cards com sombra; grades usam `gap-px` + `bg-bord` para criar as linhas divisórias. Raio de borda nunca maior que 3px.
+- Breakpoint da nav: variante custom `nav:` (920px); abaixo disso, menu hambúrguer. `SectionRail` (trilha vertical de seções) só aparece `≥1100px` (`min-[1100px]:`).
+- Efeitos que dependem de mouse (`Cursor`, campo de partículas) checam `matchMedia("(hover: none)")`/largura antes de montar — não é CSS escondendo, é não instanciar em touch.
 
 ## Padrões de código
 
 - CSS global novo vai dentro de `@layer base` em `globals.css` — fora de layer ele vence as utilities do Tailwind 4 e causa bugs silenciosos de cor.
 - Estilo: Tailwind direto no JSX; valores fora da escala usam arbitrary values (`px-[26px]`), mantendo fidelidade ao protótipo.
 - Idioma do código: nomes em inglês; conteúdo, comentários e mensagens de teste em português.
-- Animações/efeitos (partículas, reveal, tilt) em canvas/JS puro, sem libs; respeitar `prefers-reduced-motion`.
+- Animações/efeitos (partículas, núcleo 3D, reveal, carrossel) em canvas/JS puro ou `IntersectionObserver` + CSS, sem libs de animação; respeitar `prefers-reduced-motion` e nunca escutar teclado/mouse fora da seção visível.
 - Toda mudança passa por `npm test` e `npm run build` antes de commit. Teste novo segue os padrões de `src/tests/` ([docs/testes.md](docs/testes.md)).
-- Rede em teste é sempre mockada (`setup.ts` desabilita `fetch` por padrão).
+- Rede em teste é sempre mockada (`setup.ts` desabilita `fetch` por padrão); `IntersectionObserver` também é mockado lá (não dispara sozinho — componentes que dependem dele para uma feature funcionar em teste devem assumir "visível" por padrão, como o carrossel de projetos).
 
 ## Cuidados
 
-- `old/` (site anterior) e `design_handoff/` são referência: **não importar código de lá e não editar** (estão fora do `tsconfig`).
+- `old/` (site anterior) e `design_handoff/` (protótipo do design anterior) são referência: **não importar código de lá e não editar** (estão fora do `tsconfig`).
 - `public/ads.txt` é do Google AdSense — não remover.
 - API do GitHub sem token tem rate limit: em erro a seção esconde os stats e mantém o link (não quebrar esse fallback).
 - LGPD: o site não coleta dados pessoais próprios; se adicionar formulário/analytics, atualizar `src/data/privacy.ts`.

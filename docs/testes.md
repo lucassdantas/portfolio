@@ -13,14 +13,14 @@ npm run test:watch # modo watch
 src/tests/
   setup.ts                 # mocks globais: IntersectionObserver, matchMedia,
                            # canvas getContext e fetch (rede desabilitada)
-  helpers.tsx              # renderWithProviders (Theme + Language)
+  helpers.tsx              # renderWithProviders (LanguageProvider)
   unit/
     data.test.ts           # integridade da camada de dados (traduções completas,
                            # categorias válidas, imagens existentes, urls https)
     github.test.ts         # agregação e cache de fetchGithubStats (fetch mockado)
   integration/
     terminal.test.tsx      # comandos, histórico, clear, troca de tema/idioma
-    sections.test.tsx      # filtros de projetos, acordeão, playground, navbar
+    sections.test.tsx      # carrossel de projetos, acordeão, playground, navbar
     github-section.test.tsx# loading → stats; fallback em erro de API
     privacy.test.tsx       # modal LGPD abre/fecha (botão e Escape)
 ```
