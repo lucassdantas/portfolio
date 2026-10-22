@@ -37,7 +37,7 @@ Duas regras editoriais que os testes cobram:
 - Fontes: Schibsted Grotesk (corpo/títulos, `font-sans`) e DM Mono (labels/código, `font-mono`), via `next/font` — CSS vars `--font-schibsted`/`--font-dm-mono`.
 - **Sempre dark** (o site inteiro já é dark, mas estes três continuam mais escuros que o fundo, de propósito): terminal, playground e o painel do case em destaque usam `#070605`/`#0F0E0C` fixos.
 - Bordas de 1px (`border-bord`) no lugar de cards com sombra; grades usam `gap-px` + `bg-bord` para criar as linhas divisórias. Raio de borda nunca maior que 3px.
-- Breakpoint da nav: variante custom `nav:` (1040px); abaixo disso, menu hambúrguer. Era 920px e subiu quando a nav passou a ter 7 links — link novo na nav pede reconferir esse valor. `SectionRail` (trilha vertical de seções) só aparece `≥1100px` (`min-[1100px]:`).
+- Breakpoint da nav: variante custom `nav:` (1040px); abaixo disso, menu hambúrguer. Era 920px e subiu quando a nav passou a ter 7 links — link novo na nav pede reconferir esse valor. `SectionRail` (trilha vertical de seções) só aparece `≥1100px` (`min-[1100px]:`); nesse breakpoint o wrapper do `page.tsx` reserva `pr-12` para a trilha não cobrir conteúdo — ela ocupa só a largura das linhas (24px) e o rótulo aparece só em hover/foco, sem capturar clique.
 - Efeitos que dependem de mouse (`Cursor`, campo de partículas) checam `matchMedia("(hover: none)")`/largura antes de montar — não é CSS escondendo, é não instanciar em touch.
 
 ## Padrões de código

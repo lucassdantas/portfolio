@@ -24,7 +24,8 @@ export default function Home() {
       <ParticlesCanvas />
       <Cursor />
       <SectionRail />
-      <div className="relative z-10">
+      {/* ≥1100px: respiro à direita do tamanho do SectionRail, para ele não cobrir conteúdo */}
+      <div className="relative z-10 min-[1100px]:pr-12">
         <Navbar />
         <Hero />
         <Manifesto />
