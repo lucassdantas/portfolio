@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useLanguage, LANGS } from "@/contexts/LanguageContext";
-import { experiences, projects, stackGroups, books } from "@/data";
+import { experiences, projects, stackGroups, books, translations } from "@/data";
 import { fetchGithubStats, type GithubStats } from "@/lib/github";
+import { formatPeriod, tx } from "@/lib/i18n";
 import { stripMarks } from "@/lib/richText";
 import type { Lang } from "@/types";
 
@@ -21,15 +22,19 @@ const WARM = "#D7A45A";
 
 const out = (text: string, color: string = GRAY): TermLine => ({ text, color });
 
+/** Troca "{chave}" pelos valores de `vars` (textos de `t.term`). */
+const fill = (text: string, vars: Record<string, string | number>) =>
+  text.replace(/\{(\w+)\}/g, (m, k: string) => (k in vars ? String(vars[k]) : m));
+
 /** Evento global que a Navbar dispara no botão `_shell` para abrir o terminal em tela cheia. */
 export const TERMINAL_OPEN_EVENT = "ld:terminal-open";
 
 export function Terminal() {
   const { t, lang, setLang } = useLanguage();
-  const [lines, setLines] = useState<TermLine[]>([
-    out("██ lucas.dantas — portfolio v3.0", BLUE),
-    out("Digite 'help' para ver os comandos disponíveis.", GRAY),
-  ]);
+  const [lines, setLines] = useState<TermLine[]>([]);
+  // A saudação é derivada de `t` (não fica em `lines`) para trocar junto com
+  // o idioma; `clear` a esconde de vez.
+  const [cleared, setCleared] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -75,73 +80,49 @@ export function Terminal() {
     if (!cmd) return;
     if (c === "clear") {
       setLines([]);
+      setCleared(true);
       return;
     }
+    const tc = t.term;
+    // 1ª linha em destaque, demais em cinza
+    const block = (rows: string[]) => rows.map((r, i) => out(r, i === 0 ? WHITE : GRAY));
     let res: TermLine[];
     switch (c) {
       case "help":
-        res = [
-          out("help        — lista de comandos"),
-          out("whoami      — quem sou eu"),
-          out("stack       — tecnologias"),
-          out("arch        — arquitetura & práticas"),
-          out("exp         — experiência profissional"),
-          out("projects    — projetos"),
-          out("langs       — idiomas"),
-          out("github      — perfil no GitHub"),
-          out("contact     — contato"),
-          out("lang [pt|en|es|fr] — muda o idioma"),
-          out("clear       — limpa o terminal"),
-          out("books       — estante do dev"),
-          out("sudo hire-me — ...tente"),
-        ];
+        res = tc.help.map((r) => out(r));
         break;
       case "whoami":
-        res = [
-          out("Lucas Dantas — Desenvolvedor Full Stack, Rio de Janeiro/BR.", WHITE),
-          out("4+ anos entregando web apps, APIs, automações e sistemas críticos de saúde."),
-          out("Foco: arquitetura limpa, redução de custo e automação com IA."),
-        ];
+        res = block(tc.whoami);
         break;
       case "stack":
         res = stackGroups.map((g) =>
-          out(g.label.padEnd(24, " ") + "→ " + g.items.map((x) => x.name).join(", "))
+          out(g.label[lang].padEnd(24, " ") + "→ " + g.items.map((x) => tx(x.name, lang)).join(", "))
         );
         break;
       case "arch":
-        res = [
-          out("System Design · Clean Architecture · SOLID · Design Patterns", WHITE),
-          out("Filas & mensageria, MCPs, APIs REST bem versionadas"),
-          out("Testes: unitários, integração e regressão · CI/CD no GitHub"),
-          out("Ex.: chatbot re-arquitetado → cerca de 90% menos tokens por fluxo 💸"),
-        ];
+        res = block(tc.arch);
         break;
       case "exp":
         res = experiences.flatMap((e) => [
-          out(`${e.period} · ${e.title} @ ${e.company}`, WHITE),
-          ...e.bullets.slice(0, 3).map((b) => out("  · " + stripMarks(b))),
+          out(`${formatPeriod(e.period, lang)} · ${e.title[lang]} @ ${e.company}`, WHITE),
+          ...e.bullets[lang].slice(0, 3).map((b) => out("  · " + stripMarks(b))),
         ]);
         break;
       case "projects":
         res = projects.map((p) =>
-          out(`${p.name} [${p.cat}] — ${p.desc[lang].map(stripMarks).join(" ")}`),
+          out(`${p.name} [${p.cat === "Sistemas" ? t.catSys : t.catSite}] — ${p.desc[lang].map(stripMarks).join(" ")}`),
         );
         break;
       case "langs":
-        res = [
-          out("Português — Nativo", WHITE),
-          out("Inglês — C1 (cliente gringo aprova ✔)"),
-          out("Espanhol — B1"),
-          out("Francês — A1"),
-        ];
+        res = block(tc.langs);
         break;
       case "github":
         res = [
           out("github.com/lucassdantas", BLUE),
           out(
             gh.current
-              ? `${gh.current.repos} repos · ${gh.current.followers} followers · ${gh.current.stars} stars`
-              : "stats carregando..."
+              ? fill(tc.ghStats, { repos: gh.current.repos, followers: gh.current.followers, stars: gh.current.stars })
+              : tc.ghLoading
           ),
         ];
         break;
@@ -149,38 +130,32 @@ export function Terminal() {
         res = [
           out("LinkedIn: linkedin.com/in/lucas-de-sousa-dantas", BLUE),
           out("GitHub:   github.com/lucassdantas", BLUE),
-          out("Base:     Rio de Janeiro, Brasil (remoto 🌎)"),
+          out(tc.contactBase),
         ];
         break;
       case "lang":
         if (LANGS.includes(arg as Lang)) {
           setLang(arg as Lang);
-          res = [out("idioma: " + arg + " ✔", GREEN)];
+          // confirma já no idioma escolhido
+          res = [out(fill(translations[arg as Lang].term.langOk, { lang: arg }), GREEN)];
         } else {
-          res = [out("uso: lang pt|en|es|fr", RED)];
+          res = [out(tc.langUsage, RED)];
         }
         break;
       case "sudo":
-        res = [
-          out(
-            arg === "hire-me"
-              ? "Permissão concedida. Iniciando onboarding... 🚀 (me chama no LinkedIn)"
-              : 'sudo: permissão negada — mas "sudo hire-me" funciona',
-            GREEN
-          ),
-        ];
+        res = [out(arg === "hire-me" ? tc.sudoOk : tc.sudoNo, GREEN)];
         break;
       case "books":
         res = books.map((b) => out(`📖 ${b.title} — ${b.author}`));
         break;
       case "coffee":
-        res = [out("☕ compilando cafeína... pronto.", WARM)];
+        res = [out(tc.coffee, WARM)];
         break;
       case "ls":
-        res = [out("stack/  experiencia/  projetos/  educacao/  contato.md")];
+        res = [out(tc.ls)];
         break;
       default:
-        res = [out(`comando não encontrado: ${c}. Digite 'help'.`, RED)];
+        res = [out(fill(tc.notFound, { cmd: c }), RED)];
     }
     setLines((prev) => [...prev, echo, ...res]);
   };
@@ -227,7 +202,10 @@ export function Terminal() {
           fullscreen ? "flex-1" : "h-[clamp(300px,48vh,460px)]"
         }`}
       >
-        {lines.map((tl, i) => (
+        {[
+          ...(cleared ? [] : [out("██ lucas.dantas — portfolio v3.0", BLUE), out(t.term.welcome)]),
+          ...lines,
+        ].map((tl, i) => (
           <div key={i} className="whitespace-pre-wrap break-words" style={{ color: tl.color }}>
             {tl.text}
           </div>

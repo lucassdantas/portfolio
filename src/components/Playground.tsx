@@ -1,20 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/data";
 
-const INITIAL_CODE = `// Edite e clique em RUN ▶
-const dev = {
-  nome: 'Lucas Dantas',
-  stack: ['Next.js', 'Python', 'Laravel', 'Docker'],
-  foco: 'arquitetura limpa + custo baixo'
-};
-console.log(JSON.stringify(dev, null, 2));`;
+/** Código ainda é o exemplo de algum idioma (não foi editado pela pessoa)? */
+const isSample = (code: string) => Object.values(translations).some((tr) => tr.playCode === code);
 
 export function Playground() {
   const { t } = useLanguage();
-  const [code, setCode] = useState(INITIAL_CODE);
-  const [output, setOutput] = useState<string[]>(["aguardando execução..."]);
+  const [code, setCode] = useState(t.playCode);
+  // null = ainda não rodou: mostra `t.playIdle` no idioma atual
+  const [output, setOutput] = useState<string[] | null>(null);
+
+  // Troca o exemplo junto com o idioma, mas nunca apaga código editado.
+  useEffect(() => {
+    setCode((prev) => (isSample(prev) ? t.playCode : prev));
+  }, [t.playCode]);
 
   const run = () => {
     const logs: string[] = [];
@@ -28,7 +30,7 @@ export function Playground() {
     };
     try {
       new Function("console", code)(fake);
-      if (!logs.length) logs.push("(sem output — use console.log)");
+      if (!logs.length) logs.push(t.playEmpty);
     } catch (err) {
       logs.push("✖ " + (err instanceof Error ? err.message : String(err)));
     }
@@ -66,7 +68,7 @@ export function Playground() {
             <span className="font-mono text-[10.5px] tracking-[.14em] text-dim">console</span>
           </div>
           <div className="min-h-[240px] overflow-y-auto p-4 font-mono text-[12.5px] leading-[1.75] text-ok">
-            {output.map((po, i) => (
+            {(output ?? [t.playIdle]).map((po, i) => (
               <div key={i} className="whitespace-pre-wrap">
                 &gt; {po}
               </div>

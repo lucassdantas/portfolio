@@ -5,7 +5,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { privacyPolicy } from "@/data";
 
 export function PrivacyModal({ onClose }: { onClose: () => void }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const policy = privacyPolicy[lang];
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -35,21 +36,21 @@ export function PrivacyModal({ onClose }: { onClose: () => void }) {
           <div>
             <h2 className="text-xl font-bold">{t.privacy}</h2>
             <p className="mt-1 font-mono text-xs text-muted">
-              última atualização: {privacyPolicy.updatedAt}
+              {policy.updated}
             </p>
           </div>
           <button
             onClick={onClose}
-            aria-label="Fechar"
+            aria-label={t.close}
             className="cursor-pointer rounded-md border border-bord bg-transparent px-2.5 py-1 text-sm text-txt hover:border-accent"
           >
             ✕
           </button>
         </div>
         <p className="mb-5 text-sm leading-[1.6] text-muted [text-wrap:pretty]">
-          {privacyPolicy.intro}
+          {policy.intro}
         </p>
-        {privacyPolicy.sections.map((sec) => (
+        {policy.sections.map((sec) => (
           <div key={sec.title} className="mb-5">
             <h3 className="mb-2 font-mono text-sm text-accent">{sec.title}</h3>
             {sec.body.map((p, i) => (

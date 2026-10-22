@@ -112,14 +112,14 @@ export function ProjectsSection() {
         <span className="font-mono text-[11px] tracking-[.14em] text-dim uppercase">{current.name}</span>
         <button
           onClick={() => manual(index - 1)}
-          aria-label="anterior"
+          aria-label={t.prevLabel}
           className="h-11 w-11 cursor-pointer rounded-[2px] border border-bord bg-transparent font-mono text-[13px] text-txt transition-colors hover:border-accent hover:text-accent"
         >
           ←
         </button>
         <button
           onClick={() => manual(index + 1)}
-          aria-label="próximo"
+          aria-label={t.nextLabel}
           className="h-11 w-11 cursor-pointer rounded-[2px] border border-bord bg-transparent font-mono text-[13px] text-txt transition-colors hover:border-accent hover:text-accent"
         >
           →
@@ -139,7 +139,7 @@ export function ProjectsSection() {
       >
         <div className={flip ? "md:order-2" : "md:order-1"}>
           <p className="m-0 mb-[clamp(14px,2.4vh,26px)] font-mono text-[10.5px] tracking-[.24em] text-accent uppercase">
-            Project {String(index + 1).padStart(2, "0")}
+            {t.projLabel} {String(index + 1).padStart(2, "0")}
           </p>
           <h3 className="m-0 mb-3 text-[clamp(28px,3.9vw,60px)] leading-[1] font-semibold tracking-[-.035em] [text-wrap:balance]">
             {current.name}

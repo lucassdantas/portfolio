@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const SECTIONS = [
-  { id: "top", label: "Início" },
+  { id: "top", key: "navAbout" as const },
   { id: "manifesto", key: "secManifesto" as const },
   { id: "stack", key: "navStack" as const },
   { id: "experiencia", key: "navExp" as const },
@@ -56,7 +56,7 @@ export function SectionRail() {
 
   return (
     <nav
-      aria-label="seções"
+      aria-label={t.railLabel}
       className="fixed top-1/2 right-[clamp(10px,1.6vw,22px)] z-40 hidden w-6 -translate-y-1/2 flex-col gap-1.5 min-[1100px]:flex"
     >
       {SECTIONS.map((s) => {

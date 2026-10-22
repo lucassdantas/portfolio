@@ -15,7 +15,7 @@ import { renderWithProviders } from "../helpers";
 const bulletVisible = (i: number) =>
   screen
     .queryAllByRole("listitem")
-    .some((li) => li.textContent === stripMarks(experiences[i].bullets[0]));
+    .some((li) => li.textContent === stripMarks(experiences[i].bullets.pt[0]));
 
 describe("ProjectsSection — carrossel", () => {
   const featured = projects.filter((p) => p.featured);
@@ -92,19 +92,36 @@ describe("ExperienceSection — acordeão", () => {
     expect(bulletVisible(1)).toBe(true);
     expect(bulletVisible(0)).toBe(false);
   });
+
+  it("mostra cargo, período e bullets no idioma escolhido", async () => {
+    localStorage.setItem("ldp-lang", "en");
+    try {
+      renderWithProviders(<ExperienceSection />);
+      const [first] = experiences;
+      expect(await screen.findByText(first.title.en, { exact: false })).toBeInTheDocument();
+      expect(screen.getByText(/Sep 2026 — present/)).toBeInTheDocument();
+      expect(
+        screen.queryAllByRole("listitem").some((li) => li.textContent === stripMarks(first.bullets.en[0])),
+      ).toBe(true);
+      // nada do português sobra na tela em inglês
+      expect(screen.queryByText(/atual/)).not.toBeInTheDocument();
+    } finally {
+      localStorage.removeItem("ldp-lang");
+    }
+  });
 });
 
 describe("SystemsSection — sistemas em produção", () => {
   it("renderiza um card por entrega, com título e resultado", () => {
     renderWithProviders(<SystemsSection />);
     systems.forEach((s) => {
-      expect(screen.getByRole("heading", { name: s.title })).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: s.title.pt })).toBeInTheDocument();
     });
     // o resultado é a linha que justifica o card existir — se sumir, o card
     // vira lista de features
     const first = systems[0];
-    const card = screen.getByRole("heading", { name: first.title }).closest("article");
-    expect(card!.textContent).toContain(stripMarks(first.result));
+    const card = screen.getByRole("heading", { name: first.title.pt }).closest("article");
+    expect(card!.textContent).toContain(stripMarks(first.result.pt));
   });
 });
 

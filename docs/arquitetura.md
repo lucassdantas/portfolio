@@ -14,7 +14,7 @@ O site não tem mais tema claro — `ThemeContext` foi removido no redesign v3 (
 
 ## Idiomas (i18n)
 
-`LanguageContext` mantém o idioma ativo (`pt`/`en`/`es`/`fr`), persiste em `localStorage` (`ldp-lang`) e entrega o objeto `t: Translation` já resolvido. Strings de UI são traduzidas; bullets de experiência/projetos ficam em PT (decisão do design). Os idiomas `en/es/fr` são criados por spread sobre `pt`, então chaves novas nunca ficam faltando.
+`LanguageContext` mantém o idioma ativo (`pt`/`en`/`es`/`fr`), persiste em `localStorage` (`ldp-lang`) e entrega o objeto `t: Translation` já resolvido. **Tudo que aparece na tela existe nos 4 idiomas**: strings de UI em `translations.ts` e conteúdo (experiências, sistemas, princípios, formação, certificados, stack, política de privacidade) como `Record<Lang, …>` nas coleções de `src/data`. Os idiomas são objetos completos, sem spread sobre `pt` — chave nova sem tradução é erro de compilação, não fallback silencioso para o português. Datas ficam em `AAAA-MM` e são formatadas por idioma em `src/lib/i18n.ts` (`formatPeriod`, `formatMonth`), junto com `tx()`, que resolve nomes que podem ser próprios (`string`) ou traduzíveis. Exceção consciente: metadados de SEO e a imagem Open Graph (`layout.tsx`, `opengraph-image.tsx`) são gerados no servidor, numa URL só, e ficam em PT — o idioma é escolhido no cliente.
 
 ## Camadas
 

@@ -100,16 +100,60 @@ export interface Translation {
   footer: string;
   privacy: string;
   langs: SpokenLang[];
+  /** Rótulo acessível da trilha de seções (SectionRail). */
+  railLabel: string;
+  /** Rótulos acessíveis das setas do carrossel de projetos. */
+  prevLabel: string;
+  nextLabel: string;
+  /** Rótulo "Projeto 01" do carrossel. */
+  projLabel: string;
+  /** Rótulo acessível de botão de fechar (modal de privacidade). */
+  close: string;
+  /** Código inicial do playground — comentário e chaves no idioma. */
+  playCode: string;
+  playIdle: string;
+  playEmpty: string;
   all: string;
+  term: TermCopy;
   chat: ChatCopy;
 }
 
+/**
+ * Saídas do terminal interativo. Os comandos em si (`help`, `whoami`…) são
+ * iguais em todo idioma; só o texto que eles imprimem muda.
+ * Placeholders `{chave}` são substituídos em runtime.
+ */
+export interface TermCopy {
+  welcome: string;
+  help: string[];
+  /** A 1ª linha sai em destaque (branco), as demais em cinza. */
+  whoami: string[];
+  /** A 1ª linha sai em destaque (branco), as demais em cinza. */
+  arch: string[];
+  /** A 1ª linha sai em destaque (branco), as demais em cinza. */
+  langs: string[];
+  ghLoading: string;
+  /** Usa {repos}, {followers} e {stars}. */
+  ghStats: string;
+  contactBase: string;
+  /** Usa {lang}. Sai no idioma NOVO, recém-escolhido. */
+  langOk: string;
+  langUsage: string;
+  sudoOk: string;
+  sudoNo: string;
+  coffee: string;
+  ls: string;
+  /** Usa {cmd}. */
+  notFound: string;
+}
+
 export interface Experience {
-  title: string;
+  title: LocalizedText;
+  /** Nome próprio — igual em todos os idiomas. */
   company: string;
-  period: string;
-  mode: string;
-  bullets: string[];
+  period: Period;
+  mode: LocalizedText;
+  bullets: Localized;
   tech: string[];
 }
 
@@ -124,6 +168,25 @@ export type ProjectCategory = "Sistemas" | "Sites";
  * e dentro da linha `**termo**` marca destaque — ver `src/lib/richText.ts`.
  */
 export type Localized = Record<Lang, string[]>;
+
+/** Texto curto (uma string) escrito nos 4 idiomas — mesma regra de `Localized`. */
+export type LocalizedText = Record<Lang, string>;
+
+/**
+ * Texto que pode ser nome próprio (igual em todo idioma, `string`) ou traduzível
+ * (`LocalizedText`). Só para nomes — nome de tecnologia, título de certificado.
+ * Prosa é sempre `LocalizedText`/`Localized`. Resolver com `tx()` (src/lib/i18n.ts).
+ */
+export type Text = string | LocalizedText;
+
+/** Mês no formato "AAAA-MM"; o rótulo por idioma sai de `formatMonth()` (src/lib/i18n.ts). */
+export type YearMonth = `${number}-${number}`;
+
+/** Intervalo de datas; sem `end` significa "atual". */
+export interface Period {
+  start: YearMonth;
+  end?: YearMonth;
+}
 
 export interface Project {
   name: string;
@@ -149,57 +212,55 @@ export interface Project {
 }
 
 export interface Certification {
-  period: string;
-  title: string;
+  date: YearMonth;
+  title: Text;
   institution: string;
   hours: number;
   url: string;
 }
 
 export interface Education {
-  period: string;
-  course: string;
+  period: Period;
+  course: LocalizedText;
   institution: string;
-  grade: string;
-  desc: string;
+  grade: LocalizedText;
+  desc: LocalizedText;
 }
 
 export interface StackItem {
-  name: string;
+  name: Text;
   img?: string;
 }
 
 export interface StackGroup {
-  label: string;
+  label: LocalizedText;
   items: StackItem[];
 }
 
 export interface Principle {
   icon: string;
-  title: string;
-  desc: string;
+  title: LocalizedText;
+  desc: LocalizedText;
 }
 
 /**
  * Entrega de plataforma da seção "sistemas em produção" (src/data/systems.ts).
  *
- * Conteúdo só em PT, como os bullets de experiência: são textos longos e
- * específicos demais para manter em 4 idiomas sem apodrecer. O que é traduzido
- * são os rótulos da seção (`sysTitle`, `sysDesc`, `sysProblem`, `sysBuilt`).
+ * Todo texto nos 4 idiomas, como o resto do conteúdo do site.
  *
  * `problem`/`built`/`result` aceitam `**termo**` para destaque (src/lib/richText.ts) —
- * um destaque por parágrafo, no resultado ou na decisão, nunca na frase inteira.
+ * até dois por parágrafo, no resultado ou na decisão, nunca na frase inteira.
  */
 export interface SystemCase {
   /** Rótulo curto de domínio, ex.: "plataforma · motor de aprovações". */
-  domain: string;
-  title: string;
+  domain: LocalizedText;
+  title: LocalizedText;
   /** O que existia antes — sem isso o card vira lista de features. */
-  problem: string;
+  problem: LocalizedText;
   /** O que foi construído e por quê. */
-  built: string;
+  built: LocalizedText;
   /** Uma linha: o que mudou. */
-  result: string;
+  result: LocalizedText;
   tech: string[];
 }
 

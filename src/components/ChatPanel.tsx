@@ -15,7 +15,7 @@ function prefersReducedMotion(): boolean {
 
 /** Painel do chatbot (carregado sob demanda por ChatWidget). Sempre dark, como Terminal/Playground. */
 export function ChatPanel({ onClose }: { onClose: () => void }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [state, dispatch] = useReducer(
     chatReducer,
     undefined,
@@ -79,13 +79,13 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
   function handleSubmitName(e: React.FormEvent) {
     e.preventDefault();
     if (!nameInput.trim() || isTyping) return;
-    runWithTypingDelay({ type: "submitName", value: nameInput, copy: t.chat });
+    runWithTypingDelay({ type: "submitName", value: nameInput, copy: t.chat, lang });
     setNameInput("");
   }
 
   function handleSelectOption(id: ChatOptionId) {
     if (isTyping) return;
-    runWithTypingDelay({ type: "selectOption", id, copy: t.chat });
+    runWithTypingDelay({ type: "selectOption", id, copy: t.chat, lang });
   }
 
   function handleReset() {

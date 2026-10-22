@@ -6,12 +6,20 @@
 import { chatFlow } from "@/data";
 import { sanitizeName, type ChatMessage, type ChatState } from "@/lib/chat";
 import { getChatFacts } from "@/lib/chatFacts";
-import type { ChatCopy, ChatNode, ChatOptionId } from "@/types";
+import type { ChatCopy, ChatNode, ChatOptionId, Lang } from "@/types";
 
 const nodesById = new Map(chatFlow.map((n) => [n.id, n]));
 
-// Fatos são estáticos (vêm de src/data) — computados uma vez só.
-const FACTS = getChatFacts();
+// Fatos são estáticos (vêm de src/data) — computados uma vez por idioma.
+const factsCache = new Map<Lang, ReturnType<typeof getChatFacts>>();
+function factsFor(lang: Lang) {
+  let facts = factsCache.get(lang);
+  if (!facts) {
+    facts = getChatFacts(lang);
+    factsCache.set(lang, facts);
+  }
+  return facts;
+}
 
 export function getChatNode(id: string): ChatNode {
   const node = nodesById.get(id);
@@ -45,6 +53,7 @@ function settle(
   messages: ChatMessage[],
   nodeId: string,
   copy: ChatCopy,
+  lang: Lang,
   visitIndex: number
 ): { messages: ChatMessage[]; nodeId: string } {
   const node = getChatNode(nodeId);
@@ -52,9 +61,9 @@ function settle(
   const variants = copy.answers[node.answerId];
   const variant = variants[visitIndex % variants.length];
   let next = messages;
-  for (const line of variant) next = pushBot(next, interpolate(line, FACTS));
+  for (const line of variant) next = pushBot(next, interpolate(line, factsFor(lang)));
   next = pushBot(next, copy.backToMenu);
-  return settle(next, node.next, copy, visitIndex);
+  return settle(next, node.next, copy, lang, visitIndex);
 }
 
 export function initialChatState(copy: ChatCopy): ChatState {
@@ -63,8 +72,8 @@ export function initialChatState(copy: ChatCopy): ChatState {
 }
 
 export type ChatAction =
-  | { type: "submitName"; value: string; copy: ChatCopy }
-  | { type: "selectOption"; id: ChatOptionId; copy: ChatCopy }
+  | { type: "submitName"; value: string; copy: ChatCopy; lang: Lang }
+  | { type: "selectOption"; id: ChatOptionId; copy: ChatCopy; lang: Lang }
   | { type: "reset"; copy: ChatCopy };
 
 export function chatReducer(state: ChatState, action: ChatAction): ChatState {
@@ -82,7 +91,7 @@ export function chatReducer(state: ChatState, action: ChatAction): ChatState {
         };
       }
       let messages = pushUser(state.messages, name);
-      messages = pushBot(messages, interpolate(action.copy.menuPrompt, { ...FACTS, name }));
+      messages = pushBot(messages, interpolate(action.copy.menuPrompt, { ...factsFor(action.lang), name }));
       return { ...state, name, nodeId: "menu", messages, lastInteractionAt: Date.now() };
     }
 
@@ -93,7 +102,7 @@ export function chatReducer(state: ChatState, action: ChatAction): ChatState {
       if (!opt) return state;
       const messages = pushUser(state.messages, action.copy.optionLabels[action.id]);
       const visitIndex = state.visits[action.id] ?? 0;
-      const settled = settle(messages, opt.next, action.copy, visitIndex);
+      const settled = settle(messages, opt.next, action.copy, action.lang, visitIndex);
       const visits = { ...state.visits, [action.id]: visitIndex + 1 };
       return { ...state, nodeId: settled.nodeId, messages: settled.messages, visits, lastInteractionAt: Date.now() };
     }

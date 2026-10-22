@@ -1,4 +1,6 @@
 // Camada de conteúdo — dados gerais do site (links, perfil, destaque)
+import type { LocalizedText } from "@/types";
+
 export const site = {
   name: "Lucas Dantas",
   url: "https://portfolio.devdantas.com.br",
@@ -6,7 +8,12 @@ export const site = {
   githubUser: "lucassdantas",
   githubUrl: "https://github.com/lucassdantas",
   linkedinUrl: "https://www.linkedin.com/in/lucas-de-sousa-dantas/",
-  location: "📍 Rio de Janeiro, Brasil",
+  location: {
+    pt: "Rio de Janeiro, Brasil",
+    en: "Rio de Janeiro, Brazil",
+    es: "Río de Janeiro, Brasil",
+    fr: "Rio de Janeiro, Brésil",
+  } as LocalizedText,
   coords: "22°54′S 43°10′W",
   heroImage: "/assets/desenvolvedor-web-lucas-dantas.jpg",
   stats: { years: "4+", projects: "40+", languages: "4" },

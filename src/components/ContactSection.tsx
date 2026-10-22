@@ -5,7 +5,7 @@ import { site } from "@/data";
 import { Reveal } from "./Reveal";
 
 export function ContactSection() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   return (
     <section
@@ -44,7 +44,7 @@ export function ContactSection() {
         </a>
       </div>
       <p className="m-0 mt-[clamp(28px,5vh,56px)] font-mono text-[11.5px] tracking-[.14em] text-dim uppercase">
-        {site.location} · {t.remote}
+        📍 {site.location[lang]} · {t.remote}
       </p>
     </section>
   );

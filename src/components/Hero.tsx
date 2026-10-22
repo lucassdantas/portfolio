@@ -4,7 +4,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { site } from "@/data";
 
 export function Hero() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   const stats = [
     { value: site.stats.years, label: t.statYears },
@@ -21,7 +21,7 @@ export function Hero() {
       <div className="flex flex-wrap items-start justify-between gap-6 font-mono text-[11px] tracking-[.16em] text-muted uppercase">
         <p className="m-0">{t.role}</p>
         <p className="m-0 text-right">
-          {site.location.replace("📍 ", "")}
+          {site.location[lang]}
           <br />
           <span className="text-dim">{site.coords}</span>
         </p>

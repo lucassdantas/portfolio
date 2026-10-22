@@ -3,7 +3,10 @@
 // (src/data/translations.ts → chat.answers). Fica tudo aqui centralizado pra
 // nunca dessincronizar do conteúdo real — e, de propósito, nunca inclui o
 // campo `company` das experiências (o chatbot não deve citar nome de empresa).
-import { books, educations, experiences, principles, projects, site, stackGroups } from "@/data";
+// Os fatos saem no idioma da conversa — cargo, período, grupo da stack etc.
+import { books, educations, experiences, principles, projects, site, stackGroups, translations } from "@/data";
+import { formatPeriod, tx } from "@/lib/i18n";
+import type { Lang } from "@/types";
 
 const TECH_PER_ENTRY = 4;
 
@@ -20,24 +23,27 @@ export interface ChatFacts {
   bookList: string;
 }
 
-export function getChatFacts(): ChatFacts {
-  const techTop = Array.from(new Set(stackGroups.flatMap((g) => g.items.map((i) => i.name))))
+export function getChatFacts(lang: Lang): ChatFacts {
+  const techTop = Array.from(new Set(stackGroups.flatMap((g) => g.items.map((i) => tx(i.name, lang)))))
     .slice(0, 6)
     .join(", ");
 
   const expList = experiences
-    .map((e) => `• ${e.title} (${e.period}): ${e.tech.slice(0, TECH_PER_ENTRY).join(", ")}`)
+    .map((e) => `• ${e.title[lang]} (${formatPeriod(e.period, lang)}): ${e.tech.slice(0, TECH_PER_ENTRY).join(", ")}`)
     .join("\n");
 
   const stackList = stackGroups
-    .map((g) => `• ${g.label}: ${g.items.slice(0, TECH_PER_ENTRY).map((i) => i.name).join(", ")}`)
+    .map((g) => `• ${g.label[lang]}: ${g.items.slice(0, TECH_PER_ENTRY).map((i) => tx(i.name, lang)).join(", ")}`)
     .join("\n");
 
-  const principlesList = principles.map((p) => `• ${p.title}`).join("\n");
+  const principlesList = principles.map((p) => `• ${p.title[lang]}`).join("\n");
 
-  const projectCategories = Array.from(new Set(projects.map((p) => p.cat))).join(", ");
+  const t = translations[lang];
+  const projectCategories = Array.from(
+    new Set(projects.map((p) => (p.cat === "Sistemas" ? t.catSys : t.catSite))),
+  ).join(", ");
 
-  const eduList = educations.map((e) => `• ${e.course} — ${e.institution} (${e.period})`).join("\n");
+  const eduList = educations.map((e) => `• ${e.course[lang]} — ${e.institution} (${formatPeriod(e.period, lang)})`).join("\n");
 
   const bookList = books.slice(0, 3).map((b) => `• ${b.title} — ${b.author}`).join("\n");
 

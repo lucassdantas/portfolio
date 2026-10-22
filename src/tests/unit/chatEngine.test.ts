@@ -28,6 +28,7 @@ describe("motor do chatbot (chatEngine)", () => {
       type: "submitName",
       value: "Maria",
       copy,
+      lang: "pt",
     });
     expect(state.nodeId).toBe("menu");
     expect(state.name).toBe("Maria");
@@ -42,6 +43,7 @@ describe("motor do chatbot (chatEngine)", () => {
       type: "submitName",
       value: "<script>alert(1)</script>",
       copy,
+      lang: "pt",
     });
     expect(state.nodeId).toBe("askName");
     expect(state.name).toBeNull();
@@ -51,8 +53,8 @@ describe("motor do chatbot (chatEngine)", () => {
   });
 
   it("selectOption responde com fatos reais e volta pro menu", () => {
-    let state = chatReducer(initialChatState(copy), { type: "submitName", value: "Ana", copy });
-    state = chatReducer(state, { type: "selectOption", id: "skills", copy });
+    let state = chatReducer(initialChatState(copy), { type: "submitName", value: "Ana", copy, lang: "pt" });
+    state = chatReducer(state, { type: "selectOption", id: "skills", copy, lang: "pt" });
     expect(state.nodeId).toBe("menu");
     const texts = state.messages.map((m) => m.text);
     expect(texts).toContain(copy.optionLabels.skills); // eco da escolha do usuário
@@ -62,9 +64,9 @@ describe("motor do chatbot (chatEngine)", () => {
 
   it("nunca menciona o nome da empresa nas respostas do chat", () => {
     let state = initialChatState(copy);
-    state = chatReducer(state, { type: "submitName", value: "Ana", copy });
+    state = chatReducer(state, { type: "submitName", value: "Ana", copy, lang: "pt" });
     for (const id of ["about", "exp", "skills", "projects", "education", "contact"] as const) {
-      state = chatReducer(state, { type: "selectOption", id, copy });
+      state = chatReducer(state, { type: "selectOption", id, copy, lang: "pt" });
     }
     const allText = state.messages.map((m) => m.text).join(" \n ");
     for (const e of experiences) {
@@ -73,11 +75,11 @@ describe("motor do chatbot (chatEngine)", () => {
   });
 
   it("clicar duas vezes na mesma opção mostra uma variante diferente", () => {
-    let state = chatReducer(initialChatState(copy), { type: "submitName", value: "Ana", copy });
-    state = chatReducer(state, { type: "selectOption", id: "about", copy });
+    let state = chatReducer(initialChatState(copy), { type: "submitName", value: "Ana", copy, lang: "pt" });
+    state = chatReducer(state, { type: "selectOption", id: "about", copy, lang: "pt" });
     const firstAnswer = state.messages.map((m) => m.text).join("\n");
 
-    state = chatReducer(state, { type: "selectOption", id: "about", copy });
+    state = chatReducer(state, { type: "selectOption", id: "about", copy, lang: "pt" });
     const secondBatch = state.messages.slice(-4, -1).map((m) => m.text); // eco + linhas da 2ª variante (antes do backToMenu)
 
     expect(state.visits.about).toBe(2);
@@ -86,13 +88,13 @@ describe("motor do chatbot (chatEngine)", () => {
 
   it("ignora selectOption fora de uma etapa de opções", () => {
     const start = initialChatState(copy); // nodeId = askName, não "options"
-    const state = chatReducer(start, { type: "selectOption", id: "exp", copy });
+    const state = chatReducer(start, { type: "selectOption", id: "exp", copy, lang: "pt" });
     expect(state).toBe(start);
   });
 
   it("reset volta ao estado inicial (encerra e começa nova conversa)", () => {
-    let state = chatReducer(initialChatState(copy), { type: "submitName", value: "Ana", copy });
-    state = chatReducer(state, { type: "selectOption", id: "contact", copy });
+    let state = chatReducer(initialChatState(copy), { type: "submitName", value: "Ana", copy, lang: "pt" });
+    state = chatReducer(state, { type: "selectOption", id: "contact", copy, lang: "pt" });
     const reset = chatReducer(state, { type: "reset", copy });
     expect(reset.nodeId).toBe("askName");
     expect(reset.name).toBeNull();

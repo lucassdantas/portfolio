@@ -3,9 +3,10 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { educations, certifications, books } from "@/data";
 import { Reveal } from "./Reveal";
+import { formatMonth, formatPeriod, tx } from "@/lib/i18n";
 
 export function EducationSection() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   return (
     <section id="educacao" data-stg="4" className="border-t border-bord px-5 py-[clamp(70px,13vh,150px)] sm:px-8">
@@ -15,16 +16,16 @@ export function EducationSection() {
 
       <div className="mb-[clamp(40px,7vh,88px)] grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-px border border-bord bg-bord">
         {educations.map((ed, i) => (
-          <Reveal key={ed.course} delay={i * 90} className="h-full">
+          <Reveal key={ed.course.pt} delay={i * 90} className="h-full">
             <div className="h-full bg-bg p-[clamp(22px,2.8vw,36px)]">
               <p className="m-0 mb-3 font-mono text-[10.5px] tracking-[.16em] text-accent uppercase">
-                {ed.period}
+                {formatPeriod(ed.period, lang)}
               </p>
               <h3 className="m-0 mb-1.5 text-[clamp(20px,2.1vw,28px)] font-semibold tracking-[-.02em]">
-                {ed.course}
+                {ed.course[lang]}
               </h3>
               <p className="m-0 mb-3 font-mono text-[11.5px] text-dim">{ed.institution}</p>
-              <p className="m-0 text-[13.5px] leading-[1.6] text-muted">{ed.desc}</p>
+              <p className="m-0 text-[13.5px] leading-[1.6] text-muted">{ed.desc[lang]}</p>
             </div>
           </Reveal>
         ))}
@@ -37,8 +38,8 @@ export function EducationSection() {
         {certifications.map((ce) => {
           const row = (
             <>
-              <span className="font-mono text-[10.5px] tracking-[.14em] text-dim uppercase">{ce.period}</span>
-              <span className="text-[15px] font-medium tracking-[-.01em] text-txt">{ce.title}</span>
+              <span className="font-mono text-[10.5px] tracking-[.14em] text-dim uppercase">{formatMonth(ce.date, lang)}</span>
+              <span className="text-[15px] font-medium tracking-[-.01em] text-txt">{tx(ce.title, lang)}</span>
               <span className="font-mono text-[11px] text-dim">{ce.institution}</span>
               <span className="text-left font-mono text-[11px] tracking-[.1em] text-accent sm:text-right">
                 {ce.hours}h{ce.url ? " ↗" : ""}
@@ -48,11 +49,11 @@ export function EducationSection() {
           const cls =
             "grid grid-cols-1 items-baseline gap-1 border-b border-bord py-3.5 transition-[padding-left] duration-[.35s] sm:grid-cols-[100px_minmax(0,1fr)_minmax(0,.7fr)_74px] sm:gap-4.5";
           return ce.url ? (
-            <a key={ce.title} href={ce.url} target="_blank" rel="noreferrer" className={`${cls} hover:pl-3`}>
+            <a key={ce.url} href={ce.url} target="_blank" rel="noreferrer" className={`${cls} hover:pl-3`}>
               {row}
             </a>
           ) : (
-            <div key={ce.title} className={cls}>
+            <div key={tx(ce.title, "pt")} className={cls}>
               {row}
             </div>
           );

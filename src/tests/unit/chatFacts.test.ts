@@ -4,28 +4,36 @@ import { experiences, projects, stackGroups, site } from "@/data";
 
 describe("getChatFacts (mini-RAG do chatbot)", () => {
   it("nunca inclui o nome da empresa das experiências", () => {
-    const facts = getChatFacts();
+    const facts = getChatFacts("pt");
     for (const e of experiences) {
       expect(facts.expList).not.toContain(e.company);
     }
   });
 
   it("reflete dados reais de src/data (não texto solto)", () => {
-    const facts = getChatFacts();
+    const facts = getChatFacts("pt");
     expect(facts.years).toBe(site.stats.years);
-    expect(facts.stackList).toContain(stackGroups[0].label);
+    expect(facts.stackList).toContain(stackGroups[0].label.pt);
   });
 
   it("projectCount é a contagem de cards publicados, não o total de carreira", () => {
-    const facts = getChatFacts();
+    const facts = getChatFacts("pt");
     expect(facts.projectCount).toBe(String(projects.length));
     // "40+" é o número do hero (carreira inteira) e não deve vazar pro chatbot,
     // que fala em "projetos publicados aqui"
     expect(facts.projectCount).not.toBe(site.stats.projects);
   });
 
+  it("fatos saem no idioma da conversa", () => {
+    const en = getChatFacts("en");
+    expect(en.expList).toContain(experiences[0].title.en);
+    expect(en.expList).toContain("present");
+    expect(en.expList).not.toContain("atual");
+    expect(en.stackList).toContain(stackGroups[0].label.en);
+  });
+
   it("expList tem uma linha por experiência", () => {
-    const facts = getChatFacts();
+    const facts = getChatFacts("pt");
     expect(facts.expList.split("\n")).toHaveLength(experiences.length);
   });
 });

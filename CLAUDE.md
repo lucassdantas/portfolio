@@ -7,13 +7,15 @@ Portfólio one-page de Lucas Dantas (dev full stack). Next.js 16 (App Router) + 
 ```bash
 npm run dev        # dev server
 npm run build      # build de produção
-npm test           # vitest run (76 testes, unit + integração)
+npm test           # vitest run (84 testes, unit + integração)
 npm run test:watch
 ```
 
 ## Regra de ouro: conteúdo vive em src/data/
 
-Textos, experiências, projetos, certificados, traduções e a política de privacidade estão em `src/data/*` (coleções tipadas por `src/types/index.ts`, estilo NoSQL). **Nunca hardcode conteúdo em componentes** — se um texto novo aparecer, ele entra em `src/data/` (e em `translations.ts` se for string de UI, nos 4 idiomas: pt/en/es/fr). Ver [docs/conteudo.md](docs/conteudo.md).
+Textos, experiências, projetos, certificados, traduções e a política de privacidade estão em `src/data/*` (coleções tipadas por `src/types/index.ts`, estilo NoSQL). **Nunca hardcode conteúdo em componentes** — se um texto novo aparecer, ele entra em `src/data/` (e em `translations.ts` se for string de UI). Ver [docs/conteudo.md](docs/conteudo.md).
+
+**Tudo que aparece na tela existe nos 4 idiomas (pt/en/es/fr)** — UI e conteúdo. Prosa é `Localized`/`LocalizedText` (`Record<Lang, …>`), data é `"AAAA-MM"` formatada por `src/lib/i18n.ts`, e `translations.ts` não tem spread sobre `pt`: idioma faltando é erro de compilação, e `data.test.ts` pega idioma vazio ou copiado do pt. Texto novo entra nos quatro de uma vez — nunca só em português.
 
 Duas regras editoriais que os testes cobram:
 

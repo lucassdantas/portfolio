@@ -36,7 +36,60 @@ describe("camada de dados", () => {
     expect(stackGroups.length).toBeGreaterThan(0);
     expect(principles).toHaveLength(4);
     expect(books.length).toBeGreaterThan(0);
-    expect(privacyPolicy.sections.length).toBeGreaterThan(0);
+    LANGS.forEach((lang) => expect(privacyPolicy[lang].sections.length).toBeGreaterThan(0));
+  });
+
+  // Todo campo `Record<Lang, …>` do conteúdo: o compilador garante que as 4
+  // chaves existem, mas não que estão preenchidas — nem que a tradução não é
+  // o português colado. Este teste varre as coleções inteiras atrás disso.
+  it("todo texto localizado está preenchido nos 4 idiomas", () => {
+    const isLocalized = (v: unknown): v is Record<Lang, string | string[]> =>
+      !!v && typeof v === "object" && !Array.isArray(v) &&
+      Object.keys(v).sort().join() === [...LANGS].sort().join();
+
+    const found: string[] = [];
+    const walk = (v: unknown, where: string) => {
+      if (isLocalized(v)) {
+        found.push(where);
+        LANGS.forEach((lang) => {
+          const val = v[lang];
+          const items = Array.isArray(val) ? val : [val];
+          expect(items.length, `${where} [${lang}] vazio`).toBeGreaterThan(0);
+          items.forEach((s) => expect(s.trim(), `${where} [${lang}] vazio`).toBeTruthy());
+          // lista traduzida precisa ter os mesmos itens, na mesma ordem
+          if (Array.isArray(val)) {
+            expect(val.length, `${where} [${lang}] com nº de itens diferente do pt`).toBe(
+              (v.pt as string[]).length,
+            );
+          }
+        });
+        return;
+      }
+      if (Array.isArray(v)) v.forEach((x, i) => walk(x, `${where}[${i}]`));
+      else if (v && typeof v === "object") Object.entries(v).forEach(([k, x]) => walk(x, `${where}.${k}`));
+    };
+    walk({ experiences, systems, principles, educations, certifications, stackGroups, site }, "data");
+    expect(found.length).toBeGreaterThan(50);
+  });
+
+  it("prosa traduzida não é cópia do português", () => {
+    const prose: [string, Record<Lang, string | string[]>][] = [
+      ...experiences.map((e) => [`${e.company} bullets`, e.bullets] as [string, Record<Lang, string[]>]),
+      ...systems.flatMap((s) =>
+        [s.problem, s.built, s.result].map((p) => [s.title.pt, p] as [string, Record<Lang, string>]),
+      ),
+      ...principles.map((p) => [p.title.pt, p.desc] as [string, Record<Lang, string>]),
+      ...educations.map((e) => [e.course.pt, e.desc] as [string, Record<Lang, string>]),
+    ];
+    prose.forEach(([where, text]) =>
+      LANGS.filter((l) => l !== "pt").forEach((lang) => {
+        expect(text[lang], `${where}: ${lang} é cópia do pt`).not.toEqual(text.pt);
+      }),
+    );
+    LANGS.filter((l) => l !== "pt").forEach((lang) => {
+      expect(privacyPolicy[lang].intro, `privacidade: ${lang} é cópia do pt`).not.toBe(privacyPolicy.pt.intro);
+      expect(privacyPolicy[lang].sections).toHaveLength(privacyPolicy.pt.sections.length);
+    });
   });
 
   it("projetos têm categoria válida e campos obrigatórios", () => {
@@ -80,12 +133,14 @@ describe("camada de dados", () => {
 
   it("experiências têm bullets e tecnologias", () => {
     experiences.forEach((e) => {
-      expect(e.bullets.length).toBeGreaterThan(0);
-      e.bullets.forEach((b) => {
-        expect(
-          (b.match(/\*\*/g) ?? []).length % 2,
-          `${e.company}: destaque ** sem fechamento`,
-        ).toBe(0);
+      LANGS.forEach((lang) => {
+        expect(e.bullets[lang].length).toBeGreaterThan(0);
+        e.bullets[lang].forEach((b) => {
+          expect(
+            (b.match(/\*\*/g) ?? []).length % 2,
+            `${e.company} [${lang}]: destaque ** sem fechamento`,
+          ).toBe(0);
+        });
       });
       expect(e.tech.length).toBeGreaterThan(0);
     });
@@ -96,31 +151,35 @@ describe("camada de dados", () => {
   // deixa de destacar qualquer coisa.
   it("nenhum texto usa mais de dois destaques", () => {
     const marks = (s: string) => (s.match(/\*\*/g) ?? []).length / 2;
-    experiences.forEach((e) =>
-      e.bullets.forEach((b) =>
-        expect(marks(b), `${e.company}: bullet com destaque demais — "${b.slice(0, 48)}…"`)
-          .toBeLessThanOrEqual(2),
-      ),
-    );
-    systems.forEach((s) =>
-      [s.problem, s.built, s.result].forEach((p) =>
-        expect(marks(p), `${s.title}: parágrafo com destaque demais`).toBeLessThanOrEqual(2),
-      ),
-    );
+    LANGS.forEach((lang) => {
+      experiences.forEach((e) =>
+        e.bullets[lang].forEach((b) =>
+          expect(marks(b), `${e.company} [${lang}]: bullet com destaque demais — "${b.slice(0, 48)}…"`)
+            .toBeLessThanOrEqual(2),
+        ),
+      );
+      systems.forEach((s) =>
+        [s.problem, s.built, s.result].forEach((p) =>
+          expect(marks(p[lang]), `${s.title.pt} [${lang}]: parágrafo com destaque demais`).toBeLessThanOrEqual(2),
+        ),
+      );
+    });
   });
 
   it("sistemas em produção têm problema, solução, resultado e stack", () => {
     expect(systems.length).toBeGreaterThan(0);
     systems.forEach((s) => {
-      expect(s.domain.trim(), `${s.title} sem domínio`).toBeTruthy();
-      [s.problem, s.built, s.result].forEach((p) => {
-        expect(p.trim(), `${s.title} com campo vazio`).toBeTruthy();
-        expect(
-          (p.match(/\*\*/g) ?? []).length % 2,
-          `${s.title}: destaque ** sem fechamento`,
-        ).toBe(0);
+      LANGS.forEach((lang) => {
+        expect(s.domain[lang].trim(), `${s.title.pt} [${lang}] sem domínio`).toBeTruthy();
+        [s.problem, s.built, s.result].forEach((p) => {
+          expect(p[lang].trim(), `${s.title.pt} [${lang}] com campo vazio`).toBeTruthy();
+          expect(
+            (p[lang].match(/\*\*/g) ?? []).length % 2,
+            `${s.title.pt} [${lang}]: destaque ** sem fechamento`,
+          ).toBe(0);
+        });
       });
-      expect(s.tech.length, `${s.title} sem stack`).toBeGreaterThan(0);
+      expect(s.tech.length, `${s.title.pt} sem stack`).toBeGreaterThan(0);
     });
   });
 

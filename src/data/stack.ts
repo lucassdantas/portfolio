@@ -1,11 +1,13 @@
 // Camada de conteúdo — stack & competências
+// Rótulo de grupo nos 4 idiomas; nome de tecnologia é nome próprio (string),
+// exceto as práticas escritas em português, que viram objeto localizado.
 import type { StackGroup } from "@/types";
 
 const TECH_IMG = "/assets/technologyImages/";
 
 export const stackGroups: StackGroup[] = [
   {
-    label: "Back-end",
+    label: { pt: "Back-end", en: "Back end", es: "Back-end", fr: "Back-end" },
     items: [
       { name: "PHP", img: TECH_IMG + "back-end/php.png" },
       { name: "Laravel" },
@@ -19,7 +21,7 @@ export const stackGroups: StackGroup[] = [
     ],
   },
   {
-    label: "Front-end",
+    label: { pt: "Front-end", en: "Front end", es: "Front-end", fr: "Front-end" },
     items: [
       { name: "React", img: TECH_IMG + "front-end/reactjs.png" },
       { name: "Next.js", img: TECH_IMG + "front-end/nextjs.png" },
@@ -30,7 +32,7 @@ export const stackGroups: StackGroup[] = [
     ],
   },
   {
-    label: "Banco de dados",
+    label: { pt: "Banco de dados", en: "Databases", es: "Bases de datos", fr: "Bases de données" },
     items: [
       { name: "PostgreSQL" },
       { name: "SQL Server" },
@@ -40,7 +42,7 @@ export const stackGroups: StackGroup[] = [
     ],
   },
   {
-    label: "DevOps & Infra",
+    label: { pt: "DevOps & Infra", en: "DevOps & Infra", es: "DevOps & Infra", fr: "DevOps & Infra" },
     items: [
       { name: "Docker" },
       { name: "Linux" },
@@ -53,7 +55,7 @@ export const stackGroups: StackGroup[] = [
     ],
   },
   {
-    label: "Automação & IA",
+    label: { pt: "Automação & IA", en: "Automation & AI", es: "Automatización & IA", fr: "Automatisation & IA" },
     items: [
       { name: "n8n" },
       { name: "MCP" },
@@ -64,15 +66,15 @@ export const stackGroups: StackGroup[] = [
     ],
   },
   {
-    label: "Arquitetura & Práticas",
+    label: { pt: "Arquitetura & Práticas", en: "Architecture & Practices", es: "Arquitectura & Prácticas", fr: "Architecture & pratiques" },
     items: [
       { name: "System Design" },
       { name: "Clean Architecture" },
       { name: "SOLID" },
       { name: "Design Patterns" },
-      { name: "Filas & Mensageria" },
+      { name: { pt: "Filas & Mensageria", en: "Queues & Messaging", es: "Colas & Mensajería", fr: "Files & messagerie" } },
       { name: "Clean Code" },
-      { name: "Testes (unit/int/regressão)" },
+      { name: { pt: "Testes (unit/int/regressão)", en: "Testing (unit/int/regression)", es: "Pruebas (unit/int/regresión)", fr: "Tests (unit/int/régression)" } },
       { name: "Scrum & Kanban" },
     ],
   },

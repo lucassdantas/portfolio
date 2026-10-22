@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { stackGroups, principles } from "@/data";
 import { Reveal } from "./Reveal";
+import { tx } from "@/lib/i18n";
 
 /**
  * Grafo de curvas SVG ligando cada tech ao título ("hub") do seu grupo.
@@ -84,7 +85,7 @@ function useStackGraph(wrapRef: React.RefObject<HTMLDivElement | null>) {
 }
 
 export function StackSection() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const graphRef = useRef<HTMLDivElement>(null);
   useStackGraph(graphRef);
 
@@ -101,21 +102,21 @@ export function StackSection() {
         <svg className="pointer-events-none absolute inset-0 z-0 h-full w-full overflow-visible" />
         <div className="relative z-[1] grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-[clamp(22px,3vw,44px)]">
           {stackGroups.map((sg, gi) => (
-            <div key={sg.label} className="flex flex-col gap-3">
+            <div key={sg.label.pt} className="flex flex-col gap-3">
               <p
                 data-hub={gi}
                 className="m-0 border-b border-bord pb-2 font-mono text-[11px] tracking-[.18em] text-accent uppercase"
               >
-                {sg.label}
+                {sg.label[lang]}
               </p>
               <div className="flex flex-wrap gap-[7px]">
                 {sg.items.map((si) => (
                   <span
-                    key={si.name}
+                    key={tx(si.name, "pt")}
                     data-tech={gi}
                     className="ld-tech cursor-default rounded-[2px] border border-bord px-[9px] py-[5px] font-mono text-[11.5px] tracking-[.02em] text-strong transition-[color,border-color,background,transform] duration-[.25s] hover:-translate-y-0.5 hover:border-txt hover:bg-txt hover:text-bg"
                   >
-                    {si.name}
+                    {tx(si.name, lang)}
                   </span>
                 ))}
               </div>
@@ -129,13 +130,13 @@ export function StackSection() {
       </p>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-px border border-bord bg-bord">
         {principles.map((pr, i) => (
-          <Reveal key={pr.title} delay={i * 80}>
+          <Reveal key={pr.title.pt} delay={i * 80}>
             <div className="h-full bg-bg p-[clamp(20px,2.4vw,32px)]">
               <p className="m-0 mb-2.5 font-mono text-[10.5px] tracking-[.18em] text-accent">
                 {String(i + 1).padStart(2, "0")}
               </p>
-              <h3 className="m-0 mb-2.5 text-[19px] font-semibold tracking-[-.02em]">{pr.title}</h3>
-              <p className="m-0 text-[13.5px] leading-[1.6] text-muted [text-wrap:pretty]">{pr.desc}</p>
+              <h3 className="m-0 mb-2.5 text-[19px] font-semibold tracking-[-.02em]">{pr.title[lang]}</h3>
+              <p className="m-0 text-[13.5px] leading-[1.6] text-muted [text-wrap:pretty]">{pr.desc[lang]}</p>
             </div>
           </Reveal>
         ))}

@@ -4,9 +4,10 @@ import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { experiences, site } from "@/data";
 import { RichLine } from "./RichLine";
+import { formatPeriod } from "@/lib/i18n";
 
 export function ExperienceSection() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [openExp, setOpenExp] = useState(0);
   const metricLabels = [t.m1, t.m2, t.m3, t.m4];
 
@@ -42,6 +43,7 @@ export function ExperienceSection() {
         {experiences.map((ex, i) => {
           const open = openExp === i;
           const isLast = i === experiences.length - 1;
+          const bullets = ex.bullets[lang];
           return (
             <div key={i} className={`border-t border-bord ${isLast ? "border-b" : ""}`}>
               <button
@@ -50,19 +52,19 @@ export function ExperienceSection() {
               >
                 <span className="flex flex-col gap-2">
                   <span className="font-mono text-[11px] tracking-[.16em] text-accent uppercase">
-                    {ex.period}
+                    {formatPeriod(ex.period, lang)}
                   </span>
                   <span className="text-[clamp(26px,4.2vw,58px)] leading-[1.02] font-semibold tracking-[-.035em]">
-                    {ex.title} <span className="text-dim">/</span> {ex.company}
+                    {ex.title[lang]} <span className="text-dim">/</span> {ex.company}
                   </span>
-                  <span className="font-mono text-[11.5px] text-muted">{ex.mode}</span>
+                  <span className="font-mono text-[11.5px] text-muted">{ex.mode[lang]}</span>
                 </span>
                 <span className="flex-none font-mono text-[22px] text-muted">{open ? "−" : "+"}</span>
               </button>
               {open && (
                 <div>
                   <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-[clamp(18px,3vw,44px)] pb-[clamp(26px,4vh,44px)]">
-                    {[ex.bullets.slice(0, Math.ceil(ex.bullets.length / 2)), ex.bullets.slice(Math.ceil(ex.bullets.length / 2))].map(
+                    {[bullets.slice(0, Math.ceil(bullets.length / 2)), bullets.slice(Math.ceil(bullets.length / 2))].map(
                       (col, ci) => (
                         <ul
                           key={ci}
