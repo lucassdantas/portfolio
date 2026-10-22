@@ -22,7 +22,7 @@ export const systems: SystemCase[] = [
     built:
       "Extraí o motor de dentro do primeiro domínio que o usava e transformei em infraestrutura: etapas reutilizáveis entre fluxos, responsável resolvido dinamicamente (cargo, perfil ou hierarquia) e condições de execução registráveis como ponto de extensão — a regra que decide se uma etapa roda deixou de ser um condicional escondido no controller.",
     result:
-      "Hoje **quatro áreas rodam no mesmo motor**. Processo novo virou configuração em tela de administração, não desenvolvimento.",
+      "**Quatro áreas** passaram a rodar no mesmo motor. Processo novo virou configuração em tela de administração, não desenvolvimento.",
     tech: ["Laravel", "SQL Server", "PHPUnit"],
   },
   {
