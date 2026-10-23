@@ -167,7 +167,7 @@ export const experiences: Experience[] = [
       fr: "Développeur Full Stack",
     },
     company: "Freelancer",
-    period: { start: "2024-06" },
+    period: { start: "2020-06" },
     mode: {
       pt: "Remoto · clientes nacionais e internacionais",
       en: "Remote · clients in Brazil and abroad",

@@ -26,7 +26,7 @@ const pt: Translation = {
   mfW6: "Infraestrutura.",
   mfEnd: "Do problema à produção.",
   tagline:
-    "4+ anos entre sistemas de gestão hospitalar, motores de aprovação, agentes de IA e migração de legado. Escrevo teste onde o erro custa caro, documento a decisão junto com o código e prefiro extrair o que se repete a duplicá-lo.",
+    "6+ anos entre sistemas de gestão hospitalar, motores de aprovação, agentes de IA e migração de legado. Escrevo teste onde o erro custa caro, documento a decisão junto com o código e prefiro extrair o que se repete a duplicá-lo.",
   cta1: "Ver projetos",
   cta2: "Fale comigo",
   statYears: "anos de experiência",
@@ -139,7 +139,7 @@ const pt: Translation = {
     ],
     whoami: [
       "Lucas Dantas — Desenvolvedor Full Stack, Rio de Janeiro/BR.",
-      "4+ anos entregando web apps, APIs, automações e sistemas críticos de saúde.",
+      "6+ anos entregando web apps, APIs, automações e sistemas críticos de saúde.",
       "Foco: arquitetura limpa, redução de custo e automação com IA.",
     ],
     arch: [
@@ -252,7 +252,7 @@ const en: Translation = {
   mfW6: "Infrastructure.",
   mfEnd: "From problem to production.",
   tagline:
-    "4+ years across hospital management systems, approval engines, AI agents and legacy migration. I write tests where mistakes are expensive, document the decision next to the code, and would rather extract what repeats than duplicate it.",
+    "6+ years across hospital management systems, approval engines, AI agents and legacy migration. I write tests where mistakes are expensive, document the decision next to the code, and would rather extract what repeats than duplicate it.",
   cta1: "View projects",
   cta2: "Get in touch",
   statYears: "years of experience",
@@ -364,7 +364,7 @@ const en: Translation = {
     ],
     whoami: [
       "Lucas Dantas — Full Stack Developer, Rio de Janeiro/BR.",
-      "4+ years shipping web apps, APIs, automations and critical healthcare systems.",
+      "6+ years shipping web apps, APIs, automations and critical healthcare systems.",
       "Focus: clean architecture, cost reduction and AI automation.",
     ],
     arch: [
@@ -477,7 +477,7 @@ const es: Translation = {
   mfW6: "Infraestructura.",
   mfEnd: "Del problema a producción.",
   tagline:
-    "Más de 4 años entre sistemas de gestión hospitalaria, motores de aprobación, agentes de IA y migración de legado. Escribo pruebas donde el error sale caro, documento la decisión junto al código y prefiero extraer lo que se repite antes que duplicarlo.",
+    "Más de 6 años entre sistemas de gestión hospitalaria, motores de aprobación, agentes de IA y migración de legado. Escribo pruebas donde el error sale caro, documento la decisión junto al código y prefiero extraer lo que se repite antes que duplicarlo.",
   cta1: "Ver proyectos",
   cta2: "Hablemos",
   statYears: "años de experiencia",
@@ -589,7 +589,7 @@ const es: Translation = {
     ],
     whoami: [
       "Lucas Dantas — Desarrollador Full Stack, Río de Janeiro/BR.",
-      "Más de 4 años entregando web apps, APIs, automatizaciones y sistemas críticos de salud.",
+      "Más de 6 años entregando web apps, APIs, automatizaciones y sistemas críticos de salud.",
       "Enfoque: arquitectura limpia, reducción de costos y automatización con IA.",
     ],
     arch: [
@@ -702,7 +702,7 @@ const fr: Translation = {
   mfW6: "Infrastructure.",
   mfEnd: "Du problème à la production.",
   tagline:
-    "4+ ans entre systèmes de gestion hospitalière, moteurs d'approbation, agents IA et migration de legacy. J'écris des tests là où l'erreur coûte cher, je documente la décision à côté du code, et je préfère extraire ce qui se répète plutôt que le dupliquer.",
+    "6+ ans entre systèmes de gestion hospitalière, moteurs d'approbation, agents IA et migration de legacy. J'écris des tests là où l'erreur coûte cher, je documente la décision à côté du code, et je préfère extraire ce qui se répète plutôt que le dupliquer.",
   cta1: "Voir les projets",
   cta2: "Me contacter",
   statYears: "années d'expérience",
@@ -814,7 +814,7 @@ const fr: Translation = {
     ],
     whoami: [
       "Lucas Dantas — Développeur Full Stack, Rio de Janeiro/BR.",
-      "Plus de 4 ans à livrer des web apps, des API, des automatisations et des systèmes de santé critiques.",
+      "Plus de 6 ans à livrer des web apps, des API, des automatisations et des systèmes de santé critiques.",
       "Priorités : architecture propre, réduction des coûts et automatisation avec l'IA.",
     ],
     arch: [

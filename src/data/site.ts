@@ -16,7 +16,7 @@ export const site = {
   } as LocalizedText,
   coords: "22°54′S 43°10′W",
   heroImage: "/assets/desenvolvedor-web-lucas-dantas.jpg",
-  stats: { years: "4+", projects: "40+", languages: "4" },
+  stats: { years: "6+", projects: "40+", languages: "4" },
   /**
    * Régua de métricas da ExperienceSection — valores na ordem m1..m4 de translations.ts.
    * Só entra aqui número que algum bullet de `experiences.ts` sustenta; os demais
