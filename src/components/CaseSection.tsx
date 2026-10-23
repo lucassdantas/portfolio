@@ -22,7 +22,7 @@ function FlowNode({
   const badgeClass = tone === "token1" ? "text-accent" : "text-err";
   return (
     <div
-      className={`flex items-center justify-between gap-3 border border-bord bg-bg px-[13px] py-[11px] font-mono text-[11.5px] tracking-[.04em] ${toneClass}`}
+      className={`flex items-center justify-between gap-3 border border-bord bg-bg/70 px-[13px] py-[11px] font-mono text-[11.5px] tracking-[.04em] ${toneClass}`}
     >
       <span>{children}</span>
       {badge && (
@@ -66,9 +66,9 @@ export function CaseSection() {
         </p>
       </div>
 
-      <div className="mb-[clamp(46px,8vh,96px)] grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-px border border-bord bg-bord">
+      <div className="mb-[clamp(46px,8vh,96px)] grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-px border border-bord">
         <Reveal className="h-full">
-          <div className="h-full bg-bg2 p-[clamp(24px,3vw,42px)]">
+          <div className="h-full bg-bg2/88 shadow-[0_0_0_1px_var(--border)] backdrop-blur-[2px] p-[clamp(24px,3vw,42px)]">
             <p className="m-0 mb-3.5 font-mono text-[10.5px] tracking-[.2em] text-muted uppercase">
               {t.caseBefore}
             </p>
@@ -90,7 +90,7 @@ export function CaseSection() {
           </div>
         </Reveal>
         <Reveal delay={120} className="h-full">
-          <div className="h-full bg-bg2 p-[clamp(24px,3vw,42px)]">
+          <div className="h-full bg-bg2/88 shadow-[0_0_0_1px_var(--border)] backdrop-blur-[2px] p-[clamp(24px,3vw,42px)]">
             <p className="m-0 mb-3.5 font-mono text-[10.5px] tracking-[.2em] text-accent uppercase">
               {t.caseAfter}
             </p>

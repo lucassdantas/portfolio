@@ -93,14 +93,6 @@
     cursor: none !important;
   }
 
-  /* StackSection — grafo de tecnologias: hover num chip acende só o grupo */
-  #ld-graph.ld-graph-dim .ld-tech {
-    opacity: 0.28;
-  }
-  #ld-graph.ld-graph-dim .ld-tech.ld-lit {
-    opacity: 1;
-  }
-
   /* ProjectsSection — troca de projeto no carrossel: o texto entra pelo lado
      da navegação e a imagem é revelada por uma cortina, para a troca ser
      percebida mesmo de canto de olho. */

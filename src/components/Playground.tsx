@@ -45,7 +45,7 @@ export function Playground() {
         </p>
         <p className="m-0 max-w-[46ch] text-sm leading-[1.55] text-muted">{t.playDesc}</p>
       </div>
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] border border-bord bg-[#070605]">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] border border-bord bg-[#070605]/92 backdrop-blur-[2px]">
         <div className="flex flex-col border-r border-bord">
           <div className="flex items-center justify-between border-b border-bord bg-bg2 px-3.5 py-[9px]">
             <span className="font-mono text-[10.5px] tracking-[.14em] text-dim">editor.js</span>

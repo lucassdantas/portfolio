@@ -119,7 +119,7 @@ export function ProjectsSection() {
       ref={sectionRef}
       data-stg="3"
       data-pdim="0.75"
-      className="relative py-[clamp(70px,14vh,150px)]"
+      className="relative py-[clamp(60px,11vh,130px)]"
     >
       <div className="mb-[clamp(20px,4vh,50px)] flex flex-wrap items-baseline justify-between gap-6 px-5 sm:px-8">
         <p className="m-0 font-mono text-[11px] tracking-[.2em] text-muted uppercase">
@@ -129,7 +129,7 @@ export function ProjectsSection() {
       </div>
 
       {/* trilha: um número por projeto; o ativo carrega a barra do autoplay */}
-      <div className="flex flex-wrap items-center gap-2 px-5 pb-[clamp(18px,3vh,32px)] sm:px-8">
+      <div className="flex flex-wrap items-center gap-2 px-5 pb-[clamp(14px,2.4vh,24px)] sm:px-8">
         {featured.map((p, i) => {
           const on = i === index;
           return (
@@ -192,7 +192,7 @@ export function ProjectsSection() {
         data-testid="proj-stage"
         onMouseEnter={() => hold(true)}
         onMouseLeave={() => hold(false)}
-        className="grid min-h-[92svh] grid-cols-1 items-center gap-[clamp(24px,4vw,64px)] border-t border-bord px-5 py-[clamp(50px,8vh,100px)] sm:px-8 md:grid-cols-[minmax(0,.92fr)_minmax(0,1.08fr)]"
+        className="grid grid-cols-1 items-stretch gap-[clamp(16px,2.4vw,36px)] px-5 pb-[clamp(16px,3vh,32px)] sm:px-8 md:grid-cols-[minmax(0,.92fr)_minmax(0,1.08fr)]"
       >
         {/* véu de leitura: as partículas passam por trás desfocadas */}
         <div
@@ -203,7 +203,7 @@ export function ProjectsSection() {
             {t.projLabel} {pad(index + 1)}
             <span className="text-muted"> · {current.cat === "Sistemas" ? t.catSys : t.catSite}</span>
           </p>
-          <h3 className="m-0 mb-[clamp(16px,2.6vh,28px)] text-[clamp(28px,3.9vw,60px)] leading-[1] font-semibold tracking-[-.035em] [text-wrap:balance]">
+          <h3 className="m-0 mb-[clamp(12px,2vh,22px)] text-[clamp(26px,3.2vw,50px)] leading-[1] font-semibold tracking-[-.035em] [text-wrap:balance]">
             {current.name}
           </h3>
           {current.impact && (
@@ -256,7 +256,7 @@ export function ProjectsSection() {
         </div>
         <div
           key={`img-${index}`}
-          className={`ld-wipe relative aspect-[16/10.5] overflow-hidden border border-bord bg-bg2 ${flip ? "md:order-1" : "md:order-2"}`}
+          className={`ld-wipe relative aspect-[16/10.5] max-h-[min(64svh,600px)] overflow-hidden rounded-[3px] border border-bord bg-bg2 md:aspect-auto md:min-h-[min(56svh,520px)] ${flip ? "md:order-1" : "md:order-2"}`}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img

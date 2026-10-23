@@ -1,140 +1,65 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { stackGroups, principles } from "@/data";
 import { Reveal } from "./Reveal";
 import { tx } from "@/lib/i18n";
 
+const pad = (n: number) => String(n).padStart(2, "0");
+
 /**
- * Grafo de curvas SVG ligando cada tech ao título ("hub") do seu grupo.
- * Hover num chip acende só as conexões do grupo dele. Porta `initGraph()`
- * do protótipo: mede posições no DOM e redesenha em resize.
+ * Stack em cards no mesmo padrão do resto do site (grade com linhas de 1px):
+ * um card por grupo, com índice, nome e quantidade, e as tecnologias como
+ * chips. Cards levemente translúcidos — o campo de partículas aparece por trás.
+ * Abaixo, os princípios de trabalho ("como eu trabalho").
  */
-function useStackGraph(wrapRef: React.RefObject<HTMLDivElement | null>) {
-  useEffect(() => {
-    const wrap = wrapRef.current;
-    const svg = wrap?.querySelector<SVGSVGElement>("svg");
-    if (!wrap || !svg) return;
-
-    const NS = "http://www.w3.org/2000/svg";
-    const draw = () => {
-      svg.innerHTML = "";
-      const wr = wrap.getBoundingClientRect();
-      const hubPt: Record<string, [number, number]> = {};
-      wrap.querySelectorAll<HTMLElement>("[data-hub]").forEach((h) => {
-        const g = h.dataset.hub!;
-        const r = h.getBoundingClientRect();
-        hubPt[g] = [r.left - wr.left + r.width / 2, r.bottom - wr.top];
-      });
-      wrap.querySelectorAll<HTMLElement>("[data-tech]").forEach((t) => {
-        const g = t.dataset.tech!;
-        const hp = hubPt[g];
-        if (!hp) return;
-        const r = t.getBoundingClientRect();
-        const x1 = hp[0];
-        const y1 = hp[1];
-        const x2 = r.left - wr.left + r.width / 2;
-        const y2 = r.top - wr.top;
-        const my = (y1 + y2) / 2;
-        const p = document.createElementNS(NS, "path");
-        p.setAttribute("d", `M${x1} ${y1} C${x1} ${my} ${x2} ${my} ${x2} ${y2}`);
-        p.setAttribute("fill", "none");
-        p.setAttribute("stroke", "#1D94E3");
-        p.setAttribute("stroke-width", "1");
-        p.setAttribute("opacity", "0.14");
-        p.setAttribute("data-gl", g);
-        svg.appendChild(p);
-      });
-    };
-
-    const t1 = setTimeout(draw, 60);
-    const onResize = () => setTimeout(draw, 120);
-    window.addEventListener("resize", onResize);
-
-    const offs: (() => void)[] = [];
-    wrap.querySelectorAll<HTMLElement>("[data-tech]").forEach((t) => {
-      const g = t.dataset.tech!;
-      const onEnter = () => {
-        wrap.classList.add("ld-graph-dim");
-        wrap
-          .querySelectorAll<HTMLElement>("[data-tech]")
-          .forEach((o) => o.classList.toggle("ld-lit", o.dataset.tech === g));
-        svg
-          .querySelectorAll<SVGPathElement>("path")
-          .forEach((p) => p.setAttribute("opacity", p.getAttribute("data-gl") === g ? "0.6" : "0.03"));
-      };
-      const onLeave = () => {
-        wrap.classList.remove("ld-graph-dim");
-        svg.querySelectorAll<SVGPathElement>("path").forEach((p) => p.setAttribute("opacity", "0.14"));
-      };
-      t.addEventListener("pointerenter", onEnter);
-      t.addEventListener("pointerleave", onLeave);
-      offs.push(() => {
-        t.removeEventListener("pointerenter", onEnter);
-        t.removeEventListener("pointerleave", onLeave);
-      });
-    });
-
-    return () => {
-      clearTimeout(t1);
-      window.removeEventListener("resize", onResize);
-      offs.forEach((f) => f());
-    };
-  }, [wrapRef]);
-}
-
 export function StackSection() {
   const { t, lang } = useLanguage();
-  const graphRef = useRef<HTMLDivElement>(null);
-  useStackGraph(graphRef);
+  const cell = "bg-bg/88 shadow-[0_0_0_1px_var(--border)] backdrop-blur-[2px]";
 
   return (
     <section id="stack" data-stg="1.6" className="px-5 py-[clamp(70px,14vh,170px)] sm:px-8">
       <div className="mb-[clamp(26px,5vh,56px)] flex flex-wrap items-baseline justify-between gap-6">
-        <p className="m-0 font-mono text-[11px] tracking-[.2em] text-dim uppercase">
+        <p className="m-0 font-mono text-[11px] tracking-[.2em] text-muted uppercase">
           02 — {t.stackTitle}
         </p>
         <p className="m-0 max-w-[46ch] text-sm leading-[1.55] text-muted">{t.stackDesc}</p>
       </div>
 
-      <div ref={graphRef} id="ld-graph" className="relative">
-        <svg className="pointer-events-none absolute inset-0 z-0 h-full w-full overflow-visible" />
-        <div className="relative z-[1] grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-[clamp(22px,3vw,44px)]">
-          {stackGroups.map((sg, gi) => (
-            <div key={sg.label.pt} className="flex flex-col gap-3">
-              <p
-                data-hub={gi}
-                className="m-0 border-b border-bord pb-2 font-mono text-[11px] tracking-[.18em] text-accent uppercase"
-              >
-                {sg.label[lang]}
-              </p>
-              <div className="flex flex-wrap gap-[7px]">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-px border border-bord">
+        {stackGroups.map((sg, gi) => (
+          <Reveal key={sg.label.pt} delay={(gi % 3) * 90} className="h-full">
+            <div className={`group h-full p-[clamp(20px,2.4vw,30px)] transition-colors duration-300 hover:bg-bg2/90 ${cell}`}>
+              <div className="mb-[clamp(14px,2vh,20px)] flex items-baseline justify-between gap-4">
+                <p className="m-0 font-mono text-[11px] tracking-[.18em] text-accent uppercase">
+                  <span className="text-muted">{pad(gi + 1)} · </span>
+                  {sg.label[lang]}
+                </p>
+                <span className="font-mono text-[11px] text-muted">{pad(sg.items.length)}</span>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
                 {sg.items.map((si) => (
                   <span
                     key={tx(si.name, "pt")}
-                    data-tech={gi}
-                    className="ld-tech cursor-default rounded-[2px] border border-bord px-[9px] py-[5px] font-mono text-[11.5px] tracking-[.02em] text-strong transition-[color,border-color,background,transform] duration-[.25s] hover:-translate-y-0.5 hover:border-txt hover:bg-txt hover:text-bg"
+                    className="cursor-default rounded-[2px] border border-bord bg-bg/60 px-2.5 py-[5px] font-mono text-[11.5px] tracking-[.02em] text-strong transition-colors duration-300 group-hover:border-strong/40 group-hover:text-txt hover:!border-accent hover:!text-accent"
                   >
                     {tx(si.name, lang)}
                   </span>
                 ))}
               </div>
             </div>
-          ))}
-        </div>
+          </Reveal>
+        ))}
       </div>
 
-      <p className="m-0 mt-[clamp(52px,9vh,110px)] mb-[clamp(20px,3vh,34px)] font-mono text-[11px] tracking-[.2em] text-dim uppercase">
+      <p className="m-0 mt-[clamp(52px,9vh,110px)] mb-[clamp(20px,3vh,34px)] font-mono text-[11px] tracking-[.2em] text-muted uppercase">
         {"// " + t.engTitle}
       </p>
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-px border border-bord bg-bord">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-px border border-bord">
         {principles.map((pr, i) => (
-          <Reveal key={pr.title.pt} delay={i * 80}>
-            <div className="h-full bg-bg p-[clamp(20px,2.4vw,32px)]">
-              <p className="m-0 mb-2.5 font-mono text-[10.5px] tracking-[.18em] text-accent">
-                {String(i + 1).padStart(2, "0")}
-              </p>
+          <Reveal key={pr.title.pt} delay={i * 80} className="h-full">
+            <div className={`h-full p-[clamp(20px,2.4vw,32px)] ${cell}`}>
+              <p className="m-0 mb-2.5 font-mono text-[10.5px] tracking-[.18em] text-accent">{pad(i + 1)}</p>
               <h3 className="m-0 mb-2.5 text-[19px] font-semibold tracking-[-.02em]">{pr.title[lang]}</h3>
               <p className="m-0 text-[13.5px] leading-[1.6] text-muted [text-wrap:pretty]">{pr.desc[lang]}</p>
             </div>

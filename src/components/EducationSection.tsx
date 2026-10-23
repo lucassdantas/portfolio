@@ -14,10 +14,10 @@ export function EducationSection() {
         10 — {t.eduTitle}
       </p>
 
-      <div className="mb-[clamp(40px,7vh,88px)] grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-px border border-bord bg-bord">
+      <div className="mb-[clamp(40px,7vh,88px)] grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-px border border-bord">
         {educations.map((ed, i) => (
           <Reveal key={ed.course.pt} delay={i * 90} className="h-full">
-            <div className="h-full bg-bg p-[clamp(22px,2.8vw,36px)]">
+            <div className="h-full bg-bg/88 shadow-[0_0_0_1px_var(--border)] backdrop-blur-[2px] p-[clamp(22px,2.8vw,36px)]">
               <p className="m-0 mb-3 font-mono text-[10.5px] tracking-[.16em] text-accent uppercase">
                 {formatPeriod(ed.period, lang)}
               </p>
@@ -65,9 +65,9 @@ export function EducationSection() {
           <p className="m-0 mb-[clamp(16px,2.6vh,28px)] font-mono text-[11px] tracking-[.2em] text-dim uppercase">
             {"// " + t.booksTitle}
           </p>
-          <div className="flex flex-col gap-px border border-bord bg-bord">
+          <div className="flex flex-col gap-px border border-bord">
             {books.map((bk) => (
-              <div key={bk.title} className="flex items-center gap-4 bg-bg px-4.5 py-[15px]">
+              <div key={bk.title} className="flex items-center gap-4 bg-bg/88 shadow-[0_0_0_1px_var(--border)] backdrop-blur-[2px] px-4.5 py-[15px]">
                 <span className="flex-none border-l-2 border-accent pl-2.5 font-mono text-xs tracking-[.08em] text-accent">
                   {bk.initials}
                 </span>

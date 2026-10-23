@@ -20,11 +20,11 @@ export function ExperienceSection() {
         <p className="m-0 text-sm text-muted">{t.expDesc}</p>
       </div>
 
-      <div className="mb-[clamp(40px,7vh,90px)] grid grid-cols-[repeat(auto-fit,minmax(210px,1fr))] gap-px border-t border-b border-bord bg-bord">
+      <div className="mb-[clamp(40px,7vh,90px)] grid grid-cols-[repeat(auto-fit,minmax(210px,1fr))] gap-px border-t border-b border-bord">
         {site.expMetrics.map((m, i) => {
           const color = m.accent ? "var(--accent)" : m.warm ? "var(--warm)" : undefined;
           return (
-          <div key={m.value} className="bg-bg py-[clamp(22px,3vw,38px)] pl-[clamp(0px,2vw,28px)] first:pl-0">
+          <div key={m.value} className="bg-bg/88 shadow-[0_0_0_1px_var(--border)] backdrop-blur-[2px] py-[clamp(22px,3vw,38px)] pl-[clamp(0px,2vw,28px)] first:pl-0">
             <p
               className="m-0 text-[clamp(40px,5.5vw,84px)] leading-none font-bold tracking-[-.045em]"
               style={{ color }}

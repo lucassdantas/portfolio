@@ -35,12 +35,12 @@ export function GithubSection() {
           ↗ github.com/{site.githubUser}
         </a>
       </div>
-      <div className="border border-bord bg-bg2 p-[clamp(18px,2.6vw,32px)]">
+      <div className="border border-bord bg-bg2/88 p-[clamp(18px,2.6vw,32px)] backdrop-blur-[2px]">
         {gh && (
           <>
-            <div className="mb-6 grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-px border border-bord bg-bord">
+            <div className="mb-6 grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-px border border-bord">
               {stats.map((s) => (
-                <div key={s.label} className="bg-bg2 px-4 py-5 text-center">
+                <div key={s.label} className="px-4 py-5 text-center shadow-[0_0_0_1px_var(--border)]">
                   <div className="font-mono text-[26px] font-bold text-accent">{s.value}</div>
                   <div className="mt-1.5 font-mono text-[10.5px] tracking-[.1em] text-muted uppercase">
                     {s.label}

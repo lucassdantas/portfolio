@@ -2,6 +2,7 @@ import { ParticlesCanvasLoader as ParticlesCanvas } from "@/components/Particles
 import { Navbar } from "@/components/Navbar";
 import { SectionRail } from "@/components/SectionRail";
 import { Cursor } from "@/components/Cursor";
+import { SmoothScroll } from "@/components/SmoothScroll";
 import { Hero } from "@/components/Hero";
 import { Manifesto } from "@/components/Manifesto";
 import { Terminal } from "@/components/Terminal";
@@ -24,6 +25,7 @@ export default function Home() {
     <>
       <ParticlesCanvas />
       <Cursor />
+      <SmoothScroll />
       <SectionRail />
       {/* ≥1100px: respiro à direita do tamanho do SectionRail, para ele não cobrir conteúdo */}
       <div className="relative z-10 min-[1100px]:pr-12">

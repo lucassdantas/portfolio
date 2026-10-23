@@ -182,7 +182,7 @@ export function Terminal() {
   };
 
   const shell = (
-    <div className="border border-bord bg-[#070605]">
+    <div className="border border-bord bg-[#070605]/92 backdrop-blur-[2px]">
       <div className="flex items-center gap-2 border-b border-bord bg-bg2 px-4 py-[11px]">
         <span className="h-[9px] w-[9px] rounded-full bg-[#3A342E]" />
         <span className="h-[9px] w-[9px] rounded-full bg-[#3A342E]" />

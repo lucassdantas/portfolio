@@ -19,11 +19,11 @@ export function ContactSection() {
       </p>
       <Reveal>
         <h2
-          className="m-0 text-[clamp(38px,9vw,150px)] leading-[.92] font-bold tracking-[-.045em]"
+          className="m-0 max-w-[15ch] text-[clamp(36px,6.8vw,112px)] leading-[1.02] font-bold tracking-[-.04em]"
           style={{ textShadow: "0 0 36px rgba(10,9,8,.95), 0 0 12px rgba(10,9,8,.9)" }}
         >
-          <span className="block text-dim">{t.ctA}</span>
-          <span className="block">{t.ctB}</span>
+          <span className="block text-muted [text-wrap:balance]">{t.ctA}</span>
+          <span className="mt-[.22em] block [text-wrap:balance]">{t.ctB}</span>
         </h2>
       </Reveal>
       <p
