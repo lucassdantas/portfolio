@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useLanguage, LANGS } from "@/contexts/LanguageContext";
 import { site } from "@/data";
 import { TERMINAL_OPEN_EVENT } from "./Terminal";
+import { useActiveSection } from "@/lib/useActiveSection";
 
 export function Navbar() {
   const { lang, setLang, t } = useLanguage();
@@ -18,6 +19,8 @@ export function Navbar() {
     { label: t.navEdu, href: "#educacao" },
     { label: t.navContact, href: "#contato" },
   ];
+  // link da seção atual fica aceso (seções sem link, como o case, mantêm o anterior)
+  const active = useActiveSection(navLinks.map((nl) => nl.href.slice(1)));
 
   return (
     <nav className="fixed inset-x-0 top-0 z-50 border-b border-bord bg-navbg backdrop-blur-[12px]">
@@ -30,9 +33,18 @@ export function Navbar() {
             <a
               key={nl.href}
               href={nl.href}
-              className="text-[15px] font-medium text-muted hover:text-accent"
+              aria-current={active === nl.href.slice(1) ? "location" : undefined}
+              className={`relative py-1 text-[15px] font-medium transition-colors duration-300 hover:text-accent ${
+                active === nl.href.slice(1) ? "text-txt" : "text-muted"
+              }`}
             >
               {nl.label}
+              <span
+                aria-hidden
+                className={`absolute right-0 -bottom-[3px] left-0 h-[2px] origin-left bg-accent transition-transform duration-300 ${
+                  active === nl.href.slice(1) ? "scale-x-100" : "scale-x-0"
+                }`}
+              />
             </a>
           ))}
         </div>
@@ -74,7 +86,10 @@ export function Navbar() {
               key={nl.href}
               href={nl.href}
               onClick={() => setOpen(false)}
-              className="rounded-md px-2 py-2 text-[15px] font-medium text-muted hover:text-accent"
+              aria-current={active === nl.href.slice(1) ? "location" : undefined}
+              className={`rounded-md border-l-2 px-2 py-2 text-[15px] font-medium hover:text-accent ${
+                active === nl.href.slice(1) ? "border-accent text-txt" : "border-transparent text-muted"
+              }`}
             >
               {nl.label}
             </a>

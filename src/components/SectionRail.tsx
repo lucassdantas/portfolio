@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useActiveSection } from "@/lib/useActiveSection";
 
 const SECTIONS = [
   { id: "top", key: "navAbout" as const },
@@ -17,35 +18,27 @@ const SECTIONS = [
   { id: "educacao", key: "navEdu" as const },
   { id: "contato", key: "navContact" as const },
 ];
+const IDS = SECTIONS.map((s) => s.id);
+/** Quanto tempo o nome da seção fica visível depois de entrar nela. */
+const FLASH_MS = 2200;
 
 /**
  * Trilha vertical de seções, fixa à direita — só em telas ≥1100px.
- * Ocupa só a largura das linhas (o `page.tsx` reserva esse respiro à direita);
- * o rótulo flutua à esquerda apenas em hover/foco e não captura clique, para
- * nunca cobrir nem bloquear o conteúdo das seções.
+ * Ocupa só a largura das linhas (o `page.tsx` reserva esse respiro à direita).
+ * Ao entrar numa seção, o traço dela fica azul e o nome aparece por alguns
+ * segundos, no idioma ativo; fora isso o rótulo só aparece em hover/foco. O
+ * rótulo nunca captura clique, então não bloqueia o conteúdo por baixo.
  */
 export function SectionRail() {
   const { t } = useLanguage();
-  const [active, setActive] = useState("top");
+  const active = useActiveSection(IDS) ?? "top";
+  const [flash, setFlash] = useState<string | null>(null);
 
   useEffect(() => {
-    const els = SECTIONS.map((s) => document.getElementById(s.id)).filter(
-      (el): el is HTMLElement => !!el
-    );
-    if (els.length === 0) return;
-
-    const onScroll = () => {
-      const mid = window.innerHeight * 0.4;
-      let current = els[0].id;
-      els.forEach((el) => {
-        if (el.getBoundingClientRect().top <= mid) current = el.id;
-      });
-      setActive(current);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    setFlash(active);
+    const id = setTimeout(() => setFlash(null), FLASH_MS);
+    return () => clearTimeout(id);
+  }, [active]);
 
   const go = (id: string) => {
     const el = document.getElementById(id);
@@ -72,7 +65,11 @@ export function SectionRail() {
           >
             <span
               aria-hidden
-              className="pointer-events-none absolute top-1/2 right-full mr-2.5 translate-x-1.5 -translate-y-1/2 rounded-[2px] border border-bord bg-bg px-2 py-1 font-mono text-[9.5px] tracking-[.16em] whitespace-nowrap text-txt uppercase opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100"
+              className={`pointer-events-none absolute top-1/2 right-full mr-2.5 -translate-y-1/2 rounded-[2px] border bg-bg px-2 py-1 font-mono text-[9.5px] tracking-[.16em] whitespace-nowrap uppercase transition-[opacity,transform] duration-300 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100 ${
+                flash === s.id
+                  ? "translate-x-0 border-accent/60 text-accent opacity-100"
+                  : "translate-x-1.5 border-bord text-txt opacity-0"
+              }`}
             >
               {label}
             </span>

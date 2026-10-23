@@ -9,7 +9,7 @@ export function EducationSection() {
   const { t, lang } = useLanguage();
 
   return (
-    <section id="educacao" data-stg="4" className="border-t border-bord px-5 py-[clamp(70px,13vh,150px)] sm:px-8">
+    <section id="educacao" data-stg="4" data-pdim="0.7" className="border-t border-bord px-5 py-[clamp(70px,13vh,150px)] sm:px-8">
       <p className="m-0 mb-[clamp(24px,4vh,48px)] font-mono text-[11px] tracking-[.2em] text-dim uppercase">
         10 — {t.eduTitle}
       </p>
@@ -34,22 +34,22 @@ export function EducationSection() {
       <p className="m-0 mb-[clamp(16px,2.6vh,28px)] font-mono text-[11px] tracking-[.2em] text-dim uppercase">
         {"// " + t.certTitle}
       </p>
-      <div className="mb-[clamp(40px,7vh,88px)] border-t border-bord">
+      <div className="mb-[clamp(40px,7vh,88px)] border border-bord bg-bg/55 backdrop-blur-[2px]">
         {certifications.map((ce) => {
           const row = (
             <>
-              <span className="font-mono text-[10.5px] tracking-[.14em] text-dim uppercase">{formatMonth(ce.date, lang)}</span>
+              <span className="font-mono text-[10.5px] tracking-[.14em] text-muted uppercase">{formatMonth(ce.date, lang)}</span>
               <span className="text-[15px] font-medium tracking-[-.01em] text-txt">{tx(ce.title, lang)}</span>
-              <span className="font-mono text-[11px] text-dim">{ce.institution}</span>
+              <span className="font-mono text-[11px] text-muted">{ce.institution}</span>
               <span className="text-left font-mono text-[11px] tracking-[.1em] text-accent sm:text-right">
                 {ce.hours}h{ce.url ? " ↗" : ""}
               </span>
             </>
           );
           const cls =
-            "grid grid-cols-1 items-baseline gap-1 border-b border-bord py-3.5 transition-[padding-left] duration-[.35s] sm:grid-cols-[100px_minmax(0,1fr)_minmax(0,.7fr)_74px] sm:gap-4.5";
+            "grid grid-cols-1 items-baseline gap-1 border-b border-bord px-3 py-3.5 transition-[padding-left,background] duration-[.35s] last:border-b-0 sm:grid-cols-[100px_minmax(0,1fr)_minmax(0,.7fr)_74px] sm:gap-4.5";
           return ce.url ? (
-            <a key={ce.url} href={ce.url} target="_blank" rel="noreferrer" className={`${cls} hover:pl-3`}>
+            <a key={ce.url} href={ce.url} target="_blank" rel="noreferrer" className={`${cls} hover:bg-bg2 hover:pl-6`}>
               {row}
             </a>
           ) : (
@@ -83,7 +83,7 @@ export function EducationSection() {
           <p className="m-0 mb-[clamp(16px,2.6vh,28px)] font-mono text-[11px] tracking-[.2em] text-dim uppercase">
             {"// " + t.langTitle}
           </p>
-          <div className="flex flex-col gap-[18px]">
+          <div className="flex flex-col gap-[18px] border border-bord bg-bg/55 p-4.5 backdrop-blur-[2px]">
             {t.langs.map(([name, level, pct]) => (
               <div key={name}>
                 <div className="mb-[7px] flex justify-between font-mono text-[11.5px] tracking-[.08em]">

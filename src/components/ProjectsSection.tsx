@@ -118,7 +118,7 @@ export function ProjectsSection() {
       id="projetos"
       ref={sectionRef}
       data-stg="3"
-      data-pdim="0.38"
+      data-pdim="0.75"
       className="relative py-[clamp(70px,14vh,150px)]"
     >
       <div className="mb-[clamp(20px,4vh,50px)] flex flex-wrap items-baseline justify-between gap-6 px-5 sm:px-8">
@@ -197,7 +197,7 @@ export function ProjectsSection() {
         {/* véu de leitura: as partículas passam por trás desfocadas */}
         <div
           key={`txt-${index}`}
-          className={`${swap} rounded-[3px] border border-bord bg-bg/75 p-[clamp(20px,2.6vw,40px)] backdrop-blur-md ${flip ? "md:order-2" : "md:order-1"}`}
+          className={`${swap} rounded-[3px] border border-bord bg-bg/55 p-[clamp(20px,2.6vw,40px)] backdrop-blur-[3px] ${flip ? "md:order-2" : "md:order-1"}`}
         >
           <p className="m-0 mb-[clamp(14px,2.4vh,26px)] font-mono text-[10.5px] tracking-[.24em] text-accent uppercase">
             {t.projLabel} {pad(index + 1)}
@@ -273,8 +273,16 @@ export function ProjectsSection() {
         <p className="m-0 mb-[clamp(18px,3vh,32px)] font-mono text-[11px] tracking-[.2em] text-muted uppercase">
           {"// " + t.secIndex}
         </p>
-        {/* mesmo véu do palco: a lista é texto pequeno, é onde o fundo mais atrapalhava */}
-        <div className="border-t border-bord bg-bg/75 backdrop-blur-md">
+        {/* véu leve: a animação de fundo continua visível, mas não briga com o texto pequeno */}
+        <div className="border border-bord bg-bg/50 backdrop-blur-[2px]">
+          <div
+            aria-hidden
+            className="hidden grid-cols-[minmax(0,1fr)_minmax(0,1fr)_110px] gap-5 border-b border-bord px-3 py-2.5 font-mono text-[10px] tracking-[.2em] text-muted uppercase sm:grid"
+          >
+            <span>{t.idxProject}</span>
+            <span>{t.idxTech}</span>
+            <span className="text-right">{t.idxAccess}</span>
+          </div>
           {rest.map((p) => {
             const cells = (
               <>
@@ -290,7 +298,7 @@ export function ProjectsSection() {
               </>
             );
             const grid =
-              "grid grid-cols-1 items-baseline gap-1 border-b border-bord px-3 py-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_90px] sm:gap-5";
+              "grid grid-cols-1 items-baseline gap-1 border-b border-bord px-3 py-4 last:border-b-0 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_110px] sm:gap-5";
             return p.live || p.repo ? (
               <a
                 key={p.name}
@@ -300,7 +308,7 @@ export function ProjectsSection() {
                 className={`${grid} transition-[padding-left,background] duration-[.35s] hover:bg-bg2 hover:pl-6`}
               >
                 {cells}
-                <span className="text-left font-mono text-[11px] tracking-[.14em] text-accent sm:text-right">↗</span>
+                <span className="text-left font-mono text-[11px] tracking-[.14em] text-accent uppercase sm:text-right">{t.visit}</span>
               </a>
             ) : (
               <div key={p.name} className={grid}>

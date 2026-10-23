@@ -56,12 +56,10 @@ export interface Translation {
   coreB: string;
   coreCap: string;
   coreFlow: string;
-  /** OrbitSection (astronauta): rótulo, dica de interação, título em 2 linhas e legenda. */
-  orbitEyebrow: string;
+  /** OrbitSection (astronauta): dica de interação e as duas frases que aparecem durante a rolagem. */
   orbitHint: string;
   orbitA: string;
   orbitB: string;
-  orbitCap: string;
   featured: string;
   caseTitle: string;
   caseKind: string;
@@ -115,6 +113,11 @@ export interface Translation {
   projLabel: string;
   /** Aviso de autoplay pausado (mouse sobre o palco do carrossel). */
   projPaused: string;
+  /** Cabeçalho das colunas do índice de projetos e o rótulo do link. */
+  idxProject: string;
+  idxTech: string;
+  idxAccess: string;
+  visit: string;
   /** Rótulo acessível de botão de fechar (modal de privacidade). */
   close: string;
   /** Código inicial do playground — comentário e chaves no idioma. */
