@@ -100,6 +100,63 @@
   #ld-graph.ld-graph-dim .ld-tech.ld-lit {
     opacity: 1;
   }
+
+  /* ProjectsSection — troca de projeto no carrossel: o texto entra pelo lado
+     da navegação e a imagem é revelada por uma cortina, para a troca ser
+     percebida mesmo de canto de olho. */
+  .ld-swap-next {
+    animation: ld-swap-next 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .ld-swap-prev {
+    animation: ld-swap-prev 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .ld-wipe {
+    animation: ld-wipe 0.75s cubic-bezier(0.65, 0, 0.2, 1) both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ld-swap-next,
+    .ld-swap-prev,
+    .ld-wipe {
+      animation: ld-fade 0.3s ease both;
+    }
+  }
+}
+
+@keyframes ld-swap-next {
+  from {
+    opacity: 0;
+    transform: translateX(42px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes ld-swap-prev {
+  from {
+    opacity: 0;
+    transform: translateX(-42px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes ld-wipe {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes ld-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes blink {

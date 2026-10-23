@@ -6,6 +6,8 @@ import { ExperienceSection } from "@/components/ExperienceSection";
 import { SystemsSection } from "@/components/SystemsSection";
 import { Playground } from "@/components/Playground";
 import { Navbar } from "@/components/Navbar";
+import { OrbitSection } from "@/components/OrbitSection";
+import { translations } from "@/data";
 import { projects, experiences, systems } from "@/data";
 import { stripMarks } from "@/lib/richText";
 import { renderWithProviders } from "../helpers";
@@ -122,6 +124,46 @@ describe("SystemsSection — sistemas em produção", () => {
     const first = systems[0];
     const card = screen.getByRole("heading", { name: first.title.pt }).closest("article");
     expect(card!.textContent).toContain(stripMarks(first.result.pt));
+  });
+});
+
+describe("ProjectsSection — resultado em destaque", () => {
+  it("mostra o impacto do projeto no carrossel, quando existe", async () => {
+    renderWithProviders(<ProjectsSection />);
+    const featured = projects.filter((p) => p.featured);
+    const i = featured.findIndex((p) => p.impact);
+    expect(i).toBeGreaterThanOrEqual(0);
+    await userEvent.click(screen.getByRole("button", { name: String(i + 1).padStart(2, "0") }));
+    const value = featured[i].impact!.value;
+    expect(screen.getByText(typeof value === "string" ? value : value.pt)).toBeInTheDocument();
+    expect(screen.getByText(featured[i].impact!.label.pt)).toBeInTheDocument();
+  });
+
+  it("contador mostra posição atual e total", async () => {
+    const { container } = renderWithProviders(<ProjectsSection />);
+    const total = projects.filter((p) => p.featured).length;
+    await userEvent.click(screen.getByRole("button", { name: "próximo" }));
+    const counter = container.querySelector('[aria-live="polite"]');
+    expect(counter!.textContent).toBe(`02 / ${String(total).padStart(2, "0")}`);
+  });
+});
+
+describe("OrbitSection — interlúdio do astronauta", () => {
+  it("sem WebGL esconde o canvas e mantém o texto", () => {
+    const { container } = renderWithProviders(<OrbitSection />);
+    expect(screen.getByRole("heading", { name: new RegExp(translations.pt.orbitB) })).toBeInTheDocument();
+    expect(container.querySelector("canvas")!.style.display).toBe("none");
+  });
+
+  it("texto acompanha o idioma", async () => {
+    localStorage.setItem("ldp-lang", "fr");
+    try {
+      renderWithProviders(<OrbitSection />);
+      expect(await screen.findByText(translations.fr.orbitB)).toBeInTheDocument();
+      expect(screen.getByText(translations.fr.orbitHint)).toBeInTheDocument();
+    } finally {
+      localStorage.removeItem("ldp-lang");
+    }
   });
 });
 

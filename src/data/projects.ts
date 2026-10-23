@@ -167,6 +167,15 @@ export const projects: Project[] = [
     name: "Royal4House",
     featured: true,
     cat: "Sites",
+    impact: {
+      value: { pt: "1+ ano", en: "1+ year", es: "1+ año", fr: "1+ an" },
+      label: {
+        pt: "o mesmo cliente renovando comigo",
+        en: "the same client renewing with me",
+        es: "el mismo cliente renovando conmigo",
+        fr: "le même client qui renouvelle avec moi",
+      },
+    },
     desc: {
       pt: [
         "Portal de imóveis para compra e locação, que **mantenho e evoluo há mais de um ano**.",
@@ -339,26 +348,35 @@ export const projects: Project[] = [
     name: "Lançamento — Cidadania Espanhola",
     featured: true,
     cat: "Sites",
+    impact: {
+      value: { pt: "R$ 80 mil", en: "R$ 80k", es: "R$ 80 mil", fr: "80 000 R$" },
+      label: {
+        pt: "em 1 semana de campanha",
+        en: "in one week of campaign",
+        es: "en 1 semana de campaña",
+        fr: "en 1 semaine de campagne",
+      },
+    },
     desc: {
       pt: [
         "Blog de lançamento com várias páginas para uma campanha de **cidadania espanhola**.",
         "Envio dinâmico de leads em **round-robin**: cada vendedor ficava com uma fatia igual do volume.",
-        "Plugins de **rastreamento** da campanha. Resultado: **R$ 80 mil em 1 semana**.",
+        "Plugins de **rastreamento** da campanha.",
       ],
       en: [
         "Multi-page launch blog for a **Spanish citizenship** campaign.",
         "Dynamic lead routing in **round-robin**: each rep got an equal share of the volume.",
-        "Campaign **tracking** plugins. Result: **R$ 80k in one week**.",
+        "Campaign **tracking** plugins.",
       ],
       es: [
         "Blog de lanzamiento con varias páginas para una campaña de **ciudadanía española**.",
         "Envío dinámico de leads en **round-robin**: cada vendedor recibía una porción igual del volumen.",
-        "Plugins de **rastreo** de la campaña. Resultado: **R$ 80 mil en 1 semana**.",
+        "Plugins de **rastreo** de la campaña.",
       ],
       fr: [
         "Blog de lancement multi-pages pour une campagne de **citoyenneté espagnole**.",
         "Routage dynamique des leads en **round-robin** : chaque commercial recevait une part égale du volume.",
-        "Plugins de **tracking** de la campagne. Résultat : **80 000 R$ en 1 semaine**.",
+        "Plugins de **tracking** de la campagne.",
       ],
     },
     img: IMG + "sites/lancamento-cidadania/lancamento-cidadania-main.svg",
@@ -371,25 +389,30 @@ export const projects: Project[] = [
     name: "Lançamento — Certificação Esportiva",
     featured: true,
     cat: "Sites",
+    impact: {
+      value: { pt: "R$ 100 mil", en: "R$ 100k", es: "R$ 100 mil", fr: "100 000 R$" },
+      label: {
+        pt: "faturados em 1 semana · case premiado",
+        en: "revenue in one week · award-winning case",
+        es: "facturados en 1 semana · caso premiado",
+        fr: "de CA en 1 semaine · cas primé",
+      },
+    },
     desc: {
       pt: [
         "Blog de lançamento com várias páginas para uma campanha de **certificação profissional em força e condicionamento**.",
-        "**R$ 100 mil faturados em 1 semana**.",
         "O case rendeu **prêmio ao estrategista** da campanha.",
       ],
       en: [
         "Multi-page launch blog for a **professional strength & conditioning certification** campaign.",
-        "**R$ 100k in revenue in one week**.",
         "The case earned an **award for the campaign strategist**.",
       ],
       es: [
         "Blog de lanzamiento con varias páginas para una campaña de **certificación profesional en fuerza y acondicionamiento**.",
-        "**R$ 100 mil facturados en 1 semana**.",
         "El case le valió un **premio al estratega** de la campaña.",
       ],
       fr: [
         "Blog de lancement multi-pages pour une campagne de **certification professionnelle en force et conditionnement**.",
-        "**100 000 R$ de chiffre d'affaires en 1 semaine**.",
         "Le case a valu un **prix au stratège** de la campagne.",
       ],
     },
@@ -478,6 +501,15 @@ export const projects: Project[] = [
   {
     name: "Corpore",
     cat: "Sites",
+    impact: {
+      value: { pt: "3+ anos", en: "3+ years", es: "3+ años", fr: "3+ ans" },
+      label: {
+        pt: "de cliente recorrente",
+        en: "as a returning client",
+        es: "de cliente recurrente",
+        fr: "de client fidèle",
+      },
+    },
     desc: {
       pt: [
         "Site de clínica de fisioterapia — **cliente meu há mais de 3 anos**.",

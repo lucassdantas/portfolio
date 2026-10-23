@@ -68,7 +68,7 @@ describe("camada de dados", () => {
       if (Array.isArray(v)) v.forEach((x, i) => walk(x, `${where}[${i}]`));
       else if (v && typeof v === "object") Object.entries(v).forEach(([k, x]) => walk(x, `${where}.${k}`));
     };
-    walk({ experiences, systems, principles, educations, certifications, stackGroups, site }, "data");
+    walk({ experiences, systems, principles, educations, certifications, stackGroups, site, projects }, "data");
     expect(found.length).toBeGreaterThan(50);
   });
 

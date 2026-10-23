@@ -14,6 +14,7 @@ import { ProjectsSection } from "@/components/ProjectsSection";
 import { GithubSection } from "@/components/GithubSection";
 import { Playground } from "@/components/Playground";
 import { EducationSection } from "@/components/EducationSection";
+import { OrbitSection } from "@/components/OrbitSection";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
 import { ChatWidget } from "@/components/ChatWidget";
@@ -39,6 +40,7 @@ export default function Home() {
         <Terminal />
         <Playground />
         <EducationSection />
+        <OrbitSection />
         <ContactSection />
         <Footer />
       </div>

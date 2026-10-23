@@ -39,6 +39,9 @@ export const VERTEX_SRC = [
 export const FRAGMENT_SRC = [
   "precision highp float;",
   "uniform vec3 uColA; uniform vec3 uColB; uniform vec3 uColC; uniform float uOrder;",
+  // uDim: 1 = brilho normal; <1 enquanto uma seção de leitura ocupa a tela
+  // (ver `computeDim` e o atributo `data-pdim`)
+  "uniform float uDim;",
   "varying float vD; varying float vM; varying float vS;",
   "void main(){",
   "  vec2 c = gl_PointCoord - 0.5;",
@@ -48,7 +51,7 @@ export const FRAGMENT_SRC = [
   "  vec3 col = mix(uColA, uColB, clamp(fog*1.25 - 0.25, 0.0, 1.0));",
   "  col = mix(col, uColC, clamp(vM, 0.0, 1.0) * 0.85);",
   "  col = mix(col, uColB, step(0.965, vS) * 0.9);",
-  "  float al = a * fog * fog * (0.62 + 0.38*uOrder) * (0.42 + vS*0.95);",
+  "  float al = a * fog * fog * (0.62 + 0.38*uOrder) * (0.42 + vS*0.95) * uDim;",
   "  gl_FragColor = vec4(col * al, al);",
   "}",
 ].join("\n");
@@ -218,6 +221,21 @@ export function lookAt(eye: number[], center: number[], up: number[]): Float32Ar
     x[2], y[2], z[2], 0,
     -dot(x, eye), -dot(y, eye), -dot(z, eye), 1,
   ]);
+}
+
+/**
+ * Intensidade desejada do campo agora: o `data-pdim` (0..1) da seção que cobre
+ * o meio da tela, ou 1 se ela não declarar. Seções de leitura densa (lista de
+ * projetos) pedem menos brilho para o texto não competir com as partículas —
+ * o efeito continua, só recua enquanto a pessoa lê.
+ */
+export function computeDim(): number {
+  const mid = window.innerHeight * 0.5;
+  for (const el of document.querySelectorAll<HTMLElement>("[data-pdim]")) {
+    const r = el.getBoundingClientRect();
+    if (r.top <= mid && r.bottom >= mid) return parseFloat(el.dataset.pdim || "1");
+  }
+  return 1;
 }
 
 /** Lê `[data-stg]` no DOM e calcula o estágio contínuo de scroll (0..stageCount-1). */

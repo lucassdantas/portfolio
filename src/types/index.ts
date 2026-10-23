@@ -56,6 +56,12 @@ export interface Translation {
   coreB: string;
   coreCap: string;
   coreFlow: string;
+  /** OrbitSection (astronauta): rótulo, dica de interação, título em 2 linhas e legenda. */
+  orbitEyebrow: string;
+  orbitHint: string;
+  orbitA: string;
+  orbitB: string;
+  orbitCap: string;
   featured: string;
   caseTitle: string;
   caseKind: string;
@@ -107,6 +113,8 @@ export interface Translation {
   nextLabel: string;
   /** Rótulo "Projeto 01" do carrossel. */
   projLabel: string;
+  /** Aviso de autoplay pausado (mouse sobre o palco do carrossel). */
+  projPaused: string;
   /** Rótulo acessível de botão de fechar (modal de privacidade). */
   close: string;
   /** Código inicial do playground — comentário e chaves no idioma. */
@@ -198,6 +206,13 @@ export interface Project {
    */
   featured?: boolean;
   desc: Localized;
+  /**
+   * Resultado em destaque (número grande + legenda), no topo do card do
+   * carrossel e ao lado do nome no índice. SÓ com dado real que o autor
+   * confirma — projeto sem resultado mensurável fica sem `impact`, não
+   * ganha um número inventado.
+   */
+  impact?: { value: Text; label: LocalizedText };
   img: string;
   live: string;
   repo: string;

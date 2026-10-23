@@ -9,6 +9,7 @@ import {
   perspective,
   lookAt,
   computeStage,
+  computeDim,
 } from "@/shaders/particles";
 
 const STAGE_COUNT = 5;
@@ -78,7 +79,7 @@ export function ParticlesCanvas() {
     bind("aP4", forms[4], 3);
     bind("aSeed", seeds, 1);
 
-    const uNames = ["uProj", "uView", "uStage", "uTime", "uMouse", "uAspect", "uSize", "uOrder", "uColA", "uColB", "uColC"] as const;
+    const uNames = ["uProj", "uView", "uStage", "uTime", "uMouse", "uAspect", "uSize", "uOrder", "uColA", "uColB", "uColC", "uDim"] as const;
     const u: Record<string, WebGLUniformLocation | null> = {};
     uNames.forEach((k) => {
       u[k] = gl!.getUniformLocation(prog!, k);
@@ -110,6 +111,7 @@ export function ParticlesCanvas() {
     if (!isTouch) window.addEventListener("pointermove", onMove);
 
     let stageSm = 0;
+    let dimSm = 1;
     let raf = 0;
     let start = performance.now();
 
@@ -121,6 +123,7 @@ export function ParticlesCanvas() {
       const stageTarget = computeStage(STAGE_COUNT);
       stageSm += (stageTarget - stageSm) * 0.045;
       const order = Math.min(1, stageSm / (STAGE_COUNT - 1));
+      dimSm += (computeDim() - dimSm) * 0.05;
 
       const camR = 7.4 - order * 1.9;
       const ang = -0.45 + stageSm * 0.42 + mouse.x * 0.22;
@@ -134,6 +137,7 @@ export function ParticlesCanvas() {
       gl!.uniform1f(u.uStage, stageSm);
       gl!.uniform1f(u.uTime, t);
       gl!.uniform1f(u.uOrder, order);
+      gl!.uniform1f(u.uDim, dimSm);
       gl!.uniform1f(u.uAspect, aspect || 1.6);
       gl!.uniform1f(u.uSize, isTouch ? 2.0 : 2.6);
       gl!.uniform2f(u.uMouse, mouse.x, mouse.y);

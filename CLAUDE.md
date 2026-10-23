@@ -7,7 +7,7 @@ Portfólio one-page de Lucas Dantas (dev full stack). Next.js 16 (App Router) + 
 ```bash
 npm run dev        # dev server
 npm run build      # build de produção
-npm test           # vitest run (84 testes, unit + integração)
+npm test           # vitest run (88 testes, unit + integração)
 npm run test:watch
 ```
 
@@ -28,7 +28,9 @@ Duas regras editoriais que os testes cobram:
 - `CaseSection` e `SystemsSection` são complementares e não devem se sobrepor: o case abre **um** trabalho em profundidade (com diagrama antes/depois); `SystemsSection` mostra a **largura** das outras entregas de plataforma, em cards problema → solução → resultado (`src/data/systems.ts`).
 - Estado global mínimo: só `LanguageContext` (localStorage `ldp-lang`) — **o site é sempre dark, não existe mais tema claro/`ThemeContext`**. Estado de seção fica local; Navbar e Terminal se comunicam pelo evento global `TERMINAL_OPEN_EVENT` (botão `_shell` abre o terminal em tela cheia) em vez de um context novo.
 - `src/lib/github.ts`: única fonte de fetch da API do GitHub (promise cacheada em módulo).
-- `src/shaders/particles.ts` e `src/shaders/core.ts`: os dois programas WebGL do site (campo de partículas de fundo e o núcleo raymarched da `CoreSection`), portados do protótipo. Mudar a matemática do shader é editar essas strings GLSL, não os componentes que os montam.
+- `src/shaders/`: os três programas WebGL do site — `particles.ts` (campo de partículas de fundo), `core.ts` (núcleo raymarched da `CoreSection`) e `astronaut.ts` (astronauta raymarched da `OrbitSection`, interlúdio sem número antes do contato). Mudar a matemática do shader é editar essas strings GLSL, não os componentes que os montam.
+- Seções que se desenham sozinhas em tela cheia (`CoreSection`, `OrbitSection`) têm fundo opaco próprio, só renderizam com a seção visível e usam `min-[1100px]:-mr-12 min-[1100px]:pr-20` para cobrir o respiro do `SectionRail` — sem isso as partículas de fundo aparecem numa faixa à direita.
+- Legibilidade sobre as partículas: uma seção de leitura densa declara `data-pdim` (0..1) e o campo recua enquanto ela ocupa o meio da tela (`computeDim` em `particles.ts`); texto pequeno sobre o fundo ganha véu `bg-bg/75 backdrop-blur-md`. Hoje só `ProjectsSection` usa.
 - Detalhes e decisões: [docs/arquitetura.md](docs/arquitetura.md).
 
 ## Design (redesign v3)

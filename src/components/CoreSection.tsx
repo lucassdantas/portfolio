@@ -125,7 +125,7 @@ export function CoreSection() {
       ref={sectionRef}
       id="core"
       data-stg="2.3"
-      className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden border-t border-bord bg-[#070605] px-5 py-[clamp(60px,11vh,130px)] sm:px-8"
+      className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden border-t border-bord bg-[#070605] px-5 py-[clamp(60px,11vh,130px)] sm:px-8 min-[1100px]:-mr-12 min-[1100px]:pr-20"
     >
       <canvas ref={canvasRef} className="pointer-events-none absolute inset-0 block h-full w-full" aria-hidden />
       <div className="relative z-[1] flex flex-wrap justify-between gap-5 font-mono text-[11px] tracking-[.2em] text-muted uppercase">
