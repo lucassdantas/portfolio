@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { makeProgram } from "@/shaders/particles";
 import { VERTEX_SRC, buildAstronautSrc } from "@/shaders/astronaut";
+import type { ambient as AmbientEngine } from "@/lib/ambient";
 
 /** Janela de rolagem (0..1) em que cada frase aparece; fora dela, some. */
 const CAPTIONS: [number, number][] = [
@@ -75,6 +76,11 @@ export function OrbitSection() {
 
     const start = () => {
       started = true;
+      // a trilha (se tocando) sobe de intensidade com a cena; o módulo vem sob demanda
+      let amb: typeof AmbientEngine | null = null;
+      void import("@/lib/ambient").then((m) => {
+        amb = m.ambient;
+      });
       const isTouch = window.matchMedia("(hover: none)").matches || window.innerWidth < 820;
       if (!gl) return showStatic();
       const prog = makeProgram(gl, VERTEX_SRC, buildAstronautSrc(isTouch ? 64 : 100));
@@ -152,6 +158,7 @@ export function OrbitSection() {
         raf = requestAnimationFrame(draw);
         if (!inView) {
           last = now;
+          amb?.setIntensity(0);
           return;
         }
         // mede o quadro e ajusta a resolução (devagar, para não "piscar")
@@ -196,6 +203,8 @@ export function OrbitSection() {
         });
         if (hintRef.current) hintRef.current.style.opacity = String(Math.max(0, 1 - prog01 * 14));
         if (barRef.current) barRef.current.style.transform = `scaleX(${prog01})`;
+        // trilha: sobe ao entrar na cena, no auge durante as tomadas, volta ao calmo no fim
+        amb?.setIntensity(Math.min(1, prog01 * 6) * (1 - Math.max(0, (prog01 - 0.85) / 0.15)));
         if (hudRef.current) hudRef.current.style.opacity = prog01 > 0.995 ? "0" : "1";
 
         gl!.uniform2f(U.uRes, canvas.width, canvas.height);

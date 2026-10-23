@@ -256,7 +256,7 @@ export function ProjectsSection() {
         </div>
         <div
           key={`img-${index}`}
-          className={`ld-wipe relative aspect-[16/10.5] max-h-[min(64svh,600px)] overflow-hidden rounded-[3px] border border-bord bg-bg2 md:aspect-auto md:min-h-[min(56svh,520px)] ${flip ? "md:order-1" : "md:order-2"}`}
+          className={`ld-wipe ld-vel relative aspect-[16/10.5] max-h-[min(64svh,600px)] overflow-hidden rounded-[3px] border border-bord bg-bg2 md:aspect-auto md:min-h-[min(56svh,520px)] ${flip ? "md:order-1" : "md:order-2"}`}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img

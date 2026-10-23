@@ -16,6 +16,12 @@ export const site = {
   } as LocalizedText,
   coords: "22°54′S 43°10′W",
   heroImage: "/assets/desenvolvedor-web-lucas-dantas.jpg",
+  /**
+   * Trilha ambiente: vazio = trilha gerada ao vivo (src/lib/ambient.ts).
+   * Para usar uma música própria, coloque o arquivo em /public (ex.:
+   * "/audio/ambient.mp3") e aponte aqui — volume e intensidade continuam iguais.
+   */
+  ambientTrack: "" as string,
   stats: { years: "6+", projects: "40+", languages: "4" },
   /**
    * Régua de métricas da ExperienceSection — valores na ordem m1..m4 de translations.ts.

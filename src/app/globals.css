@@ -105,7 +105,49 @@
   .ld-wipe {
     animation: ld-wipe 0.75s cubic-bezier(0.65, 0, 0.2, 1) both;
   }
+  /* MotionReveal: entrada dos textos (títulos com cortina, resto subindo do desfoque) */
+  .ld-rv {
+    transition:
+      opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--rv-d, 0ms),
+      transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) var(--rv-d, 0ms),
+      filter 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--rv-d, 0ms),
+      clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1) var(--rv-d, 0ms);
+  }
+  .ld-rv-t {
+    opacity: 0;
+    transform: translateY(26px);
+    filter: blur(6px);
+  }
+  .ld-rv-h {
+    opacity: 0;
+    transform: translateY(0.45em) skewY(4deg);
+    transform-origin: left bottom;
+    clip-path: inset(0 0 100% 0);
+  }
+  .ld-rv.ld-rv-in {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    clip-path: inset(0 0 0 0);
+  }
+  /* inclinação leve com a velocidade da rolagem (--ld-vel vem do SmoothScroll) */
+  .ld-vel {
+    transform: skewY(calc(var(--ld-vel, 0) * 2.2deg));
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  .ld-eq {
+    height: 3px;
+    animation: ld-eq-bounce 1.1s ease-in-out infinite;
+  }
   @media (prefers-reduced-motion: reduce) {
+    .ld-eq {
+      animation: none;
+      height: 8px;
+    }
+    .ld-vel {
+      transform: none;
+    }
     .ld-swap-next,
     .ld-swap-prev,
     .ld-wipe {
@@ -140,6 +182,16 @@
   }
   to {
     clip-path: inset(0 0 0 0);
+  }
+}
+/* SoundToggle: barrinhas do equalizador enquanto a trilha toca */
+@keyframes ld-eq-bounce {
+  0%,
+  100% {
+    height: 3px;
+  }
+  50% {
+    height: 14px;
   }
 }
 @keyframes ld-fade {

@@ -26,10 +26,10 @@ export function StackSection() {
         <p className="m-0 max-w-[46ch] text-sm leading-[1.55] text-muted">{t.stackDesc}</p>
       </div>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-px border border-bord">
+      <div className="grid grid-cols-1 gap-px border border-bord md:grid-cols-2 xl:grid-cols-3">
         {stackGroups.map((sg, gi) => (
           <Reveal key={sg.label.pt} delay={(gi % 3) * 90} className="h-full">
-            <div className={`group h-full p-[clamp(20px,2.4vw,30px)] transition-colors duration-300 hover:bg-bg2/90 ${cell}`}>
+            <div className={`ld-vel group h-full p-[clamp(20px,2.4vw,30px)] hover:bg-bg2/90 ${cell}`}>
               <div className="mb-[clamp(14px,2vh,20px)] flex items-baseline justify-between gap-4">
                 <p className="m-0 font-mono text-[11px] tracking-[.18em] text-accent uppercase">
                   <span className="text-muted">{pad(gi + 1)} · </span>

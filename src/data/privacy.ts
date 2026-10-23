@@ -25,7 +25,7 @@ export const privacyPolicy: Record<Lang, PrivacyPolicy> = {
         title: "1. Dados coletados",
         body: [
           "Este site não possui formulários de cadastro, login ou coleta direta de dados pessoais. Nenhum dado pessoal identificável é armazenado em servidores próprios.",
-          "A sua preferência de idioma é salva apenas no seu navegador (localStorage) e nunca sai do seu dispositivo.",
+          "As suas preferências de idioma e de som (trilha ambiente ligada ou desligada) são salvas apenas no seu navegador (localStorage) e nunca saem do seu dispositivo. A trilha é gerada no próprio navegador, sem baixar arquivos de terceiros.",
           "O assistente de chat (chatbot) deste site é determinístico — uma máquina de estados finitos (FSM), sem IA/LLM — e roda inteiramente no seu navegador: o nome que você informa e o histórico da conversa ficam salvos apenas no seu localStorage, nunca são enviados a nenhum servidor, e são apagados automaticamente após 1 hora sem interação.",
         ],
       },
@@ -67,7 +67,7 @@ export const privacyPolicy: Record<Lang, PrivacyPolicy> = {
         title: "1. Data collected",
         body: [
           "This website has no sign-up forms, login or direct collection of personal data. No personally identifiable data is stored on servers of its own.",
-          "Your language preference is saved only in your browser (localStorage) and never leaves your device.",
+          "Your language and sound preferences (ambient soundtrack on or off) are saved only in your browser (localStorage) and never leave your device. The soundtrack is generated in the browser itself, without downloading third-party files.",
           "The chat assistant (chatbot) on this site is deterministic — a finite state machine (FSM), with no AI/LLM — and runs entirely in your browser: the name you enter and the conversation history are saved only in your localStorage, are never sent to any server, and are deleted automatically after 1 hour of inactivity.",
         ],
       },
@@ -109,7 +109,7 @@ export const privacyPolicy: Record<Lang, PrivacyPolicy> = {
         title: "1. Datos recopilados",
         body: [
           "Este sitio no tiene formularios de registro, inicio de sesión ni recopilación directa de datos personales. Ningún dato personal identificable se almacena en servidores propios.",
-          "Tu preferencia de idioma se guarda solo en tu navegador (localStorage) y nunca sale de tu dispositivo.",
+          "Tus preferencias de idioma y de sonido (banda sonora ambiental activada o desactivada) se guardan solo en tu navegador (localStorage) y nunca salen de tu dispositivo. La banda sonora se genera en el propio navegador, sin descargar archivos de terceros.",
           "El asistente de chat (chatbot) de este sitio es determinista — una máquina de estados finitos (FSM), sin IA/LLM — y funciona íntegramente en tu navegador: el nombre que indicas y el historial de la conversación se guardan solo en tu localStorage, nunca se envían a ningún servidor y se borran automáticamente tras 1 hora sin interacción.",
         ],
       },
@@ -151,7 +151,7 @@ export const privacyPolicy: Record<Lang, PrivacyPolicy> = {
         title: "1. Données collectées",
         body: [
           "Ce site ne comporte ni formulaire d'inscription, ni connexion, ni collecte directe de données personnelles. Aucune donnée personnelle identifiable n'est stockée sur des serveurs propres.",
-          "Votre préférence de langue est enregistrée uniquement dans votre navigateur (localStorage) et ne quitte jamais votre appareil.",
+          "Vos préférences de langue et de son (musique d'ambiance activée ou non) sont enregistrées uniquement dans votre navigateur (localStorage) et ne quittent jamais votre appareil. La musique est générée dans le navigateur lui-même, sans télécharger de fichiers tiers.",
           "L'assistant de chat (chatbot) de ce site est déterministe — une machine à états finis (FSM), sans IA/LLM — et fonctionne entièrement dans votre navigateur : le prénom que vous indiquez et l'historique de la conversation sont enregistrés uniquement dans votre localStorage, ne sont jamais envoyés à un serveur et sont supprimés automatiquement après 1 heure d'inactivité.",
         ],
       },

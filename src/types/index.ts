@@ -83,6 +83,11 @@ export interface Translation {
   sysDesc: string;
   sysProblem: string;
   sysBuilt: string;
+  /** Card de sistema: rótulos de antes/depois e o botão que abre o detalhe. */
+  sysBefore: string;
+  sysAfter: string;
+  sysMore: string;
+  sysLess: string;
   ghTitle: string;
   ghDesc: string;
   ghRepos: string;
@@ -115,6 +120,9 @@ export interface Translation {
   projPaused: string;
   /** Cabeçalho das colunas do índice de projetos e o rótulo do link. */
   idxProject: string;
+  /** Botão da trilha ambiente: textos acessíveis de ligar/desligar. */
+  soundOn: string;
+  soundOff: string;
   idxTech: string;
   idxAccess: string;
   visit: string;
@@ -279,6 +287,10 @@ export interface SystemCase {
   built: LocalizedText;
   /** Uma linha: o que mudou. */
   result: LocalizedText;
+  /** Leitura rápida: número de destaque (só fato já dito no texto) + antes/depois curtos. */
+  stat: { value: string; label: LocalizedText };
+  before: LocalizedText;
+  after: LocalizedText;
   tech: string[];
 }
 

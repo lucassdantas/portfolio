@@ -57,6 +57,7 @@ export function Playground() {
             </button>
           </div>
           <textarea
+            aria-label={t.playTitle}
             value={code}
             onChange={(e) => setCode(e.target.value)}
             spellCheck={false}

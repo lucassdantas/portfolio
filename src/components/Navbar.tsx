@@ -56,7 +56,7 @@ export function Navbar() {
                 onClick={() => setLang(code)}
                 className={`cursor-pointer rounded border-none px-2 py-1 text-[11px] ${
                   lang === code
-                    ? "bg-accent font-bold text-white"
+                    ? "bg-accent font-bold text-bg"
                     : "bg-transparent text-muted"
                 }`}
               >

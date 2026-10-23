@@ -9,7 +9,10 @@
 // empresa, nomes de pessoas/clientes/tabelas e detalhes de endpoint ficam
 // fora — os domínios são descritos pela função que exercem.
 //
-// Todo texto nos 4 idiomas (pt/en/es/fr). Destaque `**termo**`
+// Todo texto nos 4 idiomas (pt/en/es/fr). `stat`, `before` e `after` são a
+// camada de leitura rápida do card (número + antes/depois); o número só pode
+// vir de um fato já escrito em `problem`/`built`/`result`.
+// Destaque `**termo**`
 // (src/lib/richText.ts): no máximo um por parágrafo, sempre sobre o
 // resultado ou a decisão — nunca sobre a tecnologia — e no mesmo trecho
 // em todos os idiomas.
@@ -28,6 +31,27 @@ export const systems: SystemCase[] = [
       en: "One workflow engine for the whole company",
       es: "Un motor de flujos para toda la empresa",
       fr: "Un moteur de workflows pour toute l'entreprise",
+    },
+    stat: {
+      value: "4",
+      label: {
+        pt: "áreas rodando no mesmo motor",
+        en: "departments on the same engine",
+        es: "áreas sobre el mismo motor",
+        fr: "services sur le même moteur",
+      },
+    },
+    before: {
+      pt: "Cada área pedia um sistema de aprovação novo",
+      en: "Every department asked for a new approval system",
+      es: "Cada área pedía un sistema de aprobación nuevo",
+      fr: "Chaque service réclamait un nouveau système d'approbation",
+    },
+    after: {
+      pt: "Processo novo vira configuração em tela",
+      en: "A new process is just configuration on screen",
+      es: "Un proceso nuevo es configuración en pantalla",
+      fr: "Un nouveau processus devient de la configuration à l'écran",
     },
     problem: {
       pt: "Todo processo de aprovação da empresa nascia como sistema novo — a mesma sequência de etapas, o mesmo responsável por etapa, o mesmo anexo obrigatório, reescritos do zero a cada área que pedia.",
@@ -62,6 +86,27 @@ export const systems: SystemCase[] = [
       es: "Desvinculación de punta a punta",
       fr: "Départ d'un salarié, de bout en bout",
     },
+    stat: {
+      value: "7",
+      label: {
+        pt: "caminhos de aprovação, um por motivo",
+        en: "approval paths, one per exit reason",
+        es: "caminos de aprobación, uno por motivo",
+        fr: "circuits d'approbation, un par motif",
+      },
+    },
+    before: {
+      pt: "Planilha, e-mail e ninguém sabia o custo",
+      en: "Spreadsheets, email and no one knew the cost",
+      es: "Planillas, correos y nadie sabía el costo",
+      fr: "Tableurs, e-mails et personne ne connaissait le coût",
+    },
+    after: {
+      pt: "Fluxo rastreável, custo conhecido antes de decidir",
+      en: "Traceable flow, cost known before deciding",
+      es: "Flujo trazable, costo conocido antes de decidir",
+      fr: "Processus traçable, coût connu avant de décider",
+    },
     problem: {
       pt: "O desligamento de um funcionário vivia em planilha, e-mail e conversa. Cada motivo de saída exige um caminho de aprovação, documentos e cálculo de verbas diferentes — e ninguém sabia em que etapa o processo estava, quem o estava travando, nem quanto a rescisão ia custar antes de decidir.",
       en: "An employee's offboarding lived in spreadsheets, email and hallway conversations. Each exit reason requires a different approval path, documents and severance calculation — and nobody knew which step the process was at, who was holding it up, or how much the termination would cost before deciding.",
@@ -94,6 +139,27 @@ export const systems: SystemCase[] = [
       en: "Supply balances with a single source of truth",
       es: "Saldo de insumos con una única fuente de verdad",
       fr: "Des stocks de fournitures avec une source de vérité unique",
+    },
+    stat: {
+      value: "1",
+      label: {
+        pt: "fonte de verdade para o saldo",
+        en: "source of truth for the balance",
+        es: "fuente de verdad para el saldo",
+        fr: "source de vérité pour le stock",
+      },
+    },
+    before: {
+      pt: "Saldo divergente, rastreado por um lote instável",
+      en: "Mismatched balance, tracked by an unstable batch",
+      es: "Saldo divergente, rastreado por un lote inestable",
+      fr: "Stock incohérent, suivi par un lot instable",
+    },
+    after: {
+      pt: "Saldo mensal rastreado pelo código do produto",
+      en: "Monthly balance tracked by product code",
+      es: "Saldo mensual rastreado por código de producto",
+      fr: "Solde mensuel suivi par code produit",
     },
     problem: {
       pt: "O saldo de insumos das centrais de esterilização existia só dentro do ERP, rastreado por lote — e o lote registrado divergia do lote que chegava fisicamente na unidade. Resultado: saldo divergente, baixa atrasada e ninguém com resposta para o porquê.",
@@ -128,6 +194,27 @@ export const systems: SystemCase[] = [
       es: "Asistentes de WhatsApp con la IA bajo control",
       fr: "Des assistants WhatsApp avec une IA sous contrôle",
     },
+    stat: {
+      value: "0",
+      label: {
+        pt: "escritas da IA sem confirmação humana",
+        en: "AI writes without human confirmation",
+        es: "escrituras de la IA sin confirmación humana",
+        fr: "écritures de l'IA sans confirmation humaine",
+      },
+    },
+    before: {
+      pt: "IA decidindo sozinha com dados sensíveis",
+      en: "AI deciding alone over sensitive data",
+      es: "IA decidiendo sola con datos sensibles",
+      fr: "Une IA qui décide seule sur des données sensibles",
+    },
+    after: {
+      pt: "IA só redige; menu, regras e humano decidem",
+      en: "AI only drafts; menus, rules and people decide",
+      es: "La IA solo redacta; menú, reglas y personas deciden",
+      fr: "L'IA rédige ; menus, règles et humains décident",
+    },
     problem: {
       pt: "Um assistente que entrega contracheque e abre chamado em nome do funcionário é superfície de ataque real — e um modelo de linguagem erra. Deixar a decisão de negócio para o modelo era o caminho fácil e o errado.",
       en: "An assistant that hands out payslips and opens tickets on an employee's behalf is a real attack surface — and a language model makes mistakes. Leaving business decisions to the model was the easy path, and the wrong one.",
@@ -161,6 +248,27 @@ export const systems: SystemCase[] = [
       es: "31 pantallas fuera del legado",
       fr: "31 écrans sortis du legacy",
     },
+    stat: {
+      value: "31",
+      label: {
+        pt: "telas migradas, cada uma com teste e2e",
+        en: "screens migrated, each with an e2e test",
+        es: "pantallas migradas, cada una con prueba e2e",
+        fr: "écrans migrés, chacun avec un test e2e",
+      },
+    },
+    before: {
+      pt: "PHP + jQuery que não podia parar",
+      en: "PHP + jQuery that couldn't stop",
+      es: "PHP + jQuery que no podía detenerse",
+      fr: "Du PHP + jQuery qui ne pouvait pas s'arrêter",
+    },
+    after: {
+      pt: "Next.js + TypeScript com paridade auditada",
+      en: "Next.js + TypeScript with audited parity",
+      es: "Next.js + TypeScript con paridad auditada",
+      fr: "Next.js + TypeScript avec parité auditée",
+    },
     problem: {
       pt: "Um sistema em PHP e jQuery da metade da década passada, sendo substituído tela a tela, sem poder parar a operação um dia sequer.",
       en: "A PHP and jQuery system from the middle of the last decade, being replaced screen by screen without stopping operations for a single day.",
@@ -193,6 +301,27 @@ export const systems: SystemCase[] = [
       en: "The system answering in natural language",
       es: "El sistema respondiendo en lenguaje natural",
       fr: "Le système qui répond en langage naturel",
+    },
+    stat: {
+      value: "−71%",
+      label: {
+        pt: "chamadas por consulta (7 → 2)",
+        en: "calls per query (7 → 2)",
+        es: "llamadas por consulta (7 → 2)",
+        fr: "appels par requête (7 → 2)",
+      },
+    },
+    before: {
+      pt: "Abrir telas e cruzar dados à mão",
+      en: "Opening screens and cross-checking by hand",
+      es: "Abrir pantallas y cruzar datos a mano",
+      fr: "Ouvrir des écrans et recouper à la main",
+    },
+    after: {
+      pt: "Pergunta em linguagem natural, negação por padrão",
+      en: "Natural-language questions, deny by default",
+      es: "Preguntas en lenguaje natural, denegación por defecto",
+      fr: "Questions en langage naturel, refus par défaut",
     },
     problem: {
       pt: "Responder “quanto faturamos no mês passado neste cliente?” exigia abrir o sistema, saber em qual tela olhar e cruzar o resultado à mão.",
