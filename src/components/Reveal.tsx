@@ -34,8 +34,15 @@ export function Reveal({
     // inteira no carregamento. O IntersectionObserver responde fora do caminho
     // crítico; quem já está na tela na 1ª resposta nunca é escondido.
     let hidden = false;
+    // a transição só entra na hora de mostrar: esconder é instantâneo (senão
+    // cada card fazia 1s de animação invisível, abaixo da dobra, no carregamento)
     const show = () => {
       if (!hidden) return;
+      el.style.transition = [
+        `opacity .8s ${EASE} ${delay}ms`,
+        `transform 1.1s ${EASE} ${delay}ms`,
+        `clip-path 1.1s ${EASE} ${delay}ms`,
+      ].join(", ");
       el.style.opacity = "1";
       el.style.transform = "none";
       el.style.clipPath = "inset(0% 0% 0% 0% round 0px)";
@@ -45,11 +52,6 @@ export function Reveal({
       el.style.opacity = "0";
       el.style.transform = "translateY(48px) scale(.96)";
       el.style.clipPath = "inset(6% 4% 0% 4% round 6px)";
-      el.style.transition = [
-        `opacity .8s ${EASE} ${delay}ms`,
-        `transform 1.1s ${EASE} ${delay}ms`,
-        `clip-path 1.1s ${EASE} ${delay}ms`,
-      ].join(", ");
     };
     let first = true;
     const io = new IntersectionObserver(

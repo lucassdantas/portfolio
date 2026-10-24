@@ -117,7 +117,7 @@ export function buildAstronautSrc(steps: number): string {
     "}",
     "float softShadow(vec3 ro, vec3 rd){",
     "  float res = 1.0, t = 0.02;",
-    "  for (int i = 0; i < 9; i++) { float h = map(ro+rd*t); res = min(res, 8.0*h/t); t += clamp(h, 0.03, 0.25); if (res < 0.02 || t > 1.3) break; }",
+    "  for (int i = 0; i < 7; i++) { float h = map(ro+rd*t); res = min(res, 8.0*h/t); t += clamp(h, 0.04, 0.28); if (res < 0.02 || t > 1.3) break; }",
     "  return clamp(res, 0.0, 1.0);",
     "}",
     "float calcAO(vec3 p, vec3 n){",

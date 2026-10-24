@@ -92,7 +92,7 @@ export function OrbitSection() {
       const fs = gl.createShader(gl.FRAGMENT_SHADER);
       if (!prog || !vs || !fs) return showStatic();
       gl.shaderSource(vs, VERTEX_SRC);
-      gl.shaderSource(fs, buildAstronautSrc(isTouch ? 64 : 100));
+      gl.shaderSource(fs, buildAstronautSrc(isTouch ? 64 : 88));
       gl.compileShader(vs);
       gl.compileShader(fs);
       gl.attachShader(prog, vs);
@@ -135,7 +135,9 @@ export function OrbitSection() {
 
       // resolução adaptativa: começa no teto e desce se o quadro passar de ~20ms
       const maxScale = isTouch ? 0.75 : Math.min(window.devicePixelRatio || 1, 1.25);
-      let scale = maxScale;
+      // começa abaixo do teto e só sobe se os quadros forem rápidos
+      let adaptive = maxScale * 0.8;
+      let scale = adaptive;
       const resize = () => {
         const r = canvas.getBoundingClientRect();
         canvas.width = Math.max(1, Math.floor(r.width * scale));
@@ -206,8 +208,8 @@ export function OrbitSection() {
           amb?.setIntensity(0);
           return;
         }
-        // mede o quadro e ajusta a resolução: 4 quadros lentos seguidos já baixam
-        // (o primeiro quadro pode levar segundos — a GPU compila o shader nele)
+        // mede o quadro e ajusta a resolução: 2 quadros lentos seguidos já baixam,
+        // e ela só volta a subir depois de ~2s de quadros rápidos
         const dt = now - last;
         last = now;
         if (dt > 34) slow++;
@@ -215,18 +217,20 @@ export function OrbitSection() {
           slow = 0;
           if (dt < 14) fast++;
         }
-        if (slow >= 4 && scale > 0.4) {
-          scale = Math.max(0.4, scale * 0.8);
+        if (slow >= 2 && adaptive > 0.4) {
+          adaptive = Math.max(0.4, adaptive * 0.8);
           slow = fast = 0;
-          resize();
-        } else if (fast > 180 && scale < maxScale) {
-          scale = Math.min(maxScale, scale * 1.1);
+        } else if (fast > 120 && adaptive < maxScale) {
+          adaptive = Math.min(maxScale, adaptive * 1.1);
           slow = fast = 0;
-          resize();
         }
 
         const r = section.getBoundingClientRect();
         const vh = window.innerHeight;
+        // enquanto a seção ainda está chegando (palco não fixou) desenha em
+        // resolução menor: o que aparece é só a borda do céu, e a GPU não
+        // disputa com a rolagem
+        scale = r.top > 1 ? adaptive * 0.6 : adaptive;
         if (canvas.width !== Math.max(1, Math.floor(canvas.getBoundingClientRect().width * scale))) resize();
 
         const target = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - vh)));
