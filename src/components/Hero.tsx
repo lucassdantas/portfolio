@@ -1,7 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/contexts/LanguageContext";
-import { site } from "@/data";
+import { site } from "@/data/site";
 
 export function Hero() {
   const { t, lang } = useLanguage();

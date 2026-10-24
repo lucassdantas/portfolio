@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 import { ParticlesCanvasLoader as ParticlesCanvas } from "@/components/ParticlesCanvasLoader";
 import { Navbar } from "@/components/Navbar";
 import { SectionRail } from "@/components/SectionRail";
@@ -7,26 +8,42 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { MotionReveal } from "@/components/MotionReveal";
 import { Hero } from "@/components/Hero";
 import { Manifesto } from "@/components/Manifesto";
-import { Terminal, TERMINAL_OPEN_EVENT } from "@/components/Terminal";
-import { LazyHydrate } from "@/components/LazyHydrate";
-import { StackSection } from "@/components/StackSection";
-import { ExperienceSection } from "@/components/ExperienceSection";
-import { CaseSection } from "@/components/CaseSection";
-import { SystemsSection } from "@/components/SystemsSection";
-import { ProjectsSection } from "@/components/ProjectsSection";
-import { GithubSection } from "@/components/GithubSection";
-import { EducationSection } from "@/components/EducationSection";
-import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
 import { SoundToggle } from "@/components/SoundToggle";
 
-// Seções pesadas fora do topo (shaders, editor, chat): o HTML continua vindo do
-// servidor, mas o JavaScript delas é um arquivo à parte — o script principal
-// fica leve e o primeiro conteúdo pinta mais cedo (LCP no celular).
+// Abaixo da dobra, cada seção é um módulo à parte dentro de um <Suspense>: o
+// HTML vem pronto do servidor e o React hidrata cada bloco NO LUGAR quando o
+// código dele chega (hidratação seletiva, fatiada em pedaços curtos). O script
+// inicial fica só com o essencial, e nenhum bloco é recriado durante a rolagem
+// — recriar era a travada que se sentia ao se aproximar de cada seção.
+const StackSection = dynamic(() => import("@/components/StackSection").then((m) => m.StackSection));
+const ExperienceSection = dynamic(() => import("@/components/ExperienceSection").then((m) => m.ExperienceSection));
 const CoreSection = dynamic(() => import("@/components/CoreSection").then((m) => m.CoreSection));
+const CaseSection = dynamic(() => import("@/components/CaseSection").then((m) => m.CaseSection));
+const SystemsSection = dynamic(() => import("@/components/SystemsSection").then((m) => m.SystemsSection));
+const ProjectsSection = dynamic(() => import("@/components/ProjectsSection").then((m) => m.ProjectsSection));
+const GithubSection = dynamic(() => import("@/components/GithubSection").then((m) => m.GithubSection));
+const Terminal = dynamic(() => import("@/components/Terminal").then((m) => m.Terminal));
 const Playground = dynamic(() => import("@/components/Playground").then((m) => m.Playground));
+const EducationSection = dynamic(() => import("@/components/EducationSection").then((m) => m.EducationSection));
 const OrbitSection = dynamic(() => import("@/components/OrbitSection").then((m) => m.OrbitSection));
+const ContactSection = dynamic(() => import("@/components/ContactSection").then((m) => m.ContactSection));
 const ChatWidget = dynamic(() => import("@/components/ChatWidget").then((m) => m.ChatWidget));
+
+const sections = [
+  StackSection,
+  ExperienceSection,
+  CoreSection,
+  CaseSection,
+  SystemsSection,
+  ProjectsSection,
+  GithubSection,
+  Terminal,
+  Playground,
+  EducationSection,
+  OrbitSection,
+  ContactSection,
+];
 
 export default function Home() {
   return (
@@ -42,20 +59,11 @@ export default function Home() {
         <main>
           <Hero />
           <Manifesto />
-          {/* abaixo da dobra: o HTML já vem pronto do servidor, o React só liga cada
-              bloco quando ele chega perto da tela (LCP no celular) */}
-          <LazyHydrate><StackSection /></LazyHydrate>
-          <LazyHydrate><ExperienceSection /></LazyHydrate>
-          <LazyHydrate rootMargin="150% 0px"><CoreSection /></LazyHydrate>
-          <LazyHydrate><CaseSection /></LazyHydrate>
-          <LazyHydrate><SystemsSection /></LazyHydrate>
-          <LazyHydrate><ProjectsSection /></LazyHydrate>
-          <LazyHydrate><GithubSection /></LazyHydrate>
-          <LazyHydrate hydrateOn={TERMINAL_OPEN_EVENT}><Terminal /></LazyHydrate>
-          <LazyHydrate><Playground /></LazyHydrate>
-          <LazyHydrate><EducationSection /></LazyHydrate>
-          <LazyHydrate rootMargin="250% 0px"><OrbitSection /></LazyHydrate>
-          <LazyHydrate><ContactSection /></LazyHydrate>
+          {sections.map((Section, i) => (
+            <Suspense key={i} fallback={null}>
+              <Section />
+            </Suspense>
+          ))}
         </main>
         <Footer />
       </div>

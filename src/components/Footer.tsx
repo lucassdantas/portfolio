@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { site } from "@/data";
-import { PrivacyModal } from "./PrivacyModal";
+import { site } from "@/data/site";
+import dynamic from "next/dynamic";
+
+// o modal (e o texto da política) só carregam ao clicar
+const PrivacyModal = dynamic(() => import("./PrivacyModal").then((m) => m.PrivacyModal), { ssr: false });
 
 export function Footer() {
   const { t } = useLanguage();

@@ -60,15 +60,10 @@ export function OrbitSection() {
       });
     };
 
-    // pedir o contexto é barato e diz já se há WebGL; compilar o shader é a
-    // parte cara, e só acontece quando a seção se aproxima (start)
+    // criar o contexto custa dezenas de ms: só quando a seção se aproxima (start).
+    // Aqui, só a pergunta barata "este navegador tem WebGL?"
     let gl: WebGLRenderingContext | null = null;
-    try {
-      gl = canvas.getContext("webgl", { alpha: true, premultipliedAlpha: true, antialias: false });
-    } catch {
-      gl = null;
-    }
-    if (!gl) {
+    if (!("WebGLRenderingContext" in window)) {
       showStatic();
       return;
     }
@@ -82,6 +77,11 @@ export function OrbitSection() {
     const start = () => {
       started = true;
       const isTouch = window.matchMedia("(hover: none)").matches || window.innerWidth < 820;
+      try {
+        gl = canvas.getContext("webgl", { alpha: true, premultipliedAlpha: true, antialias: false });
+      } catch {
+        gl = null;
+      }
       if (!gl) return showStatic();
       // compila sem travar a página: com KHR_parallel_shader_compile o navegador
       // compila em paralelo e aqui só se pergunta "terminou?" a cada quadro. Sem a

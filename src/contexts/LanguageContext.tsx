@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { translations } from "@/data";
+import { translations } from "@/data/translations";
 import type { Lang, Translation } from "@/types";
 
 export const LANGS: Lang[] = ["pt", "en", "es", "fr"];

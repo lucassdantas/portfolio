@@ -8,7 +8,7 @@ describe("Política de Privacidade (LGPD)", () => {
   it("abre o modal a partir do rodapé", async () => {
     renderWithProviders(<Footer />);
     await userEvent.click(screen.getByRole("button", { name: "Política de Privacidade" }));
-    const dialog = screen.getByRole("dialog");
+    const dialog = await screen.findByRole("dialog");
     expect(dialog).toBeInTheDocument();
     expect(screen.getAllByText(/LGPD/).length).toBeGreaterThan(0);
     expect(screen.getByText(/1\. Dados coletados/)).toBeInTheDocument();
@@ -17,13 +17,14 @@ describe("Política de Privacidade (LGPD)", () => {
   it("fecha com o botão ✕", async () => {
     renderWithProviders(<Footer />);
     await userEvent.click(screen.getByRole("button", { name: "Política de Privacidade" }));
-    await userEvent.click(screen.getByRole("button", { name: "Fechar" }));
+    await userEvent.click(await screen.findByRole("button", { name: "Fechar" }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
   it("fecha com Escape", async () => {
     renderWithProviders(<Footer />);
     await userEvent.click(screen.getByRole("button", { name: "Política de Privacidade" }));
+    await screen.findByRole("dialog");
     await userEvent.keyboard("{Escape}");
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });

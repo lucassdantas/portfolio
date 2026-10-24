@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useLanguage, LANGS } from "@/contexts/LanguageContext";
-import { site } from "@/data";
-import { TERMINAL_OPEN_EVENT } from "./Terminal";
+import { site } from "@/data/site";
+import { TERMINAL_OPEN_EVENT } from "@/lib/events";
 import { useActiveSection } from "@/lib/useActiveSection";
 
 export function Navbar() {
@@ -92,7 +92,10 @@ export function Navbar() {
             ))}
           </div>
           <button
-            onClick={() => window.dispatchEvent(new CustomEvent(TERMINAL_OPEN_EVENT))}
+            onClick={() => {
+              document.documentElement.dataset.openTerminal = "1";
+              window.dispatchEvent(new CustomEvent(TERMINAL_OPEN_EVENT));
+            }}
             className="hidden cursor-pointer rounded-md border border-bord bg-transparent px-[13px] py-[7px] font-mono text-[10.5px] tracking-[.14em] text-txt uppercase hover:border-accent hover:text-accent nav:inline-block"
           >
             _shell

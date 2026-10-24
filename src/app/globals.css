@@ -105,6 +105,23 @@
   .ld-wipe {
     animation: ld-wipe 0.75s cubic-bezier(0.65, 0, 0.2, 1) both;
   }
+  /* Seções de texto abaixo da dobra: o navegador pula estilo, layout e pintura
+     delas até se aproximarem da tela (nota de desempenho no celular). Fora:
+     as do topo e as que se desenham sozinhas em tela cheia (core, orbita). */
+  #stack,
+  #experiencia,
+  #case,
+  #sistemas,
+  #projetos,
+  #github,
+  #terminal,
+  #playground,
+  #educacao,
+  #contato {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 1200px;
+  }
+
   /* MotionReveal: entrada dos textos (títulos com cortina, resto subindo do desfoque) */
   /* a transição fica só no estado "entrou": esconder é instantâneo. Com a
      transição no estado base, cada texto abaixo da dobra fazia 1s de animação

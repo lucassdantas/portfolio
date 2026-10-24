@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { HYDRATED_EVENT } from "./LazyHydrate";
 
 /** Textos animados na entrada: títulos ganham a cortina; o resto, subida com foco. */
 const TEXT = "section h2, section h3, section p, section li, section dt, section dd";
@@ -18,8 +17,9 @@ const SKIP = "#orbita, #core, [data-reveal], [data-no-reveal], nav, dialog, [rol
  *   pinta na hora (LCP intacto). A decisão vem do IntersectionObserver, não de
  *   medir layout — medir ~400 elementos de uma vez era uma tarefa longa no
  *   celular (TBT).
- * - Bloco que hidrata depois (LazyHydrate) recria o DOM dele e avisa em
- *   `HYDRATED_EVENT`: os textos daquele bloco entram no esquema de novo.
+ * - Seção com `content-visibility: auto` ainda não tem caixa quando o observer
+ *   responde pela primeira vez (rect zerado): aí a decisão espera a próxima
+ *   resposta, que vem quando o navegador a renderiza, perto da tela.
  * - Com `prefers-reduced-motion`, não faz nada.
  */
 export function MotionReveal() {
@@ -27,10 +27,6 @@ export function MotionReveal() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const teardowns: (() => void)[] = [];
-    const onHydrated = (e: Event) => {
-      teardowns.push(setup((e as CustomEvent<ParentNode>).detail));
-    };
-    window.addEventListener(HYDRATED_EVENT, onHydrated);
 
     // o primeiro passe só depois do carregamento, com o navegador ocioso
     const ric =
@@ -52,7 +48,6 @@ export function MotionReveal() {
     return () => {
       window.removeEventListener("load", schedule);
       cic(idleId);
-      window.removeEventListener(HYDRATED_EVENT, onHydrated);
       teardowns.forEach((fn) => fn());
     };
   }, []);
@@ -90,6 +85,8 @@ function setup(root: ParentNode = document): () => void {
       entries.forEach((en) => {
         const list = targets.get(en.target) ?? [];
         if (!decided.has(en.target)) {
+          const rc = en.boundingClientRect;
+          if (rc.width === 0 && rc.height === 0) return; // sem caixa ainda (content-visibility)
           decided.add(en.target);
           // já visível (ou acima) no primeiro contato: nunca esconde
           if (en.isIntersecting || en.boundingClientRect.top < window.innerHeight) {

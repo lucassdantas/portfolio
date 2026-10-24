@@ -7,6 +7,7 @@ import { fetchGithubStats, type GithubStats } from "@/lib/github";
 import { formatPeriod, tx } from "@/lib/i18n";
 import { stripMarks } from "@/lib/richText";
 import type { Lang } from "@/types";
+import { TERMINAL_OPEN_EVENT } from "@/lib/events";
 
 interface TermLine {
   text: string;
@@ -26,8 +27,7 @@ const out = (text: string, color: string = GRAY): TermLine => ({ text, color });
 const fill = (text: string, vars: Record<string, string | number>) =>
   text.replace(/\{(\w+)\}/g, (m, k: string) => (k in vars ? String(vars[k]) : m));
 
-/** Evento global que a Navbar dispara no botão `_shell` para abrir o terminal em tela cheia. */
-export const TERMINAL_OPEN_EVENT = "ld:terminal-open";
+export { TERMINAL_OPEN_EVENT };
 
 export function Terminal() {
   const { t, lang, setLang } = useLanguage();
@@ -57,9 +57,12 @@ export function Terminal() {
 
   useEffect(() => {
     const open = () => {
+      delete document.documentElement.dataset.openTerminal;
       setFullscreen(true);
       requestAnimationFrame(() => inputRef.current?.focus());
     };
+    // clique no _shell antes de este bloco hidratar: a Navbar deixa a marca
+    if (document.documentElement.dataset.openTerminal) open();
     window.addEventListener(TERMINAL_OPEN_EVENT, open);
     return () => window.removeEventListener(TERMINAL_OPEN_EVENT, open);
   }, []);
