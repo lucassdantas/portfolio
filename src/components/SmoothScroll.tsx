@@ -6,6 +6,12 @@ import { useEffect } from "react";
 const EASE = 0.085;
 /** Ganho por clique de roda: deltas de mouse vêm em ~100px; trackpad, em passos finos. */
 const WHEEL_GAIN = 1.0;
+/**
+ * Sobre a seção do astronauta a página anda no máximo isto por segundo: a cena
+ * é conduzida pela rolagem, mas uma rolada "de maluco" não a atravessa num
+ * piscar (a seção tem ~4 telas → mínimo de ~5s). Fora dela, sem limite.
+ */
+const ORBIT_MAX_PX_PER_S = 820;
 
 /**
  * Rolagem suave com inércia na roda do mouse — o mesmo princípio do Lenis
@@ -18,6 +24,8 @@ const WHEEL_GAIN = 1.0;
  *   `prefers-reduced-motion`.
  * - Não rouba a roda de quem tem rolagem própria (terminal, chat, modal,
  *   textarea) nem quando a página está travada (`overflow: hidden` no body).
+ * - Dentro da `#orbita`, limita a velocidade (ORBIT_MAX_PX_PER_S) para a cena
+ *   do astronauta nunca passar correndo.
  */
 export function SmoothScroll() {
   useEffect(() => {
@@ -35,6 +43,8 @@ export function SmoothScroll() {
     let raf = 0;
     let animating = false;
     let lastWritten = -1;
+    let lastT = 0;
+    let orbit: HTMLElement | null = null;
 
     const maxScroll = () => root.scrollHeight - window.innerHeight;
 
@@ -55,9 +65,22 @@ export function SmoothScroll() {
     // com ela (ver .ld-media em globals.css) e voltam ao parar
     const setVel = (v: number) => root.style.setProperty("--ld-vel", v.toFixed(3));
 
-    const tick = () => {
+    const tick = (now: number) => {
+      const dt = lastT ? Math.min(40, Math.max(8, now - lastT)) : 16;
+      lastT = now;
       setVel(Math.max(-1, Math.min(1, (target - current) / 900)));
-      current += (target - current) * EASE;
+      let step = (target - current) * EASE;
+      orbit = orbit ?? document.getElementById("orbita");
+      if (orbit) {
+        const r = orbit.getBoundingClientRect();
+        const top = r.top + window.scrollY;
+        const vh = window.innerHeight;
+        if (current > top - vh * 0.3 && current < top + r.height - vh * 0.7) {
+          const max = (ORBIT_MAX_PX_PER_S * dt) / 1000;
+          step = Math.max(-max, Math.min(max, step));
+        }
+      }
+      current += step;
       if (Math.abs(target - current) < 0.4) current = target;
       const y = Math.round(current * 100) / 100;
       lastWritten = y;
@@ -66,6 +89,7 @@ export function SmoothScroll() {
         raf = requestAnimationFrame(tick);
       } else {
         animating = false;
+        lastT = 0;
         setVel(0);
       }
     };

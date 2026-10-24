@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { systems } from "@/data";
 import { Reveal } from "./Reveal";
@@ -23,6 +23,15 @@ const pad = (n: number) => String(n).padStart(2, "0");
 export function SystemsSection() {
   const { t, lang } = useLanguage();
   const [open, setOpen] = useState<number | null>(null);
+  // ignora um segundo clique logo em seguida: duplo clique (ou clicar de novo
+  // enquanto o painel ainda entra) abria e fechava o detalhe na mesma hora
+  const lastToggle = useRef(0);
+  const toggle = (next: number | null) => {
+    const now = performance.now();
+    if (now - lastToggle.current < 400) return;
+    lastToggle.current = now;
+    setOpen(next);
+  };
 
   return (
     <section
@@ -78,7 +87,8 @@ export function SystemsSection() {
                   <RichLine text={s.result[lang]} />
                 </p>
 
-                <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-[clamp(18px,2.6vh,26px)]">
+                {/* tags numa linha, botão sempre na linha de baixo à direita — igual em todos os cards */}
+                <div className="mt-auto flex flex-col gap-4 pt-[clamp(18px,2.6vh,26px)]">
                   <div className="flex flex-wrap gap-1.5">
                     {s.tech.map((tc) => (
                       <span
@@ -90,10 +100,10 @@ export function SystemsSection() {
                     ))}
                   </div>
                   <button
-                    onClick={() => setOpen(isOpen ? null : i)}
+                    onClick={() => toggle(isOpen ? null : i)}
                     aria-expanded={isOpen}
                     tabIndex={isOpen ? -1 : 0}
-                    className="cursor-pointer border-0 border-b border-accent/40 bg-transparent px-0 pb-0.5 font-mono text-[10.5px] tracking-[.14em] text-accent uppercase transition-colors hover:border-accent hover:text-txt"
+                    className="cursor-pointer self-end border-0 border-b border-accent/40 bg-transparent px-0 pb-0.5 font-mono text-[10.5px] tracking-[.14em] text-accent uppercase transition-colors hover:border-accent hover:text-txt"
                   >
                     + {t.sysMore}
                   </button>
@@ -102,10 +112,24 @@ export function SystemsSection() {
                 {/* detalhe: desliza por cima do próprio card — a grade não muda de altura */}
                 <div
                   aria-hidden={!isOpen}
-                  className={`absolute inset-0 flex flex-col bg-bg2/97 p-[clamp(22px,2.4vw,34px)] backdrop-blur-[6px] transition-[transform,opacity] duration-500 ease-[cubic-bezier(.16,1,.3,1)] ${
+                  className={`absolute inset-0 flex flex-col bg-bg2/97 p-[clamp(22px,2.4vw,34px)] backdrop-blur-[6px] transition-[translate,opacity] duration-500 ease-[cubic-bezier(.16,1,.3,1)] ${
                     isOpen ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-full opacity-0"
                   }`}
                 >
+                  {/* fechar no topo: longe do "como foi feito", que fica embaixo */}
+                  <div className="mb-4 flex items-baseline justify-between gap-4">
+                    <p className="m-0 font-mono text-[10.5px] tracking-[.18em] text-muted uppercase">
+                      {pad(i + 1)} · {s.title[lang]}
+                    </p>
+                    <button
+                      onClick={() => toggle(null)}
+                      tabIndex={isOpen ? 0 : -1}
+                      aria-label={t.sysLess}
+                      className="flex h-8 w-8 flex-none cursor-pointer items-center justify-center rounded-full border border-bord bg-transparent font-mono text-[14px] text-txt transition-colors hover:border-accent hover:text-accent"
+                    >
+                      ×
+                    </button>
+                  </div>
                   <div className="min-h-0 flex-1 overflow-y-auto pr-1">
                     <p className="m-0 mb-1.5 font-mono text-[10px] tracking-[.2em] text-accent uppercase">{t.sysProblem}</p>
                     <p className="m-0 mb-5 text-[13.5px] leading-[1.62] text-strong [text-wrap:pretty]">
@@ -116,13 +140,6 @@ export function SystemsSection() {
                       <RichLine text={s.built[lang]} />
                     </p>
                   </div>
-                  <button
-                    onClick={() => setOpen(null)}
-                    tabIndex={isOpen ? 0 : -1}
-                    className="mt-4 cursor-pointer self-end border-0 border-b border-accent/40 bg-transparent px-0 pb-0.5 font-mono text-[10.5px] tracking-[.14em] text-accent uppercase hover:border-accent hover:text-txt"
-                  >
-                    − {t.sysLess}
-                  </button>
                 </div>
               </article>
             </Reveal>

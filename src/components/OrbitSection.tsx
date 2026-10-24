@@ -8,7 +8,7 @@ import type { ambient as AmbientEngine } from "@/lib/ambient";
 
 /** Janela de rolagem (0..1) em que cada frase aparece; fora dela, some. */
 const CAPTIONS: [number, number][] = [
-  [0.12, 0.32],
+  [0.1, 0.34],
   [0.78, 0.95],
 ];
 /** Onde ficam as transições do shader (marcas na barra de progresso). */
@@ -161,16 +161,20 @@ export function OrbitSection() {
           amb?.setIntensity(0);
           return;
         }
-        // mede o quadro e ajusta a resolução (devagar, para não "piscar")
+        // mede o quadro e ajusta a resolução: 4 quadros lentos seguidos já baixam
+        // (o primeiro quadro pode levar segundos — a GPU compila o shader nele)
         const dt = now - last;
         last = now;
-        if (dt > 22) slow++;
-        else if (dt < 13) fast++;
-        if (slow > 20 && scale > 0.5) {
-          scale = Math.max(0.5, scale * 0.85);
+        if (dt > 34) slow++;
+        else {
+          slow = 0;
+          if (dt < 14) fast++;
+        }
+        if (slow >= 4 && scale > 0.4) {
+          scale = Math.max(0.4, scale * 0.8);
           slow = fast = 0;
           resize();
-        } else if (fast > 240 && scale < maxScale) {
+        } else if (fast > 180 && scale < maxScale) {
           scale = Math.min(maxScale, scale * 1.1);
           slow = fast = 0;
           resize();
@@ -181,7 +185,14 @@ export function OrbitSection() {
         if (canvas.width !== Math.max(1, Math.floor(canvas.getBoundingClientRect().width * scale))) resize();
 
         const target = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - vh)));
-        prog01 += (target - prog01) * (reduced ? 1 : 0.1);
+        // segue a rolagem, mas no máximo ~0,3 da cena por segundo (no toque, onde
+        // não dá para frear a página, um pouco mais) — rolada rápida não atravessa
+        // a coreografia num piscar; parar de rolar para a cena
+        // dt limitado a 34ms: quadro longo (compilação, aba em segundo plano) não
+        // vira salto — num quadro lento a cena só anda devagar
+        const maxRate = ((isTouch ? 0.5 : 0.3) * Math.min(34, Math.max(0, dt))) / 1000;
+        const want = reduced ? target - prog01 : (target - prog01) * 0.1;
+        prog01 = Math.min(1, Math.max(0, prog01 + Math.max(-maxRate, Math.min(maxRate, want))));
 
         mouse.x += (mouse.tx - mouse.x) * 0.06;
         mouse.y += (mouse.ty - mouse.y) * 0.06;

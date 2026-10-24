@@ -106,6 +106,14 @@ export interface Translation {
   ctB: string;
   contactDesc: string;
   remote: string;
+  /** Cartão de status do contato: linha de disponibilidade e os pares rótulo/valor. */
+  ctStatus: string;
+  ctLabRole: string;
+  ctRole: string;
+  ctLabModel: string;
+  ctModel: string;
+  ctLabBase: string;
+  ctLabLangs: string;
   footer: string;
   privacy: string;
   langs: SpokenLang[];
