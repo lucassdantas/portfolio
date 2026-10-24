@@ -2,15 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { VERTEX_SRC, buildAstronautSrc } from "@/shaders/astronaut";
 import type { ambient as AmbientEngine } from "@/lib/ambient";
+import type { OrbitScene } from "@/lib/orbitScene";
 
 /** Janela de rolagem (0..1) em que cada frase aparece; fora dela, some. */
 const CAPTIONS: [number, number][] = [
   [0.1, 0.34],
   [0.78, 0.95],
 ];
-/** Onde ficam as transições do shader (marcas na barra de progresso). */
+/** Onde ficam as transições da cena (marcas na barra de progresso). */
 const MARKS = [0.4, 0.72];
 
 const fade = (p: number, [a, b]: [number, number]) => {
@@ -19,21 +19,22 @@ const fade = (p: number, [a, b]: [number, number]) => {
 };
 
 /**
- * Interlúdio rolável antes do contato: um astronauta raymarched
- * (`src/shaders/astronaut.ts`) cuja coreografia inteira — três tomadas e duas
- * transições — é conduzida pela rolagem. A seção tem ~4,5 telas de altura e o
- * palco fica preso (sticky); uma barra embaixo mostra o progresso e onde
- * estão as transições.
+ * Interlúdio rolável antes do contato: um astronauta (traje Z-2 da NASA,
+ * renderizado pelo three.js em `src/lib/orbitScene.ts`) cuja coreografia
+ * inteira — três tomadas e duas transições — é conduzida pela rolagem. A seção
+ * tem ~4,5 telas de altura e o palco fica preso (sticky); uma barra embaixo
+ * mostra o progresso e onde estão as transições.
  *
- * Desempenho: o WebGL só é criado quando a seção chega perto da tela (não
- * pesa o carregamento), só desenha com ela visível e ajusta a resolução sozinho
- * se o quadro ficar lento.
+ * Desempenho: nada é baixado nem criado até a seção chegar a ~3 telas
+ * (`near`); daí o módulo 3D, o modelo e as texturas entram em pausas da
+ * rolagem (`whenCalm`), os shaders compilam em paralelo e a cena só desenha
+ * com a seção visível, ajustando a resolução sozinha se o quadro ficar lento.
  *
  * - Canvas transparente nas pontas: o céu entra e sai por cima das
  *   partículas do site, sem corte.
  * - Sem WebGL: canvas escondido, frases sempre visíveis.
  * - Arrastar gira o astronauta (no toque, só na horizontal: `touch-action: pan-y`).
- * - `prefers-reduced-motion`: o tempo do shader para; a rolagem continua
+ * - `prefers-reduced-motion`: o tempo da cena para; a rolagem continua
  *   conduzindo a cena (o movimento é da própria pessoa).
  */
 export function OrbitSection() {
@@ -42,7 +43,7 @@ export function OrbitSection() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const capRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const hintRef = useRef<HTMLParagraphElement>(null);
-  // false enquanto o shader compila: a pílula do HUD avisa "preparando a cena"
+  // false enquanto modelo e shaders carregam: a pílula do HUD avisa "preparando a cena"
   const [sceneReady, setSceneReady] = useState(false);
   const barRef = useRef<HTMLSpanElement>(null);
   const hudRef = useRef<HTMLDivElement>(null);
@@ -54,8 +55,10 @@ export function OrbitSection() {
 
     let cleanup: (() => void) | null = null;
     let started = false;
+    let disposed = false;
+    let scene: OrbitScene | null = null;
 
-    // Trabalho pesado síncrono (criar o contexto, aquecer a GPU, enviar texturas)
+    // Trabalho pesado síncrono (criar o contexto, enviar texturas, aquecer a GPU)
     // só roda quando a rolagem para por um instante — é quando ninguém percebe.
     // Se a seção chegar perto antes disso, roda de qualquer jeito.
     const calmQueue: (() => void)[] = [];
@@ -81,6 +84,7 @@ export function OrbitSection() {
       calmQueue.push(fn);
       if (!calmTimer) calmTimer = window.setTimeout(pumpCalm, 0);
     };
+    const calm = () => new Promise<void>((ok) => whenCalm(ok));
 
     const showStatic = () => {
       setSceneReady(true);
@@ -90,9 +94,7 @@ export function OrbitSection() {
       });
     };
 
-    // criar o contexto custa dezenas de ms: só quando a seção se aproxima (start).
-    // Aqui, só a pergunta barata "este navegador tem WebGL?"
-    let gl: WebGLRenderingContext | null = null;
+    // aqui só a pergunta barata "este navegador tem WebGL?" — o resto espera a seção
     if (!("WebGLRenderingContext" in window)) {
       showStatic();
       return;
@@ -104,164 +106,38 @@ export function OrbitSection() {
       amb = m.ambient;
     });
 
-    // A compilação do shader leva segundos em PC comum (≈9s neste, via ANGLE/D3D):
-    // começa na primeira rolagem, com a página inteira pela frente. Texturas,
-    // buffers e o laço (`begin`) esperam a seção se aproximar (`near`).
-    let nearSeen = false;
-    let compiled: WebGLProgram | null = null;
-    const onCompiled = (prog: WebGLProgram) => {
-      compiled = prog;
-      if (nearSeen) begin(prog);
-      else whenCalm(() => prepare(prog));
-    };
+    const isTouch = window.matchMedia("(hover: none)").matches || window.innerWidth < 820;
 
-    // Buffers, uniforms e um desenho de 2×2 px: faz o driver terminar o pipeline
-    // (dezenas de ms) logo depois da compilação, ainda longe da seção.
-    let prepared: { U: Record<string, WebGLUniformLocation | null> } | null = null;
-    const prepare = (prog: WebGLProgram) => {
-      if (prepared || !gl) return;
-      gl.useProgram(prog);
-      const buf = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-      const loc = gl.getAttribLocation(prog, "aP");
-      gl.enableVertexAttribArray(loc);
-      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-      const U: Record<string, WebGLUniformLocation | null> = {};
-      (["uRes", "uTime", "uProg", "uRot", "uMouse"] as const).forEach((k) => {
-        U[k] = gl!.getUniformLocation(prog, k);
-      });
-      prepared = { U };
-      gl.viewport(0, 0, 2, 2);
-      gl.uniform2f(U.uRes, 2, 2);
-      gl.uniform1f(U.uTime, 0);
-      gl.uniform1f(U.uProg, 0);
-      gl.uniform2f(U.uRot, 0, 0);
-      gl.uniform2f(U.uMouse, 0, 0);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
-    };
-
-    const start = () => {
+    const start = async () => {
       started = true;
-      whenCalm(() => {
-        const isTouch = window.matchMedia("(hover: none)").matches || window.innerWidth < 820;
-        try {
-          gl = canvas.getContext("webgl", { alpha: true, premultipliedAlpha: true, antialias: false });
-        } catch {
-          gl = null;
-        }
-        if (!gl) return showStatic();
-        // compila sem travar a página: com KHR_parallel_shader_compile o navegador
-        // compila em paralelo e aqui só se pergunta "terminou?" a cada quadro. Sem a
-        // extensão a primeira pergunta bloqueia — mas a seção ainda está a duas
-        // telas de distância (rootMargin do `near`)
-        const prog = gl.createProgram();
-        const vs = gl.createShader(gl.VERTEX_SHADER);
-        const fs = gl.createShader(gl.FRAGMENT_SHADER);
-        if (!prog || !vs || !fs) return showStatic();
-        gl.shaderSource(vs, VERTEX_SRC);
-        gl.shaderSource(fs, buildAstronautSrc(isTouch ? 64 : 88));
-        gl.compileShader(vs);
-        gl.compileShader(fs);
-        gl.attachShader(prog, vs);
-        gl.attachShader(prog, fs);
-        gl.linkProgram(prog);
-        const par = gl.getExtension("KHR_parallel_shader_compile") as { COMPLETION_STATUS_KHR: number } | null;
-        let pollId = 0;
-        const poll = () => {
-          if (par && !gl!.getProgramParameter(prog, par.COMPLETION_STATUS_KHR)) {
-            pollId = window.setTimeout(poll, 120);
-            return;
-          }
-          if (!gl!.getProgramParameter(prog, gl!.LINK_STATUS)) {
-            console.warn(gl!.getProgramInfoLog(prog));
-            showStatic();
-            return;
-          }
-          onCompiled(prog);
-        };
-        pollId = window.setTimeout(poll, 120);
-        cleanup = () => clearTimeout(pollId);
-      });
+      try {
+        await calm();
+        if (disposed) return;
+        const { createOrbitScene } = await import("@/lib/orbitScene");
+        if (disposed) return;
+        await calm();
+        const sc = createOrbitScene(canvas, { isTouch });
+        if (!sc) return showStatic();
+        scene = sc;
+        await sc.load(calm);
+        if (disposed) return;
+        await sc.warm(calm);
+        if (disposed) return;
+        begin(sc);
+      } catch (e) {
+        console.warn(e);
+        showStatic();
+      }
     };
 
-    const begin = (prog: WebGLProgram) => {
-      if (!gl) return showStatic();
-      const isTouch = window.matchMedia("(hover: none)").matches || window.innerWidth < 820;
-      prepare(prog);
-      gl.useProgram(prog);
-      const U = prepared!.U;
-
-      // texturas da Terra (NASA, domínio público — /public/assets/space): carregam
-      // só aqui, quando a seção se aproxima; até chegarem, o shader usa o planeta
-      // procedural. Uma textura por vez e uma única decodificação por arquivo
-      // (blob → ImageBitmap, fora da thread principal): decodificar os três JPEGs
-      // de 2048px juntos ocupava todos os núcleos e travava a rolagem por ~80ms.
-      // O envio à GPU vai em 4 fatias, cada uma numa pausa da rolagem.
-      const texUnits = { uDay: 0, uNight: 1, uClouds: 2 } as const;
-      const texFiles = { uDay: "earth-day.jpg", uNight: "earth-night.jpg", uClouds: "earth-clouds.jpg" };
-      const aniso = gl.getExtension("EXT_texture_filter_anisotropic") as { TEXTURE_MAX_ANISOTROPY_EXT: number } | null;
-      let texLoaded = 0;
-      const SLICES = 4;
-      const calm = () => new Promise<void>((ok) => whenCalm(ok));
-      const loadTex = async (name: keyof typeof texUnits) => {
-        const blob = await (await fetch(`/assets/space/${texFiles[name]}`)).blob();
-        const full = await createImageBitmap(blob, { colorSpaceConversion: "none", premultiplyAlpha: "none" });
-        const w = full.width;
-        const h = full.height;
-        const sh = Math.floor(h / SLICES);
-        // recortes do bitmap já decodificado: cópia barata, sem nova decodificação
-        const slices = await Promise.all(Array.from({ length: SLICES }, (_, k) => createImageBitmap(full, 0, sh * k, w, sh)));
-        full.close();
-        if (!gl) return;
-        const tex = gl.createTexture();
-        await calm();
-        if (!gl) return;
-        gl.activeTexture(gl.TEXTURE0 + texUnits[name]);
-        gl.bindTexture(gl.TEXTURE_2D, tex);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-        for (let k = 0; k < SLICES; k++) {
-          await calm();
-          if (!gl) return;
-          gl.activeTexture(gl.TEXTURE0 + texUnits[name]);
-          gl.bindTexture(gl.TEXTURE_2D, tex);
-          gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, sh * k, gl.RGBA, gl.UNSIGNED_BYTE, slices[k]);
-          slices[k].close();
-        }
-        await calm();
-        if (!gl) return;
-        gl.useProgram(prog);
-        gl.activeTexture(gl.TEXTURE0 + texUnits[name]);
-        gl.bindTexture(gl.TEXTURE_2D, tex);
-        gl.generateMipmap(gl.TEXTURE_2D);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        if (aniso) gl.texParameterf(gl.TEXTURE_2D, aniso.TEXTURE_MAX_ANISOTROPY_EXT, 4);
-        gl.uniform1i(gl.getUniformLocation(prog, name), texUnits[name]);
-        if (++texLoaded === 3) gl.uniform1f(gl.getUniformLocation(prog, "uHasTex"), 1);
-      };
-      void (async () => {
-        for (const name of Object.keys(texUnits) as (keyof typeof texUnits)[]) {
-          try {
-            await calm();
-            await loadTex(name);
-          } catch {
-            /* sem textura: fica o planeta procedural */
-          }
-        }
-      })();
-
+    const begin = (sc: OrbitScene) => {
       const maxScale = isTouch ? 0.75 : Math.min(window.devicePixelRatio || 1, 1.25);
       // começa abaixo do teto e só sobe se os quadros forem rápidos
       let adaptive = maxScale * 0.8;
       let scale = adaptive;
       const resize = () => {
         const r = canvas.getBoundingClientRect();
-        canvas.width = Math.max(1, Math.floor(r.width * scale));
-        canvas.height = Math.max(1, Math.floor(r.height * scale));
-        gl!.viewport(0, 0, canvas.width, canvas.height);
+        sc.setSize(Math.max(1, Math.floor(r.width * scale)), Math.max(1, Math.floor(r.height * scale)));
       };
       resize();
       window.addEventListener("resize", resize);
@@ -348,8 +224,7 @@ export function OrbitSection() {
         const rTop = geoTop - window.scrollY;
         const vh = window.innerHeight;
         // enquanto a seção ainda está chegando (palco não fixou) desenha em
-        // resolução menor: o que aparece é só a borda do céu, e a GPU não
-        // disputa com a rolagem
+        // resolução menor: o que aparece é só a borda do céu
         scale = rTop > 1 ? adaptive * 0.6 : adaptive;
         if (scale !== lastScale) {
           lastScale = scale;
@@ -360,8 +235,7 @@ export function OrbitSection() {
         // segue a rolagem, mas no máximo ~0,3 da cena por segundo (no toque, onde
         // não dá para frear a página, um pouco mais) — rolada rápida não atravessa
         // a coreografia num piscar; parar de rolar para a cena
-        // dt limitado a 34ms: quadro longo (compilação, aba em segundo plano) não
-        // vira salto — num quadro lento a cena só anda devagar
+        // dt limitado a 34ms: quadro longo não vira salto
         const maxRate = ((isTouch ? 0.5 : 0.3) * Math.min(34, Math.max(0, dt))) / 1000;
         const want = reduced ? target - prog01 : (target - prog01) * 0.1;
         prog01 = Math.min(1, Math.max(0, prog01 + Math.max(-maxRate, Math.min(maxRate, want))));
@@ -390,14 +264,7 @@ export function OrbitSection() {
         amb?.setIntensity(Math.min(1, prog01 * 6) * (1 - Math.max(0, (prog01 - 0.85) / 0.15)));
         if (hudRef.current) hudRef.current.style.opacity = prog01 > 0.995 ? "0" : "1";
 
-        gl!.uniform2f(U.uRes, canvas.width, canvas.height);
-        gl!.uniform1f(U.uTime, reduced ? 12 : (now - t0) / 1000);
-        gl!.uniform1f(U.uProg, prog01);
-        gl!.uniform2f(U.uRot, rot.x, rot.y);
-        gl!.uniform2f(U.uMouse, mouse.x, mouse.y);
-        gl!.clearColor(0, 0, 0, 0);
-        gl!.clear(gl!.COLOR_BUFFER_BIT);
-        gl!.drawArrays(gl!.TRIANGLES, 0, 3);
+        sc.render({ prog: prog01, time: reduced ? 12 : (now - t0) / 1000, rot, mouse });
         if (!drewOnce) {
           drewOnce = true;
           setSceneReady(true);
@@ -420,31 +287,22 @@ export function OrbitSection() {
     // começa a preparar quando a seção está a ~3 telas de distância
     const near = new IntersectionObserver(
       (entries) => {
-        if (entries[0]?.isIntersecting) {
+        if (!started && entries[0]?.isIntersecting) {
           near.disconnect();
-          nearSeen = true;
-          if (!started) start();
-          else if (compiled) begin(compiled);
+          void start();
         }
       },
       { rootMargin: "300% 0px" }
     );
     near.observe(section);
 
-    // primeira rolagem de verdade (quem só mede a página, como o Lighthouse, não rola)
-    const onFirstScroll = () => {
-      if (window.scrollY < 200) return;
-      window.removeEventListener("scroll", onFirstScroll);
-      if (!started) start();
-    };
-    window.addEventListener("scroll", onFirstScroll, { passive: true });
-
     return () => {
+      disposed = true;
       near.disconnect();
-      window.removeEventListener("scroll", onFirstScroll);
       window.removeEventListener("scroll", noteScroll);
       clearTimeout(calmTimer);
       cleanup?.();
+      scene?.dispose();
     };
   }, []);
 
@@ -503,7 +361,7 @@ export function OrbitSection() {
               <span key={m} className="absolute top-0 h-full w-[2px] bg-[#040A18]" style={{ left: `${m * 100}%` }} />
             ))}
           </div>
-          <p className="m-0 font-mono text-[9.5px] tracking-[.16em] text-muted uppercase">{t.orbitCredit}</p>
+          <p className="m-0 text-center font-mono text-[9.5px] tracking-[.16em] text-muted uppercase">{t.orbitCredit}</p>
         </div>
       </div>
     </section>

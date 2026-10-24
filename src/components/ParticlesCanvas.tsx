@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import {
   VERTEX_SRC,
   FRAGMENT_SRC,
-  buildFormations,
+  createFormationBuilder,
   makeProgram,
   perspective,
   lookAt,
@@ -30,18 +30,24 @@ export function ParticlesCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    // só depois do primeiro quadro: montar 14 mil pontos e compilar o shader
-    // não pode disputar com a primeira pintura da página
+    // só depois do primeiro quadro, e em fatias curtas: montar 14 mil pontos de
+    // uma vez era uma tarefa de ~60ms logo depois da primeira pintura (travada
+    // visível na entrada); compilar o shader e subir os buffers vem no fim
     let dispose: (() => void) | undefined;
     let cancelled = false;
-    const ric = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 120) as unknown as number);
+    const ric = window.requestIdleCallback ?? ((cb: (dl?: IdleDeadline) => void) => window.setTimeout(cb, 120) as unknown as number);
     const cic = window.cancelIdleCallback ?? window.clearTimeout;
-    const id = ric(
-      () => {
-        if (!cancelled) dispose = init() ?? undefined;
-      },
-      { timeout: 1500 }
-    );
+    const isTouch = window.matchMedia("(hover: none)").matches || window.innerWidth < 820;
+    const N = isTouch ? 2600 : 14000;
+    const builder = createFormationBuilder(N);
+    let id = 0;
+    const run = (dl?: IdleDeadline) => {
+      if (cancelled) return;
+      const budget = dl && typeof dl.timeRemaining === "function" ? Math.max(3, Math.min(8, dl.timeRemaining())) : 6;
+      if (builder.step(budget)) dispose = init(isTouch, N, builder.arrays) ?? undefined;
+      else id = ric(run, { timeout: 300 });
+    };
+    id = ric(run, { timeout: 1500 });
     return () => {
       cancelled = true;
       cic(id);
@@ -49,11 +55,10 @@ export function ParticlesCanvas() {
     };
   }, []);
 
-  const init = (): (() => void) | void => {
+  const init = (isTouch: boolean, N: number, forms: Float32Array[]): (() => void) | void => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const isTouch = window.matchMedia("(hover: none)").matches || window.innerWidth < 820;
     let gl: WebGLRenderingContext | null = null;
     try {
       gl =
@@ -72,8 +77,6 @@ export function ParticlesCanvas() {
       return;
     }
 
-    const N = isTouch ? 2600 : 14000;
-    const forms = buildFormations(N);
     const seeds = new Float32Array(N);
     for (let i = 0; i < N; i++) seeds[i] = Math.random();
 

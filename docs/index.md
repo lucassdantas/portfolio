@@ -27,7 +27,7 @@ src/
   contexts/     # LanguageContext (pt/en/es/fr) — único estado global
   data/         # ★ TODO o conteúdo do site (textos, projetos, certificados…)
   lib/          # utilitários (fetch cacheado da API do GitHub, richText, chat)
-  shaders/      # os três programas WebGL (partículas de fundo, núcleo 3D e astronauta)
+  shaders/      # os três programas WebGL (partículas de fundo, núcleo 3D e o fundo espacial da órbita)
   tests/        # unit/ e integration/
   types/        # interfaces TypeScript das coleções de dados
 public/assets/  # fotos e logos

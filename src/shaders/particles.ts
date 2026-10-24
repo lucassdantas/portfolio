@@ -56,8 +56,13 @@ export const FRAGMENT_SRC = [
   "}",
 ].join("\n");
 
-/** Constrói as 5 formações (Float32Array de N*3 posições cada). */
-export function buildFormations(N: number): Float32Array[] {
+/**
+ * Construtor das 5 formações (Float32Array de N*3 posições cada), em fatias:
+ * `step(budgetMs)` preenche pontos até estourar o orçamento e devolve `true`
+ * quando terminou. No carregamento, 14 mil pontos de uma vez eram uma tarefa de
+ * ~60ms logo depois da primeira pintura — uma travada visível na entrada.
+ */
+export function createFormationBuilder(N: number): { arrays: Float32Array[]; step: (budgetMs: number) => boolean } {
   const A = () => new Float32Array(N * 3);
   const chaos = A();
   const lattice = A();
@@ -80,80 +85,99 @@ export function buildFormations(N: number): Float32Array[] {
     });
   }
 
-  for (let i = 0; i < N; i++) {
-    const k = i * 3;
-    // 0 — caos: filamentos entrelaçados
-    const st = strands[i % STR];
-    const u = R();
-    const iu = 1 - u;
-    const m0 = iu * iu;
-    const m1 = 2 * iu * u;
-    const m2 = u * u;
-    const jt = 0.1 + R() * 0.16;
-    chaos[k] = m0 * st.o[0] + m1 * st.c[0] + m2 * (st.o[0] + st.d[0]) + (R() - 0.5) * jt * 2.2;
-    chaos[k + 1] = m0 * st.o[1] + m1 * st.c[1] + m2 * (st.o[1] + st.d[1]) + (R() - 0.5) * jt * 2.2;
-    chaos[k + 2] = m0 * st.o[2] + m1 * st.c[2] + m2 * (st.o[2] + st.d[2]) + (R() - 0.5) * jt * 2.2;
+  let i = 0;
+  const fill = (to: number) => {
+    for (; i < to; i++) {
+      const k = i * 3;
+      // 0 — caos: filamentos entrelaçados
+      const st = strands[i % STR];
+      const u = R();
+      const iu = 1 - u;
+      const m0 = iu * iu;
+      const m1 = 2 * iu * u;
+      const m2 = u * u;
+      const jt = 0.1 + R() * 0.16;
+      chaos[k] = m0 * st.o[0] + m1 * st.c[0] + m2 * (st.o[0] + st.d[0]) + (R() - 0.5) * jt * 2.2;
+      chaos[k + 1] = m0 * st.o[1] + m1 * st.c[1] + m2 * (st.o[1] + st.d[1]) + (R() - 0.5) * jt * 2.2;
+      chaos[k + 2] = m0 * st.o[2] + m1 * st.c[2] + m2 * (st.o[2] + st.d[2]) + (R() - 0.5) * jt * 2.2;
 
-    // 1 — estrutura: retícula ortogonal (arestas de células)
-    const G = 7;
-    const step = 4.6 / G;
-    const gx = Math.floor(R() * (G + 1));
-    const gy = Math.floor(R() * (G + 1));
-    const gz = Math.floor(R() * (G + 1));
-    const axis = Math.floor(R() * 3);
-    const tt = R();
-    let lx = gx * step - 2.3;
-    let ly = gy * step - 2.3;
-    let lz = gz * step - 2.3;
-    if (axis === 0) lx += tt * step;
-    else if (axis === 1) ly += tt * step;
-    else lz += tt * step;
-    lattice[k] = lx;
-    lattice[k + 1] = ly;
-    lattice[k + 2] = lz;
+      // 1 — estrutura: retícula ortogonal (arestas de células)
+      const G = 7;
+      const step = 4.6 / G;
+      const gx = Math.floor(R() * (G + 1));
+      const gy = Math.floor(R() * (G + 1));
+      const gz = Math.floor(R() * (G + 1));
+      const axis = Math.floor(R() * 3);
+      const tt = R();
+      let lx = gx * step - 2.3;
+      let ly = gy * step - 2.3;
+      let lz = gz * step - 2.3;
+      if (axis === 0) lx += tt * step;
+      else if (axis === 1) ly += tt * step;
+      else lz += tt * step;
+      lattice[k] = lx;
+      lattice[k + 1] = ly;
+      lattice[k + 2] = lz;
 
-    // 2 — código: linhas de texto com indentação
-    const rows = 30;
-    const row = Math.floor(R() * rows);
-    const indent = row % 7 === 0 ? 0 : row % 3 === 0 ? 0.42 : 0.22;
-    const len = 1.4 + ((row * 37) % 11) / 11 * 3.0;
-    code[k] = -2.5 + indent + R() * len;
-    code[k + 1] = 2.3 - row * (4.6 / rows) + (R() - 0.5) * 0.045;
-    code[k + 2] = (R() - 0.5) * 0.5;
+      // 2 — código: linhas de texto com indentação
+      const rows = 30;
+      const row = Math.floor(R() * rows);
+      const indent = row % 7 === 0 ? 0 : row % 3 === 0 ? 0.42 : 0.22;
+      const len = 1.4 + ((row * 37) % 11) / 11 * 3.0;
+      code[k] = -2.5 + indent + R() * len;
+      code[k + 1] = 2.3 - row * (4.6 / rows) + (R() - 0.5) * 0.045;
+      code[k + 2] = (R() - 0.5) * 0.5;
 
-    // 3 — sistema: nós em anel + arestas
-    const K = 8;
-    const ci = Math.floor(R() * K);
-    const ca = (ci / K) * Math.PI * 2;
-    const cxp = Math.cos(ca) * 2.5;
-    const czp = Math.sin(ca) * 2.5;
-    const cyp = ((ci % 3) - 1) * 0.95;
-    if (R() < 0.55) {
-      const s = 0.42;
-      system[k] = cxp + (R() - 0.5) * s;
-      system[k + 1] = cyp + (R() - 0.5) * s;
-      system[k + 2] = czp + (R() - 0.5) * s;
-    } else {
-      const cj = (ci + 1 + Math.floor(R() * 3)) % K;
-      const cb = (cj / K) * Math.PI * 2;
-      const bx = Math.cos(cb) * 2.5;
-      const bz = Math.sin(cb) * 2.5;
-      const by = ((cj % 3) - 1) * 0.95;
-      const uu = R();
-      system[k] = cxp + (bx - cxp) * uu + (R() - 0.5) * 0.05;
-      system[k + 1] = cyp + (by - cyp) * uu + (R() - 0.5) * 0.05;
-      system[k + 2] = czp + (bz - czp) * uu + (R() - 0.5) * 0.05;
+      // 3 — sistema: nós em anel + arestas
+      const K = 8;
+      const ci = Math.floor(R() * K);
+      const ca = (ci / K) * Math.PI * 2;
+      const cxp = Math.cos(ca) * 2.5;
+      const czp = Math.sin(ca) * 2.5;
+      const cyp = ((ci % 3) - 1) * 0.95;
+      if (R() < 0.55) {
+        const s = 0.42;
+        system[k] = cxp + (R() - 0.5) * s;
+        system[k + 1] = cyp + (R() - 0.5) * s;
+        system[k + 2] = czp + (R() - 0.5) * s;
+      } else {
+        const cj = (ci + 1 + Math.floor(R() * 3)) % K;
+        const cb = (cj / K) * Math.PI * 2;
+        const bx = Math.cos(cb) * 2.5;
+        const bz = Math.sin(cb) * 2.5;
+        const by = ((cj % 3) - 1) * 0.95;
+        const uu = R();
+        system[k] = cxp + (bx - cxp) * uu + (R() - 0.5) * 0.05;
+        system[k + 1] = cyp + (by - cyp) * uu + (R() - 0.5) * 0.05;
+        system[k + 2] = czp + (bz - czp) * uu + (R() - 0.5) * 0.05;
+      }
+
+      // 4 — produção: laje/horizonte estável
+      const px = (R() - 0.5) * 9.2;
+      const pz = (R() - 0.5) * 6.2;
+      prod[k] = px;
+      prod[k + 1] = Math.sin(px * 0.5) * 0.14 + Math.cos(pz * 0.6) * 0.1 + (R() - 0.5) * 0.06;
+      prod[k + 2] = pz;
     }
+  };
+  return {
+    arrays: [chaos, lattice, code, system, prod],
+    step(budgetMs) {
+      const t0 = performance.now();
+      while (i < N) {
+        fill(Math.min(N, i + 400));
+        if (performance.now() - t0 > budgetMs) break;
+      }
+      return i >= N;
+    },
+  };
+}
 
-    // 4 — produção: laje/horizonte estável
-    const px = (R() - 0.5) * 9.2;
-    const pz = (R() - 0.5) * 6.2;
-    prod[k] = px;
-    prod[k + 1] = Math.sin(px * 0.5) * 0.14 + Math.cos(pz * 0.6) * 0.1 + (R() - 0.5) * 0.06;
-    prod[k + 2] = pz;
-  }
-
-  return [chaos, lattice, code, system, prod];
+/** Constrói as 5 formações de uma vez (testes e quem não precisa fatiar). */
+export function buildFormations(N: number): Float32Array[] {
+  const b = createFormationBuilder(N);
+  b.step(Infinity);
+  return b.arrays;
 }
 
 export function makeProgram(
