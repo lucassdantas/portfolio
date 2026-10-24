@@ -224,43 +224,62 @@ export function lookAt(eye: number[], center: number[], up: number[]): Float32Ar
 }
 
 /**
- * Intensidade desejada do campo agora: o `data-pdim` (0..1) da seção que cobre
- * o meio da tela, ou 1 se ela não declarar. Seções de leitura densa (lista de
- * projetos) pedem menos brilho para o texto não competir com as partículas —
- * o efeito continua, só recua enquanto a pessoa lê.
+ * Posições das seções em coordenadas do documento, lidas de uma vez. O laço de
+ * desenho calcula estágio e brilho a partir disto + `scrollY`, sem tocar no DOM
+ * a cada quadro (ler rects por quadro forçava layout da página inteira).
  */
-export function computeDim(): number {
-  const mid = window.innerHeight * 0.5;
-  for (const el of document.querySelectorAll<HTMLElement>("[data-pdim]")) {
+export interface SectionSnapshot {
+  stg: { v: number; top: number }[];
+  dim: { v: number; top: number; bottom: number }[];
+}
+
+export function measureSections(): SectionSnapshot {
+  const sy = window.scrollY;
+  const stg = Array.from(document.querySelectorAll<HTMLElement>("[data-stg]")).map((el) => ({
+    v: parseFloat(el.dataset.stg || "0"),
+    top: el.getBoundingClientRect().top + sy,
+  }));
+  const dim = Array.from(document.querySelectorAll<HTMLElement>("[data-pdim]")).map((el) => {
     const r = el.getBoundingClientRect();
-    if (r.top <= mid && r.bottom >= mid) return parseFloat(el.dataset.pdim || "1");
-  }
+    return { v: parseFloat(el.dataset.pdim || "1"), top: r.top + sy, bottom: r.bottom + sy };
+  });
+  return { stg, dim };
+}
+
+/**
+ * Intensidade desejada do campo: o `data-pdim` (0..1) da seção que cobre o meio
+ * da tela, ou 1. Seções de leitura densa pedem menos brilho para o texto não
+ * competir com as partículas — o efeito continua, só recua enquanto se lê.
+ */
+export function dimFromSnapshot(snap: SectionSnapshot, scrollY: number, vh: number): number {
+  const mid = scrollY + vh * 0.5;
+  for (const d of snap.dim) if (d.top <= mid && d.bottom >= mid) return d.v;
   return 1;
 }
 
-/** Lê `[data-stg]` no DOM e calcula o estágio contínuo de scroll (0..stageCount-1). */
-export function computeStage(stageCount: number): number {
-  const secs = Array.from(document.querySelectorAll<HTMLElement>("[data-stg]"));
-  if (secs.length === 0) return 0;
-  const mid = window.innerHeight * 0.45;
+/** Estágio contínuo de scroll (0..stageCount-1) a partir das posições das seções. */
+export function stageFromSnapshot(snap: SectionSnapshot, stageCount: number, scrollY: number, vh: number): number {
+  if (snap.stg.length === 0) return 0;
+  const mid = scrollY + vh * 0.45;
   let s = 0;
-  secs.forEach((el) => {
-    const r = el.getBoundingClientRect();
-    if (r.top <= mid) s = parseFloat(el.dataset.stg || "0");
-  });
+  for (const sec of snap.stg) if (sec.top <= mid) s = sec.v;
   let next = s;
-  secs.forEach((el) => {
-    const r = el.getBoundingClientRect();
-    const v = parseFloat(el.dataset.stg || "0");
-    if (r.top > mid && v > s && (next === s || v < next)) next = v;
-  });
-  let f = 0;
-  if (next > s) {
-    const cur = secs.find((e) => parseFloat(e.dataset.stg || "0") === next);
-    if (cur) {
-      const r = cur.getBoundingClientRect();
-      f = Math.min(1, Math.max(0, 1 - (r.top - mid) / (window.innerHeight * 0.9)));
+  let nextTop = 0;
+  for (const sec of snap.stg) {
+    if (sec.top > mid && sec.v > s && (next === s || sec.v < next)) {
+      next = sec.v;
+      nextTop = sec.top;
     }
   }
+  let f = 0;
+  if (next > s) f = Math.min(1, Math.max(0, 1 - (nextTop - mid) / (vh * 0.9)));
   return Math.min(stageCount - 1, s + f * (next - s));
+}
+
+/** Atalhos que leem o DOM na hora (fora de laços de animação). */
+export function computeDim(): number {
+  return dimFromSnapshot(measureSections(), window.scrollY, window.innerHeight);
+}
+export function computeStage(stageCount: number): number {
+  return stageFromSnapshot(measureSections(), stageCount, window.scrollY, window.innerHeight);
 }

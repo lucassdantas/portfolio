@@ -84,6 +84,9 @@ export function CoreSection() {
       io.observe(section);
 
       let coreOpen = 0;
+      let geoTop = 0;
+      let geoH = 0;
+      let geoStamp = 0;
       let raf = 0;
       let start = performance.now();
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -95,12 +98,18 @@ export function CoreSection() {
         mouse.x += (mouse.tx - mouse.x) * 0.08;
         mouse.y += (mouse.ty - mouse.y) * 0.08;
 
-        const r = section.getBoundingClientRect();
-        if (r.bottom < -80 || r.top > window.innerHeight + 80) return;
-        if (canvas.width !== Math.floor(canvas.getBoundingClientRect().width * dpr)) resize();
-
+        // posição da seção em cache (relida a cada 250ms): sem forçar layout por quadro
+        if (now - geoStamp > 250) {
+          const rr = section.getBoundingClientRect();
+          geoTop = rr.top + window.scrollY;
+          geoH = rr.height;
+          geoStamp = now;
+        }
         const vh = window.innerHeight;
-        const p = Math.min(1, Math.max(0, (vh * 0.85 - r.top) / (vh * 0.9)));
+        const rTop = geoTop - window.scrollY;
+        if (rTop + geoH < -80 || rTop > vh + 80) return;
+
+        const p = Math.min(1, Math.max(0, (vh * 0.85 - rTop) / (vh * 0.9)));
         const target = reduced ? p : p * p * (3 - 2 * p);
         coreOpen += (target - coreOpen) * 0.07;
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { VERTEX_SRC, buildAstronautSrc } from "@/shaders/astronaut";
 import type { ambient as AmbientEngine } from "@/lib/ambient";
@@ -42,6 +42,8 @@ export function OrbitSection() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const capRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const hintRef = useRef<HTMLParagraphElement>(null);
+  // false enquanto o shader compila: a pílula do HUD avisa "preparando a cena"
+  const [sceneReady, setSceneReady] = useState(false);
   const barRef = useRef<HTMLSpanElement>(null);
   const hudRef = useRef<HTMLDivElement>(null);
 
@@ -53,7 +55,35 @@ export function OrbitSection() {
     let cleanup: (() => void) | null = null;
     let started = false;
 
+    // Trabalho pesado síncrono (criar o contexto, aquecer a GPU, enviar texturas)
+    // só roda quando a rolagem para por um instante — é quando ninguém percebe.
+    // Se a seção chegar perto antes disso, roda de qualquer jeito.
+    const calmQueue: (() => void)[] = [];
+    let calmTimer = 0;
+    let queuedAt = performance.now();
+    let lastScrollAt = performance.now();
+    const noteScroll = () => {
+      lastScrollAt = performance.now();
+    };
+    window.addEventListener("scroll", noteScroll, { passive: true });
+    const pumpCalm = () => {
+      calmTimer = 0;
+      if (!calmQueue.length) return;
+      const now = performance.now();
+      const urgent = section.getBoundingClientRect().top < window.innerHeight * 1.5 || now - queuedAt > 2500;
+      if (urgent || now - lastScrollAt > 220) {
+        calmQueue.shift()!();
+        queuedAt = now;
+      }
+      calmTimer = window.setTimeout(pumpCalm, 100);
+    };
+    const whenCalm = (fn: () => void) => {
+      calmQueue.push(fn);
+      if (!calmTimer) calmTimer = window.setTimeout(pumpCalm, 0);
+    };
+
     const showStatic = () => {
+      setSceneReady(true);
       canvas.style.display = "none";
       capRefs.current.forEach((el) => {
         if (el) el.style.opacity = "1";
@@ -74,99 +104,154 @@ export function OrbitSection() {
       amb = m.ambient;
     });
 
-    const start = () => {
-      started = true;
-      const isTouch = window.matchMedia("(hover: none)").matches || window.innerWidth < 820;
-      try {
-        gl = canvas.getContext("webgl", { alpha: true, premultipliedAlpha: true, antialias: false });
-      } catch {
-        gl = null;
-      }
-      if (!gl) return showStatic();
-      // compila sem travar a página: com KHR_parallel_shader_compile o navegador
-      // compila em paralelo e aqui só se pergunta "terminou?" a cada quadro. Sem a
-      // extensão a primeira pergunta bloqueia — mas a seção ainda está a duas
-      // telas de distância (rootMargin do `near`)
-      const prog = gl.createProgram();
-      const vs = gl.createShader(gl.VERTEX_SHADER);
-      const fs = gl.createShader(gl.FRAGMENT_SHADER);
-      if (!prog || !vs || !fs) return showStatic();
-      gl.shaderSource(vs, VERTEX_SRC);
-      gl.shaderSource(fs, buildAstronautSrc(isTouch ? 64 : 88));
-      gl.compileShader(vs);
-      gl.compileShader(fs);
-      gl.attachShader(prog, vs);
-      gl.attachShader(prog, fs);
-      gl.linkProgram(prog);
-      const par = gl.getExtension("KHR_parallel_shader_compile") as { COMPLETION_STATUS_KHR: number } | null;
-      let pollId = 0;
-      const poll = () => {
-        if (par && !gl!.getProgramParameter(prog, par.COMPLETION_STATUS_KHR)) {
-          pollId = requestAnimationFrame(poll);
-          return;
-        }
-        if (!gl!.getProgramParameter(prog, gl!.LINK_STATUS)) {
-          console.warn(gl!.getProgramInfoLog(prog));
-          showStatic();
-          return;
-        }
-        begin(prog);
-      };
-      pollId = requestAnimationFrame(poll);
-      cleanup = () => cancelAnimationFrame(pollId);
+    // A compilação do shader leva segundos em PC comum (≈9s neste, via ANGLE/D3D):
+    // começa na primeira rolagem, com a página inteira pela frente. Texturas,
+    // buffers e o laço (`begin`) esperam a seção se aproximar (`near`).
+    let nearSeen = false;
+    let compiled: WebGLProgram | null = null;
+    const onCompiled = (prog: WebGLProgram) => {
+      compiled = prog;
+      if (nearSeen) begin(prog);
+      else whenCalm(() => prepare(prog));
     };
 
-    const begin = (prog: WebGLProgram) => {
-      if (!gl) return showStatic();
-      const isTouch = window.matchMedia("(hover: none)").matches || window.innerWidth < 820;
+    // Buffers, uniforms e um desenho de 2×2 px: faz o driver terminar o pipeline
+    // (dezenas de ms) logo depois da compilação, ainda longe da seção.
+    let prepared: { U: Record<string, WebGLUniformLocation | null> } | null = null;
+    const prepare = (prog: WebGLProgram) => {
+      if (prepared || !gl) return;
       gl.useProgram(prog);
-
       const buf = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, buf);
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
       const loc = gl.getAttribLocation(prog, "aP");
       gl.enableVertexAttribArray(loc);
       gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-
       const U: Record<string, WebGLUniformLocation | null> = {};
       (["uRes", "uTime", "uProg", "uRot", "uMouse"] as const).forEach((k) => {
-        U[k] = gl!.getUniformLocation(prog!, k);
+        U[k] = gl!.getUniformLocation(prog, k);
       });
+      prepared = { U };
+      gl.viewport(0, 0, 2, 2);
+      gl.uniform2f(U.uRes, 2, 2);
+      gl.uniform1f(U.uTime, 0);
+      gl.uniform1f(U.uProg, 0);
+      gl.uniform2f(U.uRot, 0, 0);
+      gl.uniform2f(U.uMouse, 0, 0);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    };
 
-      // resolução adaptativa: começa no teto e desce se o quadro passar de ~20ms
+    const start = () => {
+      started = true;
+      whenCalm(() => {
+        const isTouch = window.matchMedia("(hover: none)").matches || window.innerWidth < 820;
+        try {
+          gl = canvas.getContext("webgl", { alpha: true, premultipliedAlpha: true, antialias: false });
+        } catch {
+          gl = null;
+        }
+        if (!gl) return showStatic();
+        // compila sem travar a página: com KHR_parallel_shader_compile o navegador
+        // compila em paralelo e aqui só se pergunta "terminou?" a cada quadro. Sem a
+        // extensão a primeira pergunta bloqueia — mas a seção ainda está a duas
+        // telas de distância (rootMargin do `near`)
+        const prog = gl.createProgram();
+        const vs = gl.createShader(gl.VERTEX_SHADER);
+        const fs = gl.createShader(gl.FRAGMENT_SHADER);
+        if (!prog || !vs || !fs) return showStatic();
+        gl.shaderSource(vs, VERTEX_SRC);
+        gl.shaderSource(fs, buildAstronautSrc(isTouch ? 64 : 88));
+        gl.compileShader(vs);
+        gl.compileShader(fs);
+        gl.attachShader(prog, vs);
+        gl.attachShader(prog, fs);
+        gl.linkProgram(prog);
+        const par = gl.getExtension("KHR_parallel_shader_compile") as { COMPLETION_STATUS_KHR: number } | null;
+        let pollId = 0;
+        const poll = () => {
+          if (par && !gl!.getProgramParameter(prog, par.COMPLETION_STATUS_KHR)) {
+            pollId = window.setTimeout(poll, 120);
+            return;
+          }
+          if (!gl!.getProgramParameter(prog, gl!.LINK_STATUS)) {
+            console.warn(gl!.getProgramInfoLog(prog));
+            showStatic();
+            return;
+          }
+          onCompiled(prog);
+        };
+        pollId = window.setTimeout(poll, 120);
+        cleanup = () => clearTimeout(pollId);
+      });
+    };
+
+    const begin = (prog: WebGLProgram) => {
+      if (!gl) return showStatic();
+      const isTouch = window.matchMedia("(hover: none)").matches || window.innerWidth < 820;
+      prepare(prog);
+      gl.useProgram(prog);
+      const U = prepared!.U;
+
       // texturas da Terra (NASA, domínio público — /public/assets/space): carregam
       // só aqui, quando a seção se aproxima; até chegarem, o shader usa o planeta
-      // procedural. Decodificação fora da thread principal (img.decode) e um
-      // upload por quadro, para não travar a rolagem.
+      // procedural. Uma textura por vez e uma única decodificação por arquivo
+      // (blob → ImageBitmap, fora da thread principal): decodificar os três JPEGs
+      // de 2048px juntos ocupava todos os núcleos e travava a rolagem por ~80ms.
+      // O envio à GPU vai em 4 fatias, cada uma numa pausa da rolagem.
       const texUnits = { uDay: 0, uNight: 1, uClouds: 2 } as const;
       const texFiles = { uDay: "earth-day.jpg", uNight: "earth-night.jpg", uClouds: "earth-clouds.jpg" };
       const aniso = gl.getExtension("EXT_texture_filter_anisotropic") as { TEXTURE_MAX_ANISOTROPY_EXT: number } | null;
       let texLoaded = 0;
-      (Object.keys(texUnits) as (keyof typeof texUnits)[]).forEach((name, i) => {
-        const img = new Image();
-        img.src = `/assets/space/${texFiles[name]}`;
-        img
-          .decode()
-          .then(() => new Promise((ok) => setTimeout(ok, i * 60)))
-          .then(() => {
-            if (!gl) return;
-            gl.useProgram(prog);
-            gl.activeTexture(gl.TEXTURE0 + texUnits[name]);
-            gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img);
-            gl.generateMipmap(gl.TEXTURE_2D);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-            if (aniso) gl.texParameterf(gl.TEXTURE_2D, aniso.TEXTURE_MAX_ANISOTROPY_EXT, 4);
-            gl.uniform1i(gl.getUniformLocation(prog, name), texUnits[name]);
-            if (++texLoaded === 3) gl.uniform1f(gl.getUniformLocation(prog, "uHasTex"), 1);
-          })
-          .catch(() => {
+      const SLICES = 4;
+      const calm = () => new Promise<void>((ok) => whenCalm(ok));
+      const loadTex = async (name: keyof typeof texUnits) => {
+        const blob = await (await fetch(`/assets/space/${texFiles[name]}`)).blob();
+        const full = await createImageBitmap(blob, { colorSpaceConversion: "none", premultiplyAlpha: "none" });
+        const w = full.width;
+        const h = full.height;
+        const sh = Math.floor(h / SLICES);
+        // recortes do bitmap já decodificado: cópia barata, sem nova decodificação
+        const slices = await Promise.all(Array.from({ length: SLICES }, (_, k) => createImageBitmap(full, 0, sh * k, w, sh)));
+        full.close();
+        if (!gl) return;
+        const tex = gl.createTexture();
+        await calm();
+        if (!gl) return;
+        gl.activeTexture(gl.TEXTURE0 + texUnits[name]);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+        for (let k = 0; k < SLICES; k++) {
+          await calm();
+          if (!gl) return;
+          gl.activeTexture(gl.TEXTURE0 + texUnits[name]);
+          gl.bindTexture(gl.TEXTURE_2D, tex);
+          gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, sh * k, gl.RGBA, gl.UNSIGNED_BYTE, slices[k]);
+          slices[k].close();
+        }
+        await calm();
+        if (!gl) return;
+        gl.useProgram(prog);
+        gl.activeTexture(gl.TEXTURE0 + texUnits[name]);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        if (aniso) gl.texParameterf(gl.TEXTURE_2D, aniso.TEXTURE_MAX_ANISOTROPY_EXT, 4);
+        gl.uniform1i(gl.getUniformLocation(prog, name), texUnits[name]);
+        if (++texLoaded === 3) gl.uniform1f(gl.getUniformLocation(prog, "uHasTex"), 1);
+      };
+      void (async () => {
+        for (const name of Object.keys(texUnits) as (keyof typeof texUnits)[]) {
+          try {
+            await calm();
+            await loadTex(name);
+          } catch {
             /* sem textura: fica o planeta procedural */
-          });
-      });
+          }
+        }
+      })();
 
       const maxScale = isTouch ? 0.75 : Math.min(window.devicePixelRatio || 1, 1.25);
       // começa abaixo do teto e só sobe se os quadros forem rápidos
@@ -180,17 +265,6 @@ export function OrbitSection() {
       };
       resize();
       window.addEventListener("resize", resize);
-
-      // aquecimento: um desenho de 2×2 px com a cena vazia faz a GPU terminar o
-      // pipeline agora, longe da tela, e não no primeiro quadro visível
-      gl.viewport(0, 0, 2, 2);
-      gl.uniform2f(U.uRes, 2, 2);
-      gl.uniform1f(U.uTime, 0);
-      gl.uniform1f(U.uProg, 0);
-      gl.uniform2f(U.uRot, 0, 0);
-      gl.uniform2f(U.uMouse, 0, 0);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
-      gl.viewport(0, 0, canvas.width, canvas.height);
 
       const mouse = { tx: 0, ty: 0, x: 0, y: 0 };
       const onMove = (e: PointerEvent) => {
@@ -234,6 +308,11 @@ export function OrbitSection() {
       let fast = 0;
       let prog01 = 0;
       let raf = 0;
+      let drewOnce = false;
+      let lastScale = scale;
+      let geoTop = 0;
+      let geoH = 0;
+      let geoStamp = 0;
 
       const draw = (now: number) => {
         raf = requestAnimationFrame(draw);
@@ -259,15 +338,25 @@ export function OrbitSection() {
           slow = fast = 0;
         }
 
-        const r = section.getBoundingClientRect();
+        // posição da seção em cache (relida a cada 250ms): sem forçar layout por quadro
+        if (now - geoStamp > 250) {
+          const rr = section.getBoundingClientRect();
+          geoTop = rr.top + window.scrollY;
+          geoH = rr.height;
+          geoStamp = now;
+        }
+        const rTop = geoTop - window.scrollY;
         const vh = window.innerHeight;
         // enquanto a seção ainda está chegando (palco não fixou) desenha em
         // resolução menor: o que aparece é só a borda do céu, e a GPU não
         // disputa com a rolagem
-        scale = r.top > 1 ? adaptive * 0.6 : adaptive;
-        if (canvas.width !== Math.max(1, Math.floor(canvas.getBoundingClientRect().width * scale))) resize();
+        scale = rTop > 1 ? adaptive * 0.6 : adaptive;
+        if (scale !== lastScale) {
+          lastScale = scale;
+          resize();
+        }
 
-        const target = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - vh)));
+        const target = Math.min(1, Math.max(0, -rTop / Math.max(1, geoH - vh)));
         // segue a rolagem, mas no máximo ~0,3 da cena por segundo (no toque, onde
         // não dá para frear a página, um pouco mais) — rolada rápida não atravessa
         // a coreografia num piscar; parar de rolar para a cena
@@ -309,6 +398,10 @@ export function OrbitSection() {
         gl!.clearColor(0, 0, 0, 0);
         gl!.clear(gl!.COLOR_BUFFER_BIT);
         gl!.drawArrays(gl!.TRIANGLES, 0, 3);
+        if (!drewOnce) {
+          drewOnce = true;
+          setSceneReady(true);
+        }
       };
       raf = requestAnimationFrame(draw);
 
@@ -324,20 +417,33 @@ export function OrbitSection() {
       };
     };
 
-    // começa a compilar quando a seção está a ~2 telas de distância
+    // começa a preparar quando a seção está a ~3 telas de distância
     const near = new IntersectionObserver(
       (entries) => {
-        if (!started && entries[0]?.isIntersecting) {
+        if (entries[0]?.isIntersecting) {
           near.disconnect();
-          start();
+          nearSeen = true;
+          if (!started) start();
+          else if (compiled) begin(compiled);
         }
       },
-      { rootMargin: "200% 0px" }
+      { rootMargin: "300% 0px" }
     );
     near.observe(section);
 
+    // primeira rolagem de verdade (quem só mede a página, como o Lighthouse, não rola)
+    const onFirstScroll = () => {
+      if (window.scrollY < 200) return;
+      window.removeEventListener("scroll", onFirstScroll);
+      if (!started) start();
+    };
+    window.addEventListener("scroll", onFirstScroll, { passive: true });
+
     return () => {
       near.disconnect();
+      window.removeEventListener("scroll", onFirstScroll);
+      window.removeEventListener("scroll", noteScroll);
+      clearTimeout(calmTimer);
       cleanup?.();
     };
   }, []);
@@ -374,14 +480,18 @@ export function OrbitSection() {
         {/* HUD: dica de rolagem + barra de progresso com as marcas das transições */}
         <div
           ref={hudRef}
-          className="pointer-events-none absolute inset-x-0 bottom-[clamp(22px,5vh,48px)] flex flex-col items-center gap-4 px-6 transition-opacity duration-500"
+          className="pointer-events-none absolute inset-x-0 bottom-[clamp(22px,5vh,48px)] flex flex-col items-center gap-4 px-6 transition-opacity duration-500 max-md:bottom-[96px]"
         >
           <p
             ref={hintRef}
             className="m-0 flex items-center gap-3 rounded-full border border-accent/40 bg-[#040A18]/70 px-4 py-2 font-mono text-[11.5px] tracking-[.18em] text-txt uppercase backdrop-blur-[6px]"
           >
-            <span className="inline-block animate-bounce text-accent">↓</span>
-            {t.orbitHint}
+            {sceneReady ? (
+              <span className="inline-block animate-bounce text-accent">↓</span>
+            ) : (
+              <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-accent" />
+            )}
+            {sceneReady ? t.orbitHint : t.orbitLoading}
           </p>
           <div className="relative h-[3px] w-[min(560px,72vw)] overflow-hidden rounded-full bg-white/12">
             <span

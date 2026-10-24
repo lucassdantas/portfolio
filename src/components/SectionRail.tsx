@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { revealForNav, settleAnchor } from "@/lib/nav";
 import { useActiveSection } from "@/lib/useActiveSection";
 
 const SECTIONS = [
@@ -44,6 +45,8 @@ export function SectionRail() {
     const el = document.getElementById(id);
     if (!el) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    revealForNav();
+    settleAnchor(el);
     el.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
   };
 

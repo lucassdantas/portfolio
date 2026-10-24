@@ -45,6 +45,10 @@ export function SmoothScroll() {
     let lastWritten = -1;
     let lastT = 0;
     let orbit: HTMLElement | null = null;
+    // posição da #orbita em coordenadas do documento, relida a cada ~400ms
+    let orbitTop = 0;
+    let orbitH = 0;
+    let orbitStamp = 0;
 
     const maxScroll = () => root.scrollHeight - window.innerHeight;
 
@@ -61,21 +65,42 @@ export function SmoothScroll() {
       return false;
     };
 
-    // velocidade da rolagem (-1..1) em --ld-vel: cards e imagens inclinam de leve
-    // com ela (ver .ld-media em globals.css) e voltam ao parar
-    const setVel = (v: number) => root.style.setProperty("--ld-vel", v.toFixed(3));
+    // velocidade da rolagem (-1..1) inclina de leve os `.ld-vel` (cards, imagens).
+    // Aplicada direto em cada elemento: uma variável CSS no :root invalidava o
+    // estilo da página inteira a cada quadro — era a maior conta da rolagem.
+    let velEls: HTMLElement[] = [];
+    let velStamp = 0;
+    let lastVel = 0;
+    const setVel = (v: number) => {
+      const q = Math.round(v * 50) / 50;
+      if (q === lastVel) return;
+      lastVel = q;
+      const now = performance.now();
+      if (now - velStamp > 2000) {
+        velEls = Array.from(document.querySelectorAll<HTMLElement>(".ld-vel"));
+        velStamp = now;
+      }
+      const tf = q === 0 ? "" : `skewY(${(q * 2.2).toFixed(2)}deg)`;
+      for (const el of velEls) el.style.transform = tf;
+    };
 
     const tick = (now: number) => {
       const dt = lastT ? Math.min(40, Math.max(8, now - lastT)) : 16;
       lastT = now;
       setVel(Math.max(-1, Math.min(1, (target - current) / 900)));
       let step = (target - current) * EASE;
-      orbit = orbit ?? document.getElementById("orbita");
+      if (now - orbitStamp > 400) {
+        orbit = orbit ?? document.getElementById("orbita");
+        if (orbit) {
+          const r = orbit.getBoundingClientRect();
+          orbitTop = r.top + window.scrollY;
+          orbitH = r.height;
+        }
+        orbitStamp = now;
+      }
       if (orbit) {
-        const r = orbit.getBoundingClientRect();
-        const top = r.top + window.scrollY;
         const vh = window.innerHeight;
-        if (current > top - vh * 0.3 && current < top + r.height - vh * 0.7) {
+        if (current > orbitTop - vh * 0.3 && current < orbitTop + orbitH - vh * 0.7) {
           const max = (ORBIT_MAX_PX_PER_S * dt) / 1000;
           step = Math.max(-max, Math.min(max, step));
         }
@@ -125,7 +150,7 @@ export function SmoothScroll() {
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("scroll", onScroll);
       root.style.scrollBehavior = prevBehavior;
-      root.style.removeProperty("--ld-vel");
+      for (const el of velEls) el.style.transform = "";
     };
   }, []);
 

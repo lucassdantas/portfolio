@@ -121,6 +121,10 @@
     content-visibility: auto;
     contain-intrinsic-size: auto 1200px;
   }
+  /* Durante um salto de âncora (src/lib/nav.ts) tudo fica visível: layout exato. */
+  html.ld-nav :is(#stack, #experiencia, #case, #sistemas, #projetos, #github, #terminal, #playground, #educacao, #contato) {
+    content-visibility: visible;
+  }
 
   /* MotionReveal: entrada dos textos (títulos com cortina, resto subindo do desfoque) */
   /* a transição fica só no estado "entrou": esconder é instantâneo. Com a
@@ -148,9 +152,9 @@
     filter: none;
     clip-path: inset(0 0 0 0);
   }
-  /* inclinação leve com a velocidade da rolagem (--ld-vel vem do SmoothScroll) */
+  /* inclinação leve com a velocidade da rolagem (o SmoothScroll escreve o
+     transform direto nestes elementos) */
   .ld-vel {
-    transform: skewY(calc(var(--ld-vel, 0) * 2.2deg));
     transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
   }
@@ -164,7 +168,7 @@
       height: 8px;
     }
     .ld-vel {
-      transform: none;
+      transition: none;
     }
     .ld-swap-next,
     .ld-swap-prev,

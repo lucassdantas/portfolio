@@ -1,14 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLanguage, LANGS } from "@/contexts/LanguageContext";
 import { site } from "@/data/site";
 import { TERMINAL_OPEN_EVENT } from "@/lib/events";
+import { installAnchorNav } from "@/lib/nav";
 import { useActiveSection } from "@/lib/useActiveSection";
 
 export function Navbar() {
   const { lang, setLang, t } = useLanguage();
   const [open, setOpen] = useState(false);
+  // salto de âncora exato apesar do content-visibility das seções (lib/nav.ts)
+  useEffect(() => installAnchorNav(), []);
 
   const navLinks = [
     { label: t.navStack, href: "#stack" },

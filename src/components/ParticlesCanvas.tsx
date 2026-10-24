@@ -8,8 +8,10 @@ import {
   makeProgram,
   perspective,
   lookAt,
-  computeStage,
-  computeDim,
+  measureSections,
+  stageFromSnapshot,
+  dimFromSnapshot,
+  type SectionSnapshot,
 } from "@/shaders/particles";
 
 const STAGE_COUNT = 5;
@@ -118,6 +120,10 @@ export function ParticlesCanvas() {
     let stageTarget = 0;
     let dimTarget = 1;
     let dirty = true;
+    // posições das seções: relidas no máximo a cada 250ms (mudam só quando uma
+    // seção com content-visibility é renderizada pela primeira vez)
+    let snap: SectionSnapshot | null = null;
+    let snapStamp = 0;
     const markDirty = () => {
       dirty = true;
     };
@@ -126,6 +132,7 @@ export function ParticlesCanvas() {
     const dpr = Math.min(window.devicePixelRatio || 1, isTouch ? 1.5 : 1.8);
     const resize = () => {
       dirty = true;
+      snapStamp = 0;
       canvas.width = Math.floor(window.innerWidth * dpr);
       canvas.height = Math.floor(window.innerHeight * dpr);
       gl!.viewport(0, 0, canvas.width, canvas.height);
@@ -153,8 +160,14 @@ export function ParticlesCanvas() {
 
       if (dirty) {
         dirty = false;
-        stageTarget = computeStage(STAGE_COUNT);
-        dimTarget = computeDim();
+        if (!snap || now - snapStamp > 250) {
+          snap = measureSections();
+          snapStamp = now;
+        }
+        const sy = window.scrollY;
+        const vh = window.innerHeight;
+        stageTarget = stageFromSnapshot(snap, STAGE_COUNT, sy, vh);
+        dimTarget = dimFromSnapshot(snap, sy, vh);
       }
       stageSm += (stageTarget - stageSm) * 0.045;
       const order = Math.min(1, stageSm / (STAGE_COUNT - 1));
