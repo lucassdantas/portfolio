@@ -37,7 +37,7 @@ describe("ProjectsSection — carrossel", () => {
 
   it("a seta → avança para o próximo projeto em destaque", async () => {
     renderWithProviders(<ProjectsSection />);
-    await userEvent.click(screen.getByRole("button", { name: "próximo" }));
+    await userEvent.click(screen.getByRole("button", { name: /próximo/ }));
     expect(screen.getByRole("heading", { name: featured[1].name })).toBeInTheDocument();
   });
 
@@ -142,7 +142,7 @@ describe("ProjectsSection — resultado em destaque", () => {
   it("contador mostra posição atual e total", async () => {
     const { container } = renderWithProviders(<ProjectsSection />);
     const total = projects.filter((p) => p.featured).length;
-    await userEvent.click(screen.getByRole("button", { name: "próximo" }));
+    await userEvent.click(screen.getByRole("button", { name: /próximo/ }));
     const counter = container.querySelector('[aria-live="polite"]');
     expect(counter!.textContent).toBe(`02 / ${String(total).padStart(2, "0")}`);
   });

@@ -116,23 +116,25 @@ export function CaseSection() {
         </Reveal>
       </div>
 
-      <Reveal>
-        <div className="border-t border-b border-bord py-[clamp(24px,4vh,56px)]">
-          <p className="m-0 mb-[clamp(16px,3vh,34px)] text-[clamp(84px,17vw,260px)] leading-[.8] font-bold tracking-[-.06em] text-accent">
-            −90%
-          </p>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(210px,1fr))] gap-[clamp(14px,2.4vw,36px)]">
-            {[t.featM1, t.featM2, t.featM3].map((m) => (
+      {/* o que mudou, em três números — no mesmo padrão de cards do site, com fundo
+          legível por cima das partículas */}
+      <div className="grid grid-cols-1 gap-px border border-bord sm:grid-cols-3">
+        {site.featuredCase.metrics.map((m, i) => (
+          <Reveal key={m.value} delay={i * 90} className="h-full">
+            <div className="h-full bg-bg2/88 p-[clamp(20px,2.4vw,32px)] shadow-[0_0_0_1px_var(--border)] backdrop-blur-[2px]">
               <p
-                key={m}
-                className="m-0 border-t border-bord pt-3 font-mono text-[11.5px] leading-[1.8] tracking-[.16em] text-muted uppercase"
+                className="m-0 text-[clamp(30px,3.4vw,52px)] leading-none font-bold tracking-[-.04em] [text-wrap:balance]"
+                style={{ color: m.color }}
               >
-                {m}
+                {m.value}
               </p>
-            ))}
-          </div>
-        </div>
-      </Reveal>
+              <p className="m-0 mt-3 font-mono text-[10.5px] leading-[1.7] tracking-[.16em] text-strong uppercase">
+                {[t.featM1, t.featM2, t.featM3][i]}
+              </p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
     </section>
   );
 }
