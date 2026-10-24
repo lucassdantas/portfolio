@@ -112,6 +112,17 @@ export function ParticlesCanvas() {
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE);
 
+    // leituras de DOM (seções, data-pdim) só quando a página rola, muda de
+    // tamanho ou um bloco hidrata — antes eram a cada quadro, forçando
+    // estilo/layout 60×/s (aparecia como "Style & Layout" no Lighthouse)
+    let stageTarget = 0;
+    let dimTarget = 1;
+    let dirty = true;
+    const markDirty = () => {
+      dirty = true;
+    };
+    window.addEventListener("scroll", markDirty, { passive: true });
+    window.addEventListener("ld:hydrated", markDirty);
     let aspect = 1.6;
     const dpr = Math.min(window.devicePixelRatio || 1, isTouch ? 1.5 : 1.8);
     const resize = () => {
@@ -131,17 +142,6 @@ export function ParticlesCanvas() {
     };
     if (!isTouch) window.addEventListener("pointermove", onMove);
 
-    // leituras de DOM (seções, data-pdim) só quando a página rola, muda de
-    // tamanho ou um bloco hidrata — antes eram a cada quadro, forçando
-    // estilo/layout 60×/s (aparecia como "Style & Layout" no Lighthouse)
-    let stageTarget = 0;
-    let dimTarget = 1;
-    let dirty = true;
-    const markDirty = () => {
-      dirty = true;
-    };
-    window.addEventListener("scroll", markDirty, { passive: true });
-    window.addEventListener("ld:hydrated", markDirty);
     let stageSm = 0;
     let dimSm = 1;
     let raf = 0;

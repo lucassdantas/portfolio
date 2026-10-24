@@ -102,7 +102,7 @@ describe("Chatbot (widget flutuante)", () => {
       TYPING_TIMEOUT
     );
 
-    await userEvent.click(screen.getByRole("button", { name: "Fechar" }));
+    await userEvent.click(screen.getByRole("button", { name: "Fechar", expanded: true }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(localStorage.getItem(CHAT_STORAGE_KEY)).toContain("Ana");
 
