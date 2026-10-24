@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { startTransition, useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 /** Disparado em `window` quando um bloco hidrata; `detail` é o elemento raiz. */
@@ -50,7 +50,9 @@ export function LazyHydrate({
       setHydrated(true);
       return;
     }
-    const done = () => setHydrated(true);
+    // pela rolagem: em transição, o React fatia a hidratação em pedaços de ~5ms
+    // — nada de tarefa longa (nem travada no scroll) quando um bloco liga
+    const done = () => startTransition(() => setHydrated(true));
     const io = new IntersectionObserver(
       (entries) => {
         if (entries.some((e) => e.isIntersecting)) done();
@@ -58,9 +60,10 @@ export function LazyHydrate({
       { rootMargin }
     );
     io.observe(el);
+    // por evento (ex.: `_shell` abrindo o terminal): na hora, sem fatiar
     const onEvent = () => {
       pending.current = hydrateOn ?? null;
-      done();
+      setHydrated(true);
     };
     if (hydrateOn) window.addEventListener(hydrateOn, onEvent);
     return () => {
