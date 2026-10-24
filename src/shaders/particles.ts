@@ -165,7 +165,7 @@ export function createFormationBuilder(N: number): { arrays: Float32Array[]; ste
     step(budgetMs) {
       const t0 = performance.now();
       while (i < N) {
-        fill(Math.min(N, i + 400));
+        fill(Math.min(N, i + 200));
         if (performance.now() - t0 > budgetMs) break;
       }
       return i >= N;
@@ -306,4 +306,51 @@ export function computeDim(): number {
 }
 export function computeStage(stageCount: number): number {
   return stageFromSnapshot(measureSections(), stageCount, window.scrollY, window.innerHeight);
+}
+
+/**
+ * Compila e linka sem segurar a thread principal: com KHR_parallel_shader_compile
+ * o navegador compila em paralelo e aqui só se pergunta "terminou?" de tempos em
+ * tempos. Sem a extensão, a primeira pergunta bloqueia (como `makeProgram`).
+ * No primeiro acesso (cache de shaders frio) a compilação síncrona das
+ * partículas e do núcleo travava a página por 100–400ms.
+ */
+export function makeProgramAsync(gl: WebGLRenderingContext, vsrc: string, fsrc: string): Promise<WebGLProgram | null> {
+  return new Promise((resolve) => {
+    const sh = (type: number, src: string) => {
+      const s = gl.createShader(type);
+      if (!s) return null;
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      return s;
+    };
+    const v = sh(gl.VERTEX_SHADER, vsrc);
+    const f = sh(gl.FRAGMENT_SHADER, fsrc);
+    const p = v && f ? gl.createProgram() : null;
+    if (!v || !f || !p) {
+      resolve(null);
+      return;
+    }
+    gl.attachShader(p, v);
+    gl.attachShader(p, f);
+    gl.linkProgram(p);
+    const par = gl.getExtension("KHR_parallel_shader_compile") as { COMPLETION_STATUS_KHR: number } | null;
+    const poll = () => {
+      if (gl.isContextLost()) {
+        resolve(null);
+        return;
+      }
+      if (par && !gl.getProgramParameter(p, par.COMPLETION_STATUS_KHR)) {
+        window.setTimeout(poll, 60);
+        return;
+      }
+      if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
+        console.warn(gl.getProgramInfoLog(p));
+        resolve(null);
+        return;
+      }
+      resolve(p);
+    };
+    window.setTimeout(poll, 0);
+  });
 }

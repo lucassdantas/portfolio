@@ -107,6 +107,13 @@ export function OrbitSection() {
     });
 
     const isTouch = window.matchMedia("(hover: none)").matches || window.innerWidth < 820;
+    const maxScale = isTouch ? 0.75 : Math.min(window.devicePixelRatio || 1, 1.25);
+    // começa abaixo do teto e só sobe se os quadros forem rápidos
+    let adaptive = maxScale * 0.8;
+    const bufferSize = (scale: number) => {
+      const r = canvas.getBoundingClientRect();
+      return [Math.max(1, Math.floor(r.width * scale)), Math.max(1, Math.floor(r.height * scale))] as const;
+    };
 
     // O módulo 3D (three.js) custa ~60ms de parse na thread principal: baixa e
     // avalia na primeira pausa de rolagem depois que a pessoa começou a rolar —
@@ -137,6 +144,8 @@ export function OrbitSection() {
         scene = sc;
         await sc.load(calm);
         if (disposed) return;
+        // tamanho final já aqui: o aquecimento cria o buffer de uma vez (realocar depois custa ~100ms)
+        sc.setSize(...bufferSize(adaptive));
         await sc.warm(calm);
         if (disposed) return;
         begin(sc);
@@ -147,14 +156,8 @@ export function OrbitSection() {
     };
 
     const begin = (sc: OrbitScene) => {
-      const maxScale = isTouch ? 0.75 : Math.min(window.devicePixelRatio || 1, 1.25);
-      // começa abaixo do teto e só sobe se os quadros forem rápidos
-      let adaptive = maxScale * 0.8;
       let scale = adaptive;
-      const resize = () => {
-        const r = canvas.getBoundingClientRect();
-        sc.setSize(Math.max(1, Math.floor(r.width * scale)), Math.max(1, Math.floor(r.height * scale)));
-      };
+      const resize = () => sc.setSize(...bufferSize(scale));
       resize();
       window.addEventListener("resize", resize);
 
@@ -239,9 +242,7 @@ export function OrbitSection() {
         }
         const rTop = geoTop - window.scrollY;
         const vh = window.innerHeight;
-        // enquanto a seção ainda está chegando (palco não fixou) desenha em
-        // resolução menor: o que aparece é só a borda do céu
-        scale = rTop > 1 ? adaptive * 0.6 : adaptive;
+        scale = adaptive;
         if (scale !== lastScale) {
           lastScale = scale;
           resize();

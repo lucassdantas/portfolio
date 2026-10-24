@@ -1,8 +1,9 @@
 // Fundo da OrbitSection: céu, planeta, treliça e as duas transições, guiados
 // pela rolagem. O astronauta em si é um modelo 3D (traje Z-2 da NASA) desenhado
 // pelo three.js em `src/lib/orbitScene.ts`; este shader só pinta o que está
-// atrás dele, num triângulo de tela cheia, com a MESMA câmera (posição e base
-// vêm por uniform, calculadas uma vez em TS — nada de duplicar a coreografia).
+// atrás dele, num triângulo de tela cheia, usando a câmera do three (a inversa
+// de view-projection e a posição vêm por uniform a cada passada — assim o mesmo
+// shader também preenche o mapa de reflexo cúbico do visor).
 //
 // `uProg` (0..1) é o progresso da rolagem:
 //   A  0.00–0.40  espaço: céu azul-noite, estrelas e a Terra embaixo
@@ -31,8 +32,8 @@ export const NOISE_GLSL = [
 
 export function buildSpaceSrc(): string {
   return [
-    "uniform vec2 uRes; uniform float uTime; uniform float uProg;",
-    "uniform vec3 uCamPos; uniform vec3 uCamFw; uniform vec3 uCamRt; uniform vec3 uCamUp;",
+    "uniform vec2 uRes; uniform float uTime; uniform float uProg; uniform float uEnv;",
+    "uniform mat4 uInvVP; uniform vec3 uCamPos;",
     // texturas equirretangulares da Terra (NASA): dia, luzes noturnas, nuvens. uHasTex=0 até carregarem.
     "uniform sampler2D uDay; uniform sampler2D uNight; uniform sampler2D uClouds; uniform float uHasTex;",
     "const vec3 BLUE = vec3(0.114,0.580,0.890);",
@@ -146,35 +147,42 @@ export function buildSpaceSrc(): string {
     "  float w1 = smoothstep(0.34,0.40,p) * (1.0-smoothstep(0.40,0.46,p));",
     "  float w2 = smoothstep(0.68,0.72,p) * (1.0-smoothstep(0.72,0.76,p));",
     "  float shot = p < 0.40 ? 0.0 : (p < 0.72 ? 1.0 : 2.0);",
+    // raio desta amostra, pela câmera do three (vale para a tela e para cada face do cubo de reflexo)
+    "  vec2 ndc = (gl_FragCoord.xy / uRes) * 2.0 - 1.0;",
+    "  vec4 pw = uInvVP * vec4(ndc, 1.0, 1.0);",
     "  vec3 ro = uCamPos;",
-    "  vec3 rd = normalize(uCamFw*1.6 + uCamRt*uv.x + uCamUp*uv.y);",
+    "  vec3 rd = normalize(pw.xyz / pw.w - ro);",
     // fundo: céu (A, C) ou treliça (B); entra e sai aos poucos nas pontas
     "  float bgA = smoothstep(0.02,0.18,p) * (1.0-smoothstep(0.88,0.99,p));",
     "  vec3 bg = shot > 0.5 && shot < 1.5 ? lattice(ro, rd) : sky(ro, rd);",
     "  vec3 col = bg*bgA; float alpha = bgA;",
-    // transições
-    "  if (w1 > 0.0) {",
-    "    vec3 wc = wormhole(uv, uTime + p*40.0);",
-    "    col = mix(col, wc, smoothstep(0.0,0.6,w1)); alpha = max(alpha, smoothstep(0.0,0.4,w1));",
-    "    col += vec3(0.6,0.85,1.0) * pow(w1, 60.0) * 0.5;",
-    "  }",
-    "  if (w2 > 0.0) {",
-    "    float ph = smoothstep(0.68, 0.76, p); float r = length(uv);",
-    "    vec3 ring = vec3(smoothstep(0.035,0.0,abs(r-ph*1.5+0.02)), smoothstep(0.035,0.0,abs(r-ph*1.5)), smoothstep(0.035,0.0,abs(r-ph*1.5-0.02)));",
-    "    col += (ring*vec3(0.6,0.9,1.4)*2.4 + vec3(0.6,0.85,1.0)*pow(w2,60.0)*0.5) * w2;",
-    "    alpha = max(alpha, w2*0.9);",
-    "  }",
+    // transições (só na tela; o cubo de reflexo não as recebe)
+    "  if (uEnv < 0.5) {",
+    "    if (w1 > 0.0) {",
+    "      vec3 wc = wormhole(uv, uTime + p*40.0);",
+    "      col = mix(col, wc, smoothstep(0.0,0.6,w1)); alpha = max(alpha, smoothstep(0.0,0.4,w1));",
+    "      col += vec3(0.6,0.85,1.0) * pow(w1, 60.0) * 0.5;",
+    "    }",
+    "    if (w2 > 0.0) {",
+    "      float ph = smoothstep(0.68, 0.76, p); float r = length(uv);",
+    "      vec3 ring = vec3(smoothstep(0.035,0.0,abs(r-ph*1.5+0.02)), smoothstep(0.035,0.0,abs(r-ph*1.5)), smoothstep(0.035,0.0,abs(r-ph*1.5-0.02)));",
+    "      col += (ring*vec3(0.6,0.9,1.4)*2.4 + vec3(0.6,0.85,1.0)*pow(w2,60.0)*0.5) * w2;",
+    "      alpha = max(alpha, w2*0.9);",
+    "    }",
     // halo de lente sutil (some quando o céu some)
-    "  float lr = length(uv*vec2(0.9,1.0));",
-    "  vec3 rainbow = 0.5+0.5*cos(6.2832*(lr*1.4 + vec3(0.0,0.33,0.67)));",
-    "  col += rainbow * exp(-pow((lr-0.78)*7.0, 2.0)) * 0.045 * bgA;",
+    "    float lr = length(uv*vec2(0.9,1.0));",
+    "    vec3 rainbow = 0.5+0.5*cos(6.2832*(lr*1.4 + vec3(0.0,0.33,0.67)));",
+    "    col += rainbow * exp(-pow((lr-0.78)*7.0, 2.0)) * 0.045 * bgA;",
+    "  }",
 
     "  col = col / max(alpha, 0.001);",
     "  col = col*(2.51*col+0.03)/(col*(2.43*col+0.59)+0.14);",
     "  col = pow(clamp(col,0.0,1.0), vec3(0.92));",
-    "  float vig = 0.5 + 0.5*smoothstep(1.4, 0.2, length(uv*vec2(0.85,1.1)));",
-    "  col *= mix(1.0, vig, bgA);",
-    "  col += (hash1(gl_FragCoord.xy + fract(uTime)*91.0) - 0.5)*0.012*alpha;",
+    "  if (uEnv < 0.5) {",
+    "    float vig = 0.5 + 0.5*smoothstep(1.4, 0.2, length(uv*vec2(0.85,1.1)));",
+    "    col *= mix(1.0, vig, bgA);",
+    "    col += (hash1(gl_FragCoord.xy + fract(uTime)*91.0) - 0.5)*0.012*alpha;",
+    "  }",
     "  gl_FragColor = vec4(col*alpha, alpha);",
     "}",
   ].join("\n");

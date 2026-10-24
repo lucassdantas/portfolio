@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { makeProgram } from "@/shaders/particles";
+import { makeProgramAsync } from "@/shaders/particles";
 import { VERTEX_SRC, buildFragmentSrc } from "@/shaders/core";
 
 /**
@@ -39,97 +39,109 @@ export function CoreSection() {
 
       const STEPS = isTouch ? 48 : 92;
       const ISTEPS = isTouch ? 20 : 40;
-      const prog = makeProgram(gl, VERTEX_SRC, buildFragmentSrc(STEPS, ISTEPS));
-      if (!prog) {
-        canvas.style.display = "none";
-        return;
-      }
-      gl.useProgram(prog);
+      const glc: WebGLRenderingContext = gl;
+      const begin = (prog: WebGLProgram): (() => void) => {
+        glc.useProgram(prog);
 
-      const buf = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-      const loc = gl.getAttribLocation(prog, "aP");
-      gl.enableVertexAttribArray(loc);
-      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+        const buf = glc.createBuffer();
+        glc.bindBuffer(glc.ARRAY_BUFFER, buf);
+        glc.bufferData(glc.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), glc.STATIC_DRAW);
+        const loc = glc.getAttribLocation(prog, "aP");
+        glc.enableVertexAttribArray(loc);
+        glc.vertexAttribPointer(loc, 2, glc.FLOAT, false, 0, 0);
 
-      const U: Record<string, WebGLUniformLocation | null> = {};
-      (["uRes", "uTime", "uMouse", "uOpen", "uRev"] as const).forEach((k) => {
-        U[k] = gl!.getUniformLocation(prog!, k);
-      });
-      gl.enable(gl.BLEND);
-      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+        const U: Record<string, WebGLUniformLocation | null> = {};
+        (["uRes", "uTime", "uMouse", "uOpen", "uRev"] as const).forEach((k) => {
+          U[k] = glc.getUniformLocation(prog!, k);
+        });
+        glc.enable(glc.BLEND);
+        glc.blendFunc(glc.ONE, glc.ONE_MINUS_SRC_ALPHA);
 
-      const dpr = Math.min(window.devicePixelRatio || 1, isTouch ? 1 : 1.25);
-      const resize = () => {
-        const r = canvas.getBoundingClientRect();
-        canvas.width = Math.max(1, Math.floor(r.width * dpr));
-        canvas.height = Math.max(1, Math.floor(r.height * dpr));
-        gl!.viewport(0, 0, canvas.width, canvas.height);
-      };
-      resize();
-      window.addEventListener("resize", resize);
+        const dpr = Math.min(window.devicePixelRatio || 1, isTouch ? 1 : 1.25);
+        const resize = () => {
+          const r = canvas.getBoundingClientRect();
+          canvas.width = Math.max(1, Math.floor(r.width * dpr));
+          canvas.height = Math.max(1, Math.floor(r.height * dpr));
+          glc.viewport(0, 0, canvas.width, canvas.height);
+        };
+        resize();
+        window.addEventListener("resize", resize);
 
-      const mouse = { tx: 0, ty: 0, x: 0, y: 0 };
-      const onMove = (e: PointerEvent) => {
-        mouse.tx = (e.clientX / window.innerWidth) * 2 - 1;
-        mouse.ty = -((e.clientY / window.innerHeight) * 2 - 1);
-      };
-      if (!isTouch) window.addEventListener("pointermove", onMove);
+        const mouse = { tx: 0, ty: 0, x: 0, y: 0 };
+        const onMove = (e: PointerEvent) => {
+          mouse.tx = (e.clientX / window.innerWidth) * 2 - 1;
+          mouse.ty = -((e.clientY / window.innerHeight) * 2 - 1);
+        };
+        if (!isTouch) window.addEventListener("pointermove", onMove);
 
-      let inView = false;
-      const io = new IntersectionObserver((entries) => {
-        inView = entries[0]?.isIntersecting ?? false;
-      });
-      io.observe(section);
+        let inView = false;
+        const io = new IntersectionObserver((entries) => {
+          inView = entries[0]?.isIntersecting ?? false;
+        });
+        io.observe(section);
 
-      let coreOpen = 0;
-      let geoTop = 0;
-      let geoH = 0;
-      let geoStamp = 0;
-      let raf = 0;
-      let start = performance.now();
-      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        let coreOpen = 0;
+        let geoTop = 0;
+        let geoH = 0;
+        let geoStamp = 0;
+        let raf = 0;
+        let start = performance.now();
+        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      const draw = (now: number) => {
+        const draw = (now: number) => {
+          raf = requestAnimationFrame(draw);
+          if (!inView) return;
+          const t = (now - start) / 1000;
+          mouse.x += (mouse.tx - mouse.x) * 0.08;
+          mouse.y += (mouse.ty - mouse.y) * 0.08;
+
+          // posição da seção em cache (relida a cada 250ms): sem forçar layout por quadro
+          if (now - geoStamp > 250) {
+            const rr = section.getBoundingClientRect();
+            geoTop = rr.top + window.scrollY;
+            geoH = rr.height;
+            geoStamp = now;
+          }
+          const vh = window.innerHeight;
+          const rTop = geoTop - window.scrollY;
+          if (rTop + geoH < -80 || rTop > vh + 80) return;
+
+          const p = Math.min(1, Math.max(0, (vh * 0.85 - rTop) / (vh * 0.9)));
+          const target = reduced ? p : p * p * (3 - 2 * p);
+          coreOpen += (target - coreOpen) * 0.07;
+
+          glc.useProgram(prog);
+          glc.uniform2f(U.uRes, canvas.width, canvas.height);
+          glc.uniform1f(U.uTime, t);
+          glc.uniform2f(U.uMouse, mouse.x, mouse.y);
+          glc.uniform1f(U.uOpen, coreOpen);
+          glc.uniform1f(U.uRev, Math.min(1, coreOpen * 1.4));
+          glc.clearColor(0, 0, 0, 0);
+          glc.clear(glc.COLOR_BUFFER_BIT);
+          glc.drawArrays(glc.TRIANGLES, 0, 3);
+        };
         raf = requestAnimationFrame(draw);
-        if (!inView) return;
-        const t = (now - start) / 1000;
-        mouse.x += (mouse.tx - mouse.x) * 0.08;
-        mouse.y += (mouse.ty - mouse.y) * 0.08;
 
-        // posição da seção em cache (relida a cada 250ms): sem forçar layout por quadro
-        if (now - geoStamp > 250) {
-          const rr = section.getBoundingClientRect();
-          geoTop = rr.top + window.scrollY;
-          geoH = rr.height;
-          geoStamp = now;
-        }
-        const vh = window.innerHeight;
-        const rTop = geoTop - window.scrollY;
-        if (rTop + geoH < -80 || rTop > vh + 80) return;
-
-        const p = Math.min(1, Math.max(0, (vh * 0.85 - rTop) / (vh * 0.9)));
-        const target = reduced ? p : p * p * (3 - 2 * p);
-        coreOpen += (target - coreOpen) * 0.07;
-
-        gl!.useProgram(prog);
-        gl!.uniform2f(U.uRes, canvas.width, canvas.height);
-        gl!.uniform1f(U.uTime, t);
-        gl!.uniform2f(U.uMouse, mouse.x, mouse.y);
-        gl!.uniform1f(U.uOpen, coreOpen);
-        gl!.uniform1f(U.uRev, Math.min(1, coreOpen * 1.4));
-        gl!.clearColor(0, 0, 0, 0);
-        gl!.clear(gl!.COLOR_BUFFER_BIT);
-        gl!.drawArrays(gl!.TRIANGLES, 0, 3);
+        return () => {
+          cancelAnimationFrame(raf);
+          io.disconnect();
+          window.removeEventListener("resize", resize);
+          if (!isTouch) window.removeEventListener("pointermove", onMove);
+        };
       };
-      raf = requestAnimationFrame(draw);
-
+      let disposed = false;
+      let disposeInner: (() => void) | undefined;
+      void makeProgramAsync(glc, VERTEX_SRC, buildFragmentSrc(STEPS, ISTEPS)).then((prog) => {
+        if (disposed) return;
+        if (!prog) {
+          canvas.style.display = "none";
+          return;
+        }
+        disposeInner = begin(prog);
+      });
       return () => {
-        cancelAnimationFrame(raf);
-        io.disconnect();
-        window.removeEventListener("resize", resize);
-        if (!isTouch) window.removeEventListener("pointermove", onMove);
+        disposed = true;
+        disposeInner?.();
       };
     };
     const near = new IntersectionObserver(
