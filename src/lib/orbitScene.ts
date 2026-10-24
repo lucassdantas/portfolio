@@ -166,40 +166,6 @@ function bitmapTexture(bmp: ImageBitmap, srgb: boolean): THREE.Texture {
   return tex;
 }
 
-/** Ambiente de reflexos: equirretangular pequeno gerado em código (nada baixado). */
-function spaceEnvironment(): THREE.DataTexture {
-  const w = 128;
-  const h = 64;
-  const data = new Float32Array(w * h * 4);
-  for (let y = 0; y < h; y++) {
-    const v = y / (h - 1); // 0 = zênite, 1 = nadir
-    for (let x = 0; x < w; x++) {
-      const u = x / w;
-      const i = (y * w + x) * 4;
-      // céu profundo em cima, brilho azul da Terra embaixo
-      const earth = smoothstep(0.55, 0.95, v);
-      let r = 0.004 + 0.1 * earth;
-      let g = 0.008 + 0.3 * earth;
-      let b = 0.02 + 0.7 * earth;
-      // sol: mancha quente pequena e forte
-      const du = Math.min(Math.abs(u - 0.18), 1 - Math.abs(u - 0.18));
-      const sun = Math.exp(-((du * du) / 0.0016 + ((v - 0.3) * (v - 0.3)) / 0.003));
-      r += 9 * sun;
-      g += 8.4 * sun;
-      b += 7.2 * sun;
-      data[i] = r;
-      data[i + 1] = g;
-      data[i + 2] = b;
-      data[i + 3] = 1;
-    }
-  }
-  const tex = new THREE.DataTexture(data, w, h, THREE.RGBAFormat, THREE.FloatType);
-  tex.mapping = THREE.EquirectangularReflectionMapping;
-  tex.colorSpace = THREE.LinearSRGBColorSpace;
-  tex.needsUpdate = true;
-  return tex;
-}
-
 export function createOrbitScene(canvas: HTMLCanvasElement, opts: { isTouch: boolean }): OrbitScene | null {
   let renderer: THREE.WebGLRenderer;
   try {
@@ -216,6 +182,9 @@ export function createOrbitScene(canvas: HTMLCanvasElement, opts: { isTouch: boo
     return null;
   }
   renderer.setPixelRatio(1);
+  // sem checagem de erro de shader em produção: `getProgramInfoLog` espera o link
+  // terminar e travava a thread principal por centenas de ms
+  renderer.debug.checkShaderErrors = process.env.NODE_ENV !== "production";
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.12;
@@ -262,14 +231,18 @@ export function createOrbitScene(canvas: HTMLCanvasElement, opts: { isTouch: boo
   scene.add(bg);
 
   // luzes: sol quente (com sombra), brilho azul da Terra por baixo, contraluz fria
+  // e um hemisfério (céu escuro em cima, Terra azul embaixo). Sem mapa de
+  // ambiente de propósito: o PMREM do three compila um shader pesado de forma
+  // síncrona (~400ms travados na thread principal) — reflexos vêm das luzes.
   const sun = new THREE.DirectionalLight(0xfff1dc, 3.2);
   sun.position.set(6, 7, 5);
   const fill = new THREE.DirectionalLight(0x3f9cff, 1.6);
   fill.position.set(0.5, -8, 3);
   const rim = new THREE.DirectionalLight(0xbfe4ff, 2.0);
   rim.position.set(-4, 2, -8);
-  const ambient = new THREE.AmbientLight(0x2a3d5c, 1.0);
-  scene.add(sun, fill, rim, ambient);
+  const ambient = new THREE.AmbientLight(0x2a3d5c, 0.8);
+  const hemi = new THREE.HemisphereLight(0x22324e, 0x2f86d9, 1.4);
+  scene.add(sun, fill, rim, ambient, hemi);
 
   // o traje: grupo posicionado pela coreografia; o modelo entra dentro, centrado e na escala certa
   const root = new THREE.Group();
@@ -361,7 +334,6 @@ export function createOrbitScene(canvas: HTMLCanvasElement, opts: { isTouch: boo
   };
   const m4 = new THREE.Matrix4();
   let aspect = 16 / 9;
-  let envTex: THREE.Texture | null = null;
 
   const configureSuit = (gltf: THREE.Group, maps: { bump: THREE.Texture; orm: THREE.Texture; spec: THREE.Texture }) => {
     const box = new THREE.Box3().setFromObject(gltf);
@@ -387,7 +359,6 @@ export function createOrbitScene(canvas: HTMLCanvasElement, opts: { isTouch: boo
         bumpScale: 0.9,
         specularIntensity: 1,
         specularColorMap: maps.spec,
-        envMapIntensity: 0.9,
         side: THREE.DoubleSide,
       });
       if (m.map) m.map.anisotropy = 4;
@@ -414,16 +385,7 @@ export function createOrbitScene(canvas: HTMLCanvasElement, opts: { isTouch: boo
 
   const api: OrbitScene = {
     async load(calm) {
-      // 1) ambiente de reflexos (gerado, barato) — numa pausa, porque compila os shaders do PMREM
-      await calm();
-      const pmrem = new THREE.PMREMGenerator(renderer);
-      const eq = spaceEnvironment();
-      envTex = pmrem.fromEquirectangular(eq).texture;
-      eq.dispose();
-      pmrem.dispose();
-      scene.environment = envTex;
-
-      // 2) modelo + mapas do traje (um download por vez, upload numa pausa cada)
+      // 1) modelo + mapas do traje (download em paralelo, upload numa pausa cada)
       const loader = new GLTFLoader();
       loader.setMeshoptDecoder(MeshoptDecoder);
       const [gltf, bump, orm, spec] = await Promise.all([
@@ -441,7 +403,7 @@ export function createOrbitScene(canvas: HTMLCanvasElement, opts: { isTouch: boo
         renderer.initTexture(tex);
       }
 
-      // 3) Terra: três texturas, uma por vez, cada upload numa pausa
+      // 2) Terra: três texturas, uma por vez, cada upload numa pausa
       const earth: (keyof typeof bgUniforms)[] = ["uDay", "uNight", "uClouds"];
       const files = { uDay: "earth-day.jpg", uNight: "earth-night.jpg", uClouds: "earth-clouds.jpg" } as const;
       void (async () => {
@@ -512,8 +474,8 @@ export function createOrbitScene(canvas: HTMLCanvasElement, opts: { isTouch: boo
       sun.intensity = mix(3.2, 1.1, b);
       fill.intensity = mix(1.6, 1.0, b);
       rim.intensity = mix(2.0, 3.4, b);
-      ambient.intensity = mix(1.0, 2.2, b);
-      if (suitMaterial) suitMaterial.envMapIntensity = mix(0.9, 0.45, b);
+      ambient.intensity = mix(0.8, 2.0, b);
+      hemi.intensity = mix(1.4, 0.6, b);
       renderer.render(scene, camera);
     },
 
@@ -525,7 +487,6 @@ export function createOrbitScene(canvas: HTMLCanvasElement, opts: { isTouch: boo
       dustMat.dispose();
       jetGeo.dispose();
       jetMat.dispose();
-      envTex?.dispose();
       root.traverse((o) => {
         if (o instanceof THREE.Mesh) {
           o.geometry.dispose();

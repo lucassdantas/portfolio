@@ -108,6 +108,22 @@ export function OrbitSection() {
 
     const isTouch = window.matchMedia("(hover: none)").matches || window.innerWidth < 820;
 
+    // O módulo 3D (three.js) custa ~60ms de parse na thread principal: baixa e
+    // avalia na primeira pausa de rolagem depois que a pessoa começou a rolar —
+    // longe da seção, onde ninguém percebe. Quem só mede a página não rola.
+    let quietTimer = 0;
+    let prefetched = false;
+    const onScrollQuiet = () => {
+      if (prefetched) return;
+      clearTimeout(quietTimer);
+      quietTimer = window.setTimeout(() => {
+        prefetched = true;
+        window.removeEventListener("scroll", onScrollQuiet);
+        void import("@/lib/orbitScene");
+      }, 600);
+    };
+    window.addEventListener("scroll", onScrollQuiet, { passive: true });
+
     const start = async () => {
       started = true;
       try {
@@ -300,6 +316,8 @@ export function OrbitSection() {
       disposed = true;
       near.disconnect();
       window.removeEventListener("scroll", noteScroll);
+      window.removeEventListener("scroll", onScrollQuiet);
+      clearTimeout(quietTimer);
       clearTimeout(calmTimer);
       cleanup?.();
       scene?.dispose();

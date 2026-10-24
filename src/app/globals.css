@@ -114,13 +114,13 @@
   #sistemas,
   #projetos,
   #github,
-  #terminal,
-  #playground,
   #educacao,
   #contato {
     content-visibility: auto;
     contain-intrinsic-size: auto 1200px;
   }
+  /* terminal e playground ficam fora: a primeira pintura deles ao rolar (painel
+     grande com backdrop-filter) era uma travada de ~70ms no caminho do astronauta */
   /* Durante um salto de âncora (src/lib/nav.ts) tudo fica visível: layout exato. */
   html.ld-nav :is(#stack, #experiencia, #case, #sistemas, #projetos, #github, #terminal, #playground, #educacao, #contato) {
     content-visibility: visible;
