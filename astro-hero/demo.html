@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AstroHero — demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#020208}.after{min-height:60vh;display:grid;place-items:center;color:#9AA4C2;font:16px system-ui}</style>
+</head>
+<body>
+<div id="astro-hero"></div>
+<section id="contato" class="after">(resto do site continua aqui)</section>
+
+<script src="vendor/three-r147-bundle.js"></script>
+<script src="assets/astro_geo.js" defer></script>
+<script src="astro-hero.js"></script>
+<script>
+  AstroHero.mount(document.getElementById('astro-hero'), { assetsPath: 'assets/' });
+</script>
+</body>
+</html>
