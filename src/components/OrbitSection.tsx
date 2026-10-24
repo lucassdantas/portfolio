@@ -290,7 +290,7 @@ export function OrbitSection() {
       {mode !== "mounted" && (
         <div className="absolute inset-0">
           <div className="sticky top-0 flex h-[100svh] flex-col justify-between overflow-hidden px-5 pt-[clamp(88px,17vh,180px)] pb-7 sm:px-[clamp(20px,3.4vw,56px)]">
-            <h2 className="m-0 max-w-[10ch] text-[clamp(52px,7.6vw,124px)] leading-[.92] font-bold tracking-[-.05em] text-[#F4F6FF]">
+            <h2 className="m-0 w-max max-w-[min(7.6em,100%)] text-balance text-[clamp(52px,7.6vw,124px)] leading-[.92] font-bold tracking-[-.05em] text-[#F4F6FF]">
               {t.orbitA}
             </h2>
             {mode === "static" ? (
