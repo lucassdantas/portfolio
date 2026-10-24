@@ -1,388 +1,325 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { ambient as AmbientEngine } from "@/lib/ambient";
-import type { OrbitScene } from "@/lib/orbitScene";
 
-/** Janela de rolagem (0..1) em que cada frase aparece; fora dela, some. */
-const CAPTIONS: [number, number][] = [
-  [0.1, 0.34],
-  [0.78, 0.95],
-];
-/** Onde ficam as transições da cena (marcas na barra de progresso). */
-const MARKS = [0.4, 0.72];
+/** Arquivos da cena (public/astro-hero): three r147 isolado em window.THREE, geometria e o componente. */
+const BASE = "/astro-hero/";
+const SCRIPTS = {
+  three: `${BASE}vendor/three-r147-bundle.js`,
+  geo: `${BASE}assets/astro_geo.js`,
+  hero: `${BASE}astro-hero.js`,
+};
+/** Cor e Terra em WebP; mapas de normal/oclusão ficam em JPG (em WebP ficavam maiores). */
+const ext = (name: string) => (/^(baseColor_|earth_day|earth_lights|earth_clouds)/.test(name) ? ".webp" : ".jpg");
 
-const fade = (p: number, [a, b]: [number, number]) => {
-  const w = 0.05;
-  return Math.max(0, Math.min(1, (p - a) / w, (b - p) / w));
+type HeroTexts = {
+  title: string;
+  hint: string;
+  midTop: string;
+  midBottom: string;
+  final: string;
+  cta: string;
+  ctaHref: string;
+  loading: string;
+};
+type HeroApi = {
+  prepareEnv: () => boolean;
+  prewarm: () => void;
+  programsReady: () => boolean;
+  uploadNextTexture: () => "uploaded" | "waiting" | "done";
+  warmFrame: () => void;
+  isLoaded: () => boolean;
+};
+type HeroInstance = { api: HeroApi; setTexts: (t: Partial<HeroTexts>) => void; destroy: () => void };
+type AstroHeroGlobal = {
+  mount: (
+    root: HTMLElement,
+    opts: {
+      assetsPath: string;
+      texts: HeroTexts;
+      ariaLabel?: string;
+      ext?: (name: string) => string;
+      scale?: number;
+      onFrame?: (s: { p: number }) => void;
+    }
+  ) => HeroInstance;
 };
 
+const escapeHtml = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+const loadScript = (src: string) =>
+  new Promise<void>((resolve, reject) => {
+    const prev = document.querySelector<HTMLScriptElement>(`script[src="${src}"]`);
+    if (prev) {
+      if (prev.dataset.ready) resolve();
+      else {
+        prev.addEventListener("load", () => resolve());
+        prev.addEventListener("error", () => reject(new Error(src)));
+      }
+      return;
+    }
+    const s = document.createElement("script");
+    s.src = src;
+    s.async = true;
+    s.onload = () => {
+      s.dataset.ready = "1";
+      resolve();
+    };
+    s.onerror = () => reject(new Error(src));
+    document.body.appendChild(s);
+  });
+
 /**
- * Interlúdio rolável antes do contato: um astronauta (traje Z-2 da NASA,
- * renderizado pelo three.js em `src/lib/orbitScene.ts`) cuja coreografia
- * inteira — três tomadas e duas transições — é conduzida pela rolagem. A seção
- * tem ~4,5 telas de altura e o palco fica preso (sticky); uma barra embaixo
- * mostra o progresso e onde estão as transições.
+ * Interlúdio do astronauta (3ª seção, logo depois do manifesto): a cena em três
+ * atos de `public/astro-hero/` — Terra → quarta dimensão → planeta calmo —,
+ * conduzida pela rolagem dentro de uma seção de 600vh com palco sticky.
  *
- * Desempenho: nada é baixado nem criado até a seção chegar a ~3 telas
- * (`near`); daí o módulo 3D, o modelo e as texturas entram em pausas da
- * rolagem (`whenCalm`), os shaders compilam em paralelo e a cena só desenha
- * com a seção visível, ajustando a resolução sozinha se o quadro ficar lento.
- *
- * - Canvas transparente nas pontas: o céu entra e sai por cima das
- *   partículas do site, sem corte.
- * - Sem WebGL: canvas escondido, frases sempre visíveis.
- * - Arrastar gira o astronauta (no toque, só na horizontal: `touch-action: pan-y`).
- * - `prefers-reduced-motion`: o tempo da cena para; a rolagem continua
- *   conduzindo a cena (o movimento é da própria pessoa).
+ * Desempenho (a seção fica perto do topo, então isto é o que importa):
+ * - Nada é baixado no carregamento: quem só mede a página (PageSpeed) não
+ *   rola. Tudo começa na primeira interação real (rolagem, toque, tecla).
+ * - Os scripts baixam em paralelo, mas são avaliados um por pausa da rolagem
+ *   (`whenCalm`: 220ms sem rolar; ou na marra quando a seção está a 1,5 tela).
+ * - Depois de montar: todos os shaders compilam em paralelo
+ *   (KHR_parallel_shader_compile, `api.prewarm`), as texturas sobem uma por
+ *   pausa e um quadro de aquecimento roda fora da tela. Só então a seção
+ *   aparece — o primeiro quadro visível não compila nem sobe nada.
+ * - O laço da cena só desenha com a seção na tela.
+ * - Sem WebGL: os textos ficam estáticos, com o botão para o contato.
  */
 export function OrbitSection() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const capRefs = useRef<(HTMLSpanElement | null)[]>([]);
-  const hintRef = useRef<HTMLParagraphElement>(null);
-  // false enquanto modelo e shaders carregam: a pílula do HUD avisa "preparando a cena"
-  const [sceneReady, setSceneReady] = useState(false);
-  const barRef = useRef<HTMLSpanElement>(null);
-  const hudRef = useRef<HTMLDivElement>(null);
+  const mountRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HeroInstance | null>(null);
+  const [mode, setMode] = useState<"placeholder" | "mounted" | "static">("placeholder");
+
+  const texts = useMemo<HeroTexts>(
+    () => ({
+      title: t.orbitA,
+      hint: t.orbitHint,
+      midTop: t.orbitMidTop,
+      midBottom: t.orbitMidBottom,
+      final: escapeHtml(t.orbitB).replace(/\n/g, "<br>"),
+      cta: t.orbitCta,
+      ctaHref: "#contato",
+      loading: t.orbitLoading,
+    }),
+    [t]
+  );
+  const textsRef = useRef(texts);
+  textsRef.current = texts;
+
+  useEffect(() => {
+    heroRef.current?.setTexts(texts);
+  }, [texts, lang]);
 
   useEffect(() => {
     const section = sectionRef.current;
-    const canvas = canvasRef.current;
-    if (!section || !canvas) return;
+    const host = mountRef.current;
+    if (!section || !host) return;
 
-    let cleanup: (() => void) | null = null;
-    let started = false;
+    const hasWebGL = (() => {
+      try {
+        const c = document.createElement("canvas");
+        return !!(c.getContext("webgl2") || c.getContext("webgl"));
+      } catch {
+        return false;
+      }
+    })();
+    if (!hasWebGL) {
+      setMode("static");
+      return;
+    }
+
     let disposed = false;
-    let scene: OrbitScene | null = null;
 
-    // Trabalho pesado síncrono (criar o contexto, enviar texturas, aquecer a GPU)
-    // só roda quando a rolagem para por um instante — é quando ninguém percebe.
-    // Se a seção chegar perto antes disso, roda de qualquer jeito.
+    // fila de trabalho pesado: roda quando a rolagem para por um instante
     const calmQueue: (() => void)[] = [];
     let calmTimer = 0;
-    let queuedAt = performance.now();
     let lastScrollAt = performance.now();
     const noteScroll = () => {
       lastScrollAt = performance.now();
     };
     window.addEventListener("scroll", noteScroll, { passive: true });
-    const pumpCalm = () => {
+    const pump = () => {
       calmTimer = 0;
-      if (!calmQueue.length) return;
-      const now = performance.now();
-      const urgent = section.getBoundingClientRect().top < window.innerHeight * 1.5 || now - queuedAt > 2500;
-      if (urgent || now - lastScrollAt > 220) {
-        calmQueue.shift()!();
-        queuedAt = now;
-      }
-      calmTimer = window.setTimeout(pumpCalm, 100);
+      if (disposed || !calmQueue.length) return;
+      const urgent = section.getBoundingClientRect().top < window.innerHeight * 1.5;
+      if (urgent || performance.now() - lastScrollAt > 220) calmQueue.shift()!();
+      if (calmQueue.length) calmTimer = window.setTimeout(pump, 90);
     };
-    const whenCalm = (fn: () => void) => {
-      calmQueue.push(fn);
-      if (!calmTimer) calmTimer = window.setTimeout(pumpCalm, 0);
-    };
-    const calm = () => new Promise<void>((ok) => whenCalm(ok));
-
-    const showStatic = () => {
-      setSceneReady(true);
-      canvas.style.display = "none";
-      capRefs.current.forEach((el) => {
-        if (el) el.style.opacity = "1";
+    const calm = () =>
+      new Promise<void>((resolve) => {
+        calmQueue.push(resolve);
+        if (!calmTimer) calmTimer = window.setTimeout(pump, 0);
       });
-    };
+    const wait = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms));
 
-    // aqui só a pergunta barata "este navegador tem WebGL?" — o resto espera a seção
-    if (!("WebGLRenderingContext" in window)) {
-      showStatic();
-      return;
-    }
-
-    // a trilha (se tocando) sobe de intensidade com a cena; o módulo vem sob demanda
     let amb: typeof AmbientEngine | null = null;
     void import("@/lib/ambient").then((m) => {
       amb = m.ambient;
     });
 
-    const isTouch = window.matchMedia("(hover: none)").matches || window.innerWidth < 820;
-    const maxScale = isTouch ? 0.75 : Math.min(window.devicePixelRatio || 1, 1.25);
-    // começa abaixo do teto e só sobe se os quadros forem rápidos
-    let adaptive = maxScale * 0.8;
-    const bufferSize = (scale: number) => {
-      const r = canvas.getBoundingClientRect();
-      return [Math.max(1, Math.floor(r.width * scale)), Math.max(1, Math.floor(r.height * scale))] as const;
-    };
-
-    // O módulo 3D (three.js) custa ~60ms de parse na thread principal: baixa e
-    // avalia na primeira pausa de rolagem depois que a pessoa começou a rolar —
-    // longe da seção, onde ninguém percebe. Quem só mede a página não rola.
-    let quietTimer = 0;
-    let prefetched = false;
-    const onScrollQuiet = () => {
-      if (prefetched) return;
-      clearTimeout(quietTimer);
-      quietTimer = window.setTimeout(() => {
-        prefetched = true;
-        window.removeEventListener("scroll", onScrollQuiet);
-        void import("@/lib/orbitScene");
-      }, 600);
-    };
-    window.addEventListener("scroll", onScrollQuiet, { passive: true });
-
     const start = async () => {
-      started = true;
       try {
+        // baixa tudo em paralelo (rede); avalia um por vez, em pausas
+        const pre = [SCRIPTS.three, SCRIPTS.geo, SCRIPTS.hero].map((src) =>
+          fetch(src, { priority: "low" } as RequestInit).catch(() => null)
+        );
+        await Promise.all(pre);
+        if (disposed) return;
         await calm();
-        if (disposed) return;
-        const { createOrbitScene } = await import("@/lib/orbitScene");
-        if (disposed) return;
+        await loadScript(SCRIPTS.three);
         await calm();
-        const sc = createOrbitScene(canvas, { isTouch });
-        if (!sc) return showStatic();
-        scene = sc;
-        await sc.load(calm);
+        await loadScript(SCRIPTS.hero);
+        await calm();
+        const geo = loadScript(SCRIPTS.geo);
         if (disposed) return;
-        // tamanho final já aqui: o aquecimento cria o buffer de uma vez (realocar depois custa ~100ms)
-        sc.setSize(...bufferSize(adaptive));
-        await sc.warm(calm);
+
+        await calm();
+        const AstroHero = (window as unknown as { AstroHero?: AstroHeroGlobal }).AstroHero;
+        if (!AstroHero) throw new Error("AstroHero ausente");
+        const hero = AstroHero.mount(host, {
+          assetsPath: `${BASE}assets/`,
+          texts: textsRef.current,
+          ariaLabel: t.orbitAria,
+          ext,
+          // escala de render fixa (trocar depois realoca tudo e trava): menor no toque
+          scale: window.matchMedia("(hover: none)").matches || window.innerWidth < 820 ? 0.7 : 0.9,
+          onFrame: (s) => {
+            const p = s.p;
+            amb?.setIntensity(Math.min(1, p * 6) * (1 - Math.max(0, (p - 0.85) / 0.15)));
+          },
+        });
+        heroRef.current = hero;
+        setMode("mounted");
+
+        // geometria do astronauta (o componente monta o modelo quando ela chega)
+        await geo;
+        for (let i = 0; i < 100 && !hero.api.isLoaded() && !disposed; i++) await wait(100);
         if (disposed) return;
-        begin(sc);
+
+        // mapas de ambiente (um por pausa) — antes de compilar: eles mudam os shaders
+        for (let i = 0; i < 5 && !disposed; i++) {
+          await calm();
+          const done = hero.api.prepareEnv();
+          // a 1ª chamada só manda compilar: espera o driver antes de desenhar
+          for (let k = 0; k < 60 && !hero.api.programsReady() && !disposed; k++) await wait(100);
+          if (done) break;
+        }
+        if (disposed) return;
+
+        // shaders: compila tudo em paralelo e espera o driver terminar
+        await calm();
+        hero.api.prewarm();
+        for (let i = 0; i < 80 && !hero.api.programsReady() && !disposed; i++) await wait(100);
+
+        // texturas: uma por pausa, conforme chegam da rede
+        for (let i = 0; i < 400 && !disposed; i++) {
+          await calm();
+          const r = hero.api.uploadNextTexture();
+          if (r === "done") break;
+          if (r === "waiting") await wait(150);
+        }
+        if (disposed) return;
+
+        // quadro completo fora da tela: passes de bloom, alvos de render, uniforms
+        await calm();
+        hero.api.warmFrame();
       } catch (e) {
-        console.warn(e);
-        showStatic();
+        if (!disposed) {
+          console.warn(e);
+          heroRef.current?.destroy();
+          heroRef.current = null;
+          setMode("static");
+        }
       }
     };
 
-    const begin = (sc: OrbitScene) => {
-      let scale = adaptive;
-      const resize = () => sc.setSize(...bufferSize(scale));
-      resize();
-      window.addEventListener("resize", resize);
-
-      const mouse = { tx: 0, ty: 0, x: 0, y: 0 };
-      const onMove = (e: PointerEvent) => {
-        mouse.tx = (e.clientX / window.innerWidth) * 2 - 1;
-        mouse.ty = -((e.clientY / window.innerHeight) * 2 - 1);
-      };
-      if (!isTouch) window.addEventListener("pointermove", onMove);
-
-      const rot = { x: 0, y: 0, vx: 0, vy: 0 };
-      let drag: { x: number; y: number } | null = null;
-      const stage = canvas.parentElement!;
-      const onDown = (e: PointerEvent) => {
-        drag = { x: e.clientX, y: e.clientY };
-      };
-      const onDrag = (e: PointerEvent) => {
-        if (!drag) return;
-        rot.vx = (e.clientX - drag.x) * 0.006;
-        rot.vy = e.pointerType === "touch" ? 0 : (e.clientY - drag.y) * 0.004;
-        drag = { x: e.clientX, y: e.clientY };
-        rot.x += rot.vx;
-        rot.y = Math.max(-0.6, Math.min(0.6, rot.y + rot.vy));
-      };
-      const onUp = () => {
-        drag = null;
-      };
-      stage.addEventListener("pointerdown", onDown);
-      window.addEventListener("pointermove", onDrag);
-      window.addEventListener("pointerup", onUp);
-      window.addEventListener("pointercancel", onUp);
-
-      let inView = true;
-      const io = new IntersectionObserver((entries) => {
-        inView = entries[0]?.isIntersecting ?? false;
-      });
-      io.observe(section);
-
-      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const t0 = performance.now();
-      let last = t0;
-      let slow = 0;
-      let fast = 0;
-      let prog01 = 0;
-      let raf = 0;
-      let drewOnce = false;
-      let lastScale = scale;
-      let geoTop = 0;
-      let geoH = 0;
-      let geoStamp = 0;
-
-      const draw = (now: number) => {
-        raf = requestAnimationFrame(draw);
-        if (!inView) {
-          last = now;
-          amb?.setIntensity(0);
-          return;
-        }
-        // mede o quadro e ajusta a resolução: 2 quadros lentos seguidos já baixam,
-        // e ela só volta a subir depois de ~2s de quadros rápidos
-        const dt = now - last;
-        last = now;
-        if (dt > 34) slow++;
-        else {
-          slow = 0;
-          if (dt < 14) fast++;
-        }
-        if (slow >= 2 && adaptive > 0.4) {
-          adaptive = Math.max(0.4, adaptive * 0.8);
-          slow = fast = 0;
-        } else if (fast > 120 && adaptive < maxScale) {
-          adaptive = Math.min(maxScale, adaptive * 1.1);
-          slow = fast = 0;
-        }
-
-        // posição da seção em cache (relida a cada 250ms): sem forçar layout por quadro
-        if (now - geoStamp > 250) {
-          const rr = section.getBoundingClientRect();
-          geoTop = rr.top + window.scrollY;
-          geoH = rr.height;
-          geoStamp = now;
-        }
-        const rTop = geoTop - window.scrollY;
-        const vh = window.innerHeight;
-        scale = adaptive;
-        if (scale !== lastScale) {
-          lastScale = scale;
-          resize();
-        }
-
-        const target = Math.min(1, Math.max(0, -rTop / Math.max(1, geoH - vh)));
-        // segue a rolagem, mas no máximo ~0,3 da cena por segundo (no toque, onde
-        // não dá para frear a página, um pouco mais) — rolada rápida não atravessa
-        // a coreografia num piscar; parar de rolar para a cena
-        // dt limitado a 34ms: quadro longo não vira salto
-        const maxRate = ((isTouch ? 0.5 : 0.3) * Math.min(34, Math.max(0, dt))) / 1000;
-        const want = reduced ? target - prog01 : (target - prog01) * 0.1;
-        prog01 = Math.min(1, Math.max(0, prog01 + Math.max(-maxRate, Math.min(maxRate, want))));
-
-        mouse.x += (mouse.tx - mouse.x) * 0.06;
-        mouse.y += (mouse.ty - mouse.y) * 0.06;
-        if (!drag) {
-          rot.x += rot.vx;
-          rot.y = Math.max(-0.6, Math.min(0.6, rot.y + rot.vy));
-          rot.vx *= 0.95;
-          rot.vy *= 0.92;
-          rot.y *= 0.985;
-        }
-
-        CAPTIONS.forEach((win, i) => {
-          const el = capRefs.current[i];
-          if (!el) return;
-          const o = fade(prog01, win);
-          el.style.opacity = String(o);
-          el.style.transform = `translateY(${(1 - o) * 28}px)`;
-          el.style.filter = `blur(${(1 - o) * 8}px)`;
-        });
-        if (hintRef.current) hintRef.current.style.opacity = String(Math.max(0, 1 - prog01 * 14));
-        if (barRef.current) barRef.current.style.transform = `scaleX(${prog01})`;
-        // trilha: sobe ao entrar na cena, no auge durante as tomadas, volta ao calmo no fim
-        amb?.setIntensity(Math.min(1, prog01 * 6) * (1 - Math.max(0, (prog01 - 0.85) / 0.15)));
-        if (hudRef.current) hudRef.current.style.opacity = prog01 > 0.995 ? "0" : "1";
-
-        sc.render({ prog: prog01, time: reduced ? 12 : (now - t0) / 1000, rot, mouse });
-        if (!drewOnce) {
-          drewOnce = true;
-          setSceneReady(true);
-        }
-      };
-      raf = requestAnimationFrame(draw);
-
-      cleanup = () => {
-        cancelAnimationFrame(raf);
-        io.disconnect();
-        window.removeEventListener("resize", resize);
-        if (!isTouch) window.removeEventListener("pointermove", onMove);
-        stage.removeEventListener("pointerdown", onDown);
-        window.removeEventListener("pointermove", onDrag);
-        window.removeEventListener("pointerup", onUp);
-        window.removeEventListener("pointercancel", onUp);
-      };
+    // gatilho: primeira interação real (o PageSpeed não interage)
+    let started = false;
+    const kick = () => {
+      if (started) return;
+      started = true;
+      off();
+      void start();
     };
-
-    // começa a preparar quando a seção está a ~3 telas de distância
-    const near = new IntersectionObserver(
-      (entries) => {
-        if (!started && entries[0]?.isIntersecting) {
-          near.disconnect();
-          void start();
-        }
-      },
-      { rootMargin: "300% 0px" }
-    );
-    near.observe(section);
+    const onScroll = () => {
+      if (window.scrollY > 40) kick();
+    };
+    const events: [string, EventListener][] = [
+      ["scroll", onScroll],
+      ["wheel", kick],
+      ["touchstart", kick],
+      ["keydown", kick],
+      ["pointerdown", kick],
+    ];
+    const off = () => events.forEach(([e, f]) => window.removeEventListener(e, f));
+    events.forEach(([e, f]) => window.addEventListener(e, f, { passive: true }));
+    // aberto já rolado (recarregar no meio da página, link com âncora)
+    if (window.scrollY > 40) kick();
 
     return () => {
       disposed = true;
-      near.disconnect();
+      off();
       window.removeEventListener("scroll", noteScroll);
-      window.removeEventListener("scroll", onScrollQuiet);
-      clearTimeout(quietTimer);
       clearTimeout(calmTimer);
-      cleanup?.();
-      scene?.dispose();
+      calmQueue.length = 0;
+      heroRef.current?.destroy();
+      heroRef.current = null;
+      amb?.setIntensity(0);
     };
+    // os textos entram por textsRef/setTexts; montar de novo a cada idioma recriaria o WebGL
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const capCls =
-    "pointer-events-none absolute block max-w-[14ch] text-[clamp(40px,6.6vw,112px)] leading-[.95] font-bold tracking-[-.045em] opacity-0 will-change-transform";
-  const glow = { textShadow: "0 0 40px rgba(4,10,24,.9), 0 0 12px rgba(4,10,24,.8)" };
+  const finalLines = t.orbitB.split("\n");
 
   return (
-    <section ref={sectionRef} id="orbita" className="relative h-[460svh] max-md:h-[340svh]">
-      <div className="sticky top-0 h-[100svh] touch-pan-y overflow-hidden select-none min-[1100px]:-mr-12">
-        <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full" aria-hidden />
-        <h2 className="m-0">
-          <span
-            ref={(el) => {
-              capRefs.current[0] = el;
-            }}
-            className={`${capCls} top-[18%] left-5 text-[#9CCBF0] sm:left-8`}
-            style={glow}
-          >
-            {t.orbitA}
-          </span>{" "}
-          <span
-            ref={(el) => {
-              capRefs.current[1] = el;
-            }}
-            className={`${capCls} bottom-[18%] left-5 text-[#F5F2ED] sm:left-8`}
-            style={glow}
-          >
-            {t.orbitB}
-          </span>
-        </h2>
-
-        {/* HUD: dica de rolagem + barra de progresso com as marcas das transições */}
-        <div
-          ref={hudRef}
-          className="pointer-events-none absolute inset-x-0 bottom-[clamp(22px,5vh,48px)] flex flex-col items-center gap-4 px-6 transition-opacity duration-500 max-md:bottom-[96px]"
-        >
-          <p
-            ref={hintRef}
-            className="m-0 flex items-center gap-3 rounded-full border border-accent/40 bg-[#040A18]/70 px-4 py-2 font-mono text-[11.5px] tracking-[.18em] text-txt uppercase backdrop-blur-[6px]"
-          >
-            {sceneReady ? (
-              <span className="inline-block animate-bounce text-accent">↓</span>
+    <section
+      ref={sectionRef}
+      id="orbita"
+      aria-label={t.orbitAria}
+      className="relative h-[600vh] bg-[#020208] min-[1100px]:-mr-12"
+    >
+      {/* espaço reservado (vem do servidor): mesma altura e o título no lugar,
+          para nada abaixo pular quando a cena montar */}
+      {mode !== "mounted" && (
+        <div className="absolute inset-0">
+          <div className="sticky top-0 flex h-[100svh] flex-col justify-between overflow-hidden px-5 pt-[clamp(88px,17vh,180px)] pb-7 sm:px-[clamp(20px,3.4vw,56px)]">
+            <h2 className="m-0 max-w-[10ch] text-[clamp(52px,7.6vw,124px)] leading-[.92] font-bold tracking-[-.05em] text-[#F4F6FF]">
+              {t.orbitA}
+            </h2>
+            {mode === "static" ? (
+              <div className="flex flex-col items-start gap-7">
+                <p className="m-0 text-[clamp(40px,5.6vw,96px)] leading-[.92] font-bold tracking-[-.05em] text-[#FFF6EE]">
+                  {finalLines.map((l, i) => (
+                    <span key={i} className="block">
+                      {l}
+                    </span>
+                  ))}
+                </p>
+                <a
+                  href="#contato"
+                  className="inline-flex min-h-12 items-center gap-3 rounded-full border border-[rgba(255,246,238,.55)] px-[22px] text-base font-semibold text-[#F4F1EC] no-underline"
+                >
+                  {t.orbitCta} <span aria-hidden>→</span>
+                </a>
+              </div>
             ) : (
-              <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-accent" />
+              <p className="m-0 self-end font-mono text-[11px] tracking-[.2em] text-[#9AA4C2] uppercase">{t.orbitLoading}</p>
             )}
-            {sceneReady ? t.orbitHint : t.orbitLoading}
-          </p>
-          <div className="relative h-[3px] w-[min(560px,72vw)] overflow-hidden rounded-full bg-white/12">
-            <span
-              ref={barRef}
-              className="absolute inset-0 origin-left rounded-full bg-gradient-to-r from-accent to-[#66D9FF]"
-              style={{ transform: "scaleX(0)" }}
-            />
-            {MARKS.map((m) => (
-              <span key={m} className="absolute top-0 h-full w-[2px] bg-[#040A18]" style={{ left: `${m * 100}%` }} />
-            ))}
           </div>
-          <p className="m-0 text-center font-mono text-[9.5px] tracking-[.16em] text-muted uppercase">{t.orbitCredit}</p>
         </div>
-      </div>
+      )}
+      {/* a cena monta aqui (o componente cria a própria seção interna com 100% de altura) */}
+      <div ref={mountRef} className="absolute inset-0" />
+      <p className="pointer-events-none absolute right-5 bottom-3 m-0 font-mono text-[9.5px] tracking-[.16em] text-[#9AA4C2]/70 uppercase">
+        {t.orbitCredit}
+      </p>
     </section>
   );
 }

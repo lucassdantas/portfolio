@@ -56,14 +56,23 @@ export interface Translation {
   coreB: string;
   coreCap: string;
   coreFlow: string;
-  /** OrbitSection (astronauta): dica de interação e as duas frases que aparecem durante a rolagem. */
+  /** OrbitSection (astronauta, cena em public/astro-hero): textos da cena em três atos. */
   orbitHint: string;
-  /** Pílula do HUD enquanto o shader do astronauta compila. */
+  /** Enquanto o astronauta carrega. */
   orbitLoading: string;
-  /** Crédito das imagens da Terra (NASA), no HUD da cena. */
+  /** Crédito do modelo 3D (Smithsonian, CC0). */
   orbitCredit: string;
+  /** Título do 1º ato. */
   orbitA: string;
+  /** Frase do 3º ato; `
+` vira quebra de linha. */
   orbitB: string;
+  orbitMidTop: string;
+  orbitMidBottom: string;
+  /** Botão do 3º ato (leva ao contato). */
+  orbitCta: string;
+  /** Descrição da cena para leitor de tela. */
+  orbitAria: string;
   featured: string;
   caseTitle: string;
   caseKind: string;

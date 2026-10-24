@@ -149,18 +149,25 @@ describe("ProjectsSection — resultado em destaque", () => {
 });
 
 describe("OrbitSection — interlúdio do astronauta", () => {
-  it("sem WebGL esconde o canvas e mantém o texto", () => {
-    const { container } = renderWithProviders(<OrbitSection />);
-    expect(screen.getByRole("heading", { name: new RegExp(translations.pt.orbitB) })).toBeInTheDocument();
-    expect(container.querySelector("canvas")!.style.display).toBe("none");
+  it("nada carrega sem interação: só o título e o aviso de carregamento", () => {
+    renderWithProviders(<OrbitSection />);
+    expect(screen.getByRole("heading", { name: translations.pt.orbitA })).toBeInTheDocument();
+    expect(document.querySelector('script[src^="/astro-hero/"]')).toBeNull();
+  });
+
+  it("sem WebGL mostra os textos estáticos e o botão para o contato", async () => {
+    renderWithProviders(<OrbitSection />);
+    const cta = await screen.findByRole("link", { name: new RegExp(translations.pt.orbitCta) });
+    expect(cta).toHaveAttribute("href", "#contato");
+    expect(screen.getByText(translations.pt.orbitB.split("\n")[1])).toBeInTheDocument();
   });
 
   it("texto acompanha o idioma", async () => {
     localStorage.setItem("ldp-lang", "fr");
     try {
       renderWithProviders(<OrbitSection />);
-      expect(await screen.findByText(translations.fr.orbitB)).toBeInTheDocument();
-      expect(screen.getByText(translations.fr.orbitHint)).toBeInTheDocument();
+      expect(await screen.findByRole("heading", { name: translations.fr.orbitA })).toBeInTheDocument();
+      expect(await screen.findByRole("link", { name: new RegExp(translations.fr.orbitCta) })).toBeInTheDocument();
     } finally {
       localStorage.removeItem("ldp-lang");
     }
