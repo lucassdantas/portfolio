@@ -58,6 +58,8 @@ export interface Translation {
   coreFlow: string;
   /** OrbitSection (astronauta): dica de interação e as duas frases que aparecem durante a rolagem. */
   orbitHint: string;
+  /** Crédito das imagens da Terra (NASA), no HUD da cena. */
+  orbitCredit: string;
   orbitA: string;
   orbitB: string;
   featured: string;

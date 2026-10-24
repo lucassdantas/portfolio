@@ -85,11 +85,13 @@ function setup(root: ParentNode = document): () => void {
       entries.forEach((en) => {
         const list = targets.get(en.target) ?? [];
         if (!decided.has(en.target)) {
-          const rc = en.boundingClientRect;
-          if (rc.width === 0 && rc.height === 0) return; // sem caixa ainda (content-visibility)
           decided.add(en.target);
+          const rc = en.boundingClientRect;
+          // rect zerado = dentro de seção com content-visibility ainda não
+          // renderizada, logo longe da tela: esconde e espera entrar
+          const offscreen = rc.width === 0 && rc.height === 0;
           // já visível (ou acima) no primeiro contato: nunca esconde
-          if (en.isIntersecting || en.boundingClientRect.top < window.innerHeight) {
+          if (!offscreen && (en.isIntersecting || rc.top < window.innerHeight)) {
             io.unobserve(en.target);
             return;
           }

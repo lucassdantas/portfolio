@@ -134,6 +134,40 @@ export function OrbitSection() {
       });
 
       // resolução adaptativa: começa no teto e desce se o quadro passar de ~20ms
+      // texturas da Terra (NASA, domínio público — /public/assets/space): carregam
+      // só aqui, quando a seção se aproxima; até chegarem, o shader usa o planeta
+      // procedural. Decodificação fora da thread principal (img.decode) e um
+      // upload por quadro, para não travar a rolagem.
+      const texUnits = { uDay: 0, uNight: 1, uClouds: 2 } as const;
+      const texFiles = { uDay: "earth-day.jpg", uNight: "earth-night.jpg", uClouds: "earth-clouds.jpg" };
+      const aniso = gl.getExtension("EXT_texture_filter_anisotropic") as { TEXTURE_MAX_ANISOTROPY_EXT: number } | null;
+      let texLoaded = 0;
+      (Object.keys(texUnits) as (keyof typeof texUnits)[]).forEach((name, i) => {
+        const img = new Image();
+        img.src = `/assets/space/${texFiles[name]}`;
+        img
+          .decode()
+          .then(() => new Promise((ok) => setTimeout(ok, i * 60)))
+          .then(() => {
+            if (!gl) return;
+            gl.useProgram(prog);
+            gl.activeTexture(gl.TEXTURE0 + texUnits[name]);
+            gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img);
+            gl.generateMipmap(gl.TEXTURE_2D);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            if (aniso) gl.texParameterf(gl.TEXTURE_2D, aniso.TEXTURE_MAX_ANISOTROPY_EXT, 4);
+            gl.uniform1i(gl.getUniformLocation(prog, name), texUnits[name]);
+            if (++texLoaded === 3) gl.uniform1f(gl.getUniformLocation(prog, "uHasTex"), 1);
+          })
+          .catch(() => {
+            /* sem textura: fica o planeta procedural */
+          });
+      });
+
       const maxScale = isTouch ? 0.75 : Math.min(window.devicePixelRatio || 1, 1.25);
       // começa abaixo do teto e só sobe se os quadros forem rápidos
       let adaptive = maxScale * 0.8;
@@ -359,6 +393,7 @@ export function OrbitSection() {
               <span key={m} className="absolute top-0 h-full w-[2px] bg-[#040A18]" style={{ left: `${m * 100}%` }} />
             ))}
           </div>
+          <p className="m-0 font-mono text-[9.5px] tracking-[.16em] text-muted uppercase">{t.orbitCredit}</p>
         </div>
       </div>
     </section>
