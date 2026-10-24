@@ -18,6 +18,7 @@ export function ChatWidget() {
       {open && <ChatPanel onClose={() => setOpen(false)} />}
       <button
         type="button"
+        data-chat-launcher
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? t.chat.closeLabel : t.chat.launcher}
         aria-expanded={open}

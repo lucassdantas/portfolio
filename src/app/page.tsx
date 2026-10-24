@@ -7,7 +7,8 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { MotionReveal } from "@/components/MotionReveal";
 import { Hero } from "@/components/Hero";
 import { Manifesto } from "@/components/Manifesto";
-import { Terminal } from "@/components/Terminal";
+import { Terminal, TERMINAL_OPEN_EVENT } from "@/components/Terminal";
+import { LazyHydrate } from "@/components/LazyHydrate";
 import { StackSection } from "@/components/StackSection";
 import { ExperienceSection } from "@/components/ExperienceSection";
 import { CaseSection } from "@/components/CaseSection";
@@ -41,18 +42,20 @@ export default function Home() {
         <main>
           <Hero />
           <Manifesto />
-          <StackSection />
-          <ExperienceSection />
-          <CoreSection />
-          <CaseSection />
-          <SystemsSection />
-          <ProjectsSection />
-          <GithubSection />
-          <Terminal />
-          <Playground />
-          <EducationSection />
-          <OrbitSection />
-          <ContactSection />
+          {/* abaixo da dobra: o HTML já vem pronto do servidor, o React só liga cada
+              bloco quando ele chega perto da tela (LCP no celular) */}
+          <LazyHydrate><StackSection /></LazyHydrate>
+          <LazyHydrate><ExperienceSection /></LazyHydrate>
+          <LazyHydrate rootMargin="150% 0px"><CoreSection /></LazyHydrate>
+          <LazyHydrate><CaseSection /></LazyHydrate>
+          <LazyHydrate><SystemsSection /></LazyHydrate>
+          <LazyHydrate><ProjectsSection /></LazyHydrate>
+          <LazyHydrate><GithubSection /></LazyHydrate>
+          <LazyHydrate hydrateOn={TERMINAL_OPEN_EVENT}><Terminal /></LazyHydrate>
+          <LazyHydrate><Playground /></LazyHydrate>
+          <LazyHydrate><EducationSection /></LazyHydrate>
+          <LazyHydrate rootMargin="250% 0px"><OrbitSection /></LazyHydrate>
+          <LazyHydrate><ContactSection /></LazyHydrate>
         </main>
         <Footer />
       </div>

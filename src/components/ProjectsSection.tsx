@@ -178,7 +178,7 @@ export function ProjectsSection() {
         </button>
         <button
           onClick={() => manual(index + 1)}
-          aria-label={t.nextLabel}
+          aria-label={`${next.name} — ${t.nextLabel}`}
           className="group flex h-11 cursor-pointer items-center gap-3 rounded-[2px] border border-bord bg-bg/80 px-3.5 font-mono text-[13px] text-txt transition-colors hover:border-accent hover:text-accent"
         >
           <span className="hidden max-w-[22ch] truncate text-[10.5px] tracking-[.14em] text-muted uppercase group-hover:text-accent md:inline">

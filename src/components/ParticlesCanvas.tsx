@@ -28,6 +28,26 @@ export function ParticlesCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    // só depois do primeiro quadro: montar 14 mil pontos e compilar o shader
+    // não pode disputar com a primeira pintura da página
+    let dispose: (() => void) | undefined;
+    let cancelled = false;
+    const ric = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 120) as unknown as number);
+    const cic = window.cancelIdleCallback ?? window.clearTimeout;
+    const id = ric(
+      () => {
+        if (!cancelled) dispose = init() ?? undefined;
+      },
+      { timeout: 1500 }
+    );
+    return () => {
+      cancelled = true;
+      cic(id);
+      dispose?.();
+    };
+  }, []);
+
+  const init = (): (() => void) | void => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -95,6 +115,7 @@ export function ParticlesCanvas() {
     let aspect = 1.6;
     const dpr = Math.min(window.devicePixelRatio || 1, isTouch ? 1.5 : 1.8);
     const resize = () => {
+      dirty = true;
       canvas.width = Math.floor(window.innerWidth * dpr);
       canvas.height = Math.floor(window.innerHeight * dpr);
       gl!.viewport(0, 0, canvas.width, canvas.height);
@@ -110,6 +131,17 @@ export function ParticlesCanvas() {
     };
     if (!isTouch) window.addEventListener("pointermove", onMove);
 
+    // leituras de DOM (seções, data-pdim) só quando a página rola, muda de
+    // tamanho ou um bloco hidrata — antes eram a cada quadro, forçando
+    // estilo/layout 60×/s (aparecia como "Style & Layout" no Lighthouse)
+    let stageTarget = 0;
+    let dimTarget = 1;
+    let dirty = true;
+    const markDirty = () => {
+      dirty = true;
+    };
+    window.addEventListener("scroll", markDirty, { passive: true });
+    window.addEventListener("ld:hydrated", markDirty);
     let stageSm = 0;
     let dimSm = 1;
     let raf = 0;
@@ -120,10 +152,14 @@ export function ParticlesCanvas() {
       mouse.x += (mouse.tx - mouse.x) * 0.08;
       mouse.y += (mouse.ty - mouse.y) * 0.08;
 
-      const stageTarget = computeStage(STAGE_COUNT);
+      if (dirty) {
+        dirty = false;
+        stageTarget = computeStage(STAGE_COUNT);
+        dimTarget = computeDim();
+      }
       stageSm += (stageTarget - stageSm) * 0.045;
       const order = Math.min(1, stageSm / (STAGE_COUNT - 1));
-      dimSm += (computeDim() - dimSm) * 0.05;
+      dimSm += (dimTarget - dimSm) * 0.05;
 
       const camR = 7.4 - order * 1.9;
       const ang = -0.45 + stageSm * 0.42 + mouse.x * 0.22;
@@ -153,9 +189,11 @@ export function ParticlesCanvas() {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("scroll", markDirty);
+      window.removeEventListener("ld:hydrated", markDirty);
       if (!isTouch) window.removeEventListener("pointermove", onMove);
     };
-  }, []);
+  };
 
   return (
     <canvas

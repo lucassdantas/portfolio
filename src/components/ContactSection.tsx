@@ -14,7 +14,10 @@ export function ContactSection() {
   const { t, lang } = useLanguage();
   const cell = "bg-bg2/88 shadow-[0_0_0_1px_var(--border)] backdrop-blur-[2px]";
   const glow = { textShadow: "0 0 36px rgba(10,9,8,.95), 0 0 12px rgba(10,9,8,.9)" };
+  // segunda frase: o trecho `ctAccent` sai em azul (e o ponto final também)
   const ctB = t.ctB.replace(/\.$/, "");
+  const cut = ctB.indexOf(t.ctAccent);
+  const parts = cut >= 0 ? [ctB.slice(0, cut), t.ctAccent, ctB.slice(cut + t.ctAccent.length)] : [ctB, "", ""];
   const rows: [string, string][] = [
     [t.ctLabRole, t.ctRole],
     [t.ctLabModel, t.ctModel],
@@ -41,7 +44,9 @@ export function ContactSection() {
             >
               <span className="block [text-wrap:balance]">{t.ctA}</span>
               <span className="mt-[.18em] block [text-wrap:balance]">
-                {ctB}
+                {parts[0]}
+                <span className="text-accent">{parts[1]}</span>
+                {parts[2]}
                 <span className="text-accent">.</span>
               </span>
             </h2>

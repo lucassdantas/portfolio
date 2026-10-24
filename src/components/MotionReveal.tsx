@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { HYDRATED_EVENT } from "./LazyHydrate";
 
 /** Textos animados na entrada: títulos ganham a cortina; o resto, subida com foco. */
 const TEXT = "section h2, section h3, section p, section li, section dt, section dd";
@@ -25,7 +26,13 @@ export function MotionReveal() {
 
     // prepara só com o navegador ocioso, depois do carregamento: medir e marcar
     // centenas de elementos não pode disputar com a primeira pintura (TBT/LCP)
-    let teardown: (() => void) | undefined;
+    const teardowns: (() => void)[] = [];
+    // bloco hidratado depois (LazyHydrate): o React recriou o DOM dele, então os
+    // textos ganham o movimento de entrada de novo, só dentro daquele bloco
+    const onHydrated = (e: Event) => {
+      teardowns.push(setup((e as CustomEvent<ParentNode>).detail));
+    };
+    window.addEventListener(HYDRATED_EVENT, onHydrated);
     const ric =
       window.requestIdleCallback ??
       ((cb: () => void) => window.setTimeout(cb, 300) as unknown as number);
@@ -34,7 +41,7 @@ export function MotionReveal() {
     const schedule = () => {
       idleId = ric(
         () => {
-          teardown = setup();
+          teardowns.push(setup());
         },
         { timeout: 2000 }
       );
@@ -44,7 +51,8 @@ export function MotionReveal() {
     return () => {
       window.removeEventListener("load", schedule);
       cic(idleId);
-      teardown?.();
+      window.removeEventListener(HYDRATED_EVENT, onHydrated);
+      teardowns.forEach((fn) => fn());
     };
   }, []);
 
@@ -52,9 +60,9 @@ export function MotionReveal() {
 }
 
 /** Marca os textos abaixo da dobra e revela cada um ao entrar na tela. */
-function setup(): () => void {
+function setup(root: ParentNode = document): () => void {
   const vh = window.innerHeight;
-  const els = Array.from(document.querySelectorAll<HTMLElement>(TEXT)).filter(
+  const els = Array.from(root.querySelectorAll<HTMLElement>(TEXT)).filter(
     (el) => !el.closest(SKIP) && el.getBoundingClientRect().top > vh * 0.95
   );
 

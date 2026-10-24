@@ -24,6 +24,7 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
   const [isTyping, setIsTyping] = useState(false);
   const [nameInput, setNameInput] = useState("");
   const bodyRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const prevLenRef = useRef(state.messages.length);
@@ -51,8 +52,18 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
+    // clique fora do painel fecha (a bolha já alterna sozinha, então fica de fora)
+    const onDown = (e: PointerEvent) => {
+      const el = e.target as Element | null;
+      if (!el || panelRef.current?.contains(el) || el.closest("[data-chat-launcher]")) return;
+      onClose();
+    };
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onDown);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onDown);
+    };
   }, [onClose]);
 
   useEffect(() => {
@@ -102,6 +113,7 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
   return (
     <div
       role="dialog"
+      ref={panelRef}
       aria-label={t.chat.title}
       className="fixed bottom-24 right-4 z-50 flex h-[min(520px,70vh)] w-[min(360px,calc(100vw-2rem))] flex-col overflow-hidden rounded-xl border border-[#16233A] bg-[#060D18] shadow-[0_20px_60px_rgba(0,0,0,.5)] sm:right-6"
     >
@@ -118,6 +130,15 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
           className="cursor-pointer rounded-md px-1.5 py-0.5 text-xs text-[#8C98AB] hover:text-[#E2E8F0]"
         >
           ↺
+        </button>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label={t.chat.closeLabel}
+          title={t.chat.resetLabel}
+          className="cursor-pointer rounded-md px-1.5 py-0.5 text-xs text-[#8C98AB] hover:text-[#E2E8F0]"
+        >
+          ✕
         </button>
       </div>
 

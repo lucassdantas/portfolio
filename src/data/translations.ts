@@ -107,6 +107,7 @@ const pt: Translation = {
   contactTitle: "contato",
   ctA: "Sistema complexo, prazo real.",
   ctB: "É onde eu trabalho melhor.",
+  ctAccent: "trabalho melhor",
   contactDesc:
     "Rendo mais em time com processo definido, code review de verdade e espaço para propor arquitetura.",
   remote: "remoto",
@@ -353,6 +354,7 @@ const en: Translation = {
   contactTitle: "contact",
   ctA: "Complex system, real deadline.",
   ctB: "That's where I do my best work.",
+  ctAccent: "do my best work",
   contactDesc:
     "I do my best work on teams with a defined process, real code review and room to propose architecture.",
   remote: "remote",
@@ -599,6 +601,7 @@ const es: Translation = {
   contactTitle: "contacto",
   ctA: "Sistema complejo, plazo real.",
   ctB: "Ahí es donde mejor trabajo.",
+  ctAccent: "mejor trabajo",
   contactDesc:
     "Rindo más en equipos con proceso definido, code review de verdad y espacio para proponer arquitectura.",
   remote: "remoto",
@@ -845,6 +848,7 @@ const fr: Translation = {
   contactTitle: "contact",
   ctA: "Système complexe, délai réel.",
   ctB: "C'est là que je suis le meilleur.",
+  ctAccent: "le meilleur",
   contactDesc:
     "Je donne le meilleur de moi-même dans une équipe avec un processus clair, de vraies revues de code et la place de proposer l'architecture.",
   remote: "à distance",

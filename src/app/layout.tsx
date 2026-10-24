@@ -6,13 +6,13 @@ import "./globals.css";
 
 const schibsted = Schibsted_Grotesk({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-schibsted",
 });
 
 const dmMono = DM_Mono({
   subsets: ["latin"],
-  weight: ["300", "400", "500"],
+  weight: ["400", "500"],
   variable: "--font-dm-mono",
 });
 

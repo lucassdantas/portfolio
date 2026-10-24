@@ -106,6 +106,8 @@ export interface Translation {
   ctB: string;
   contactDesc: string;
   remote: string;
+  /** Trecho de `ctB` que aparece em azul (precisa ser substring exata de `ctB`). */
+  ctAccent: string;
   /** Cartão de status do contato: linha de disponibilidade e os pares rótulo/valor. */
   ctStatus: string;
   ctLabRole: string;

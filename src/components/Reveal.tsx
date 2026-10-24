@@ -7,7 +7,8 @@ const EASE = "cubic-bezier(.16,1,.3,1)";
 /**
  * Entrada de cards ao rolar: sobem 48px crescendo de 96% e com os cantos se
  * abrindo (clip-path) até o tamanho final. Conteúdo que já está na tela no
- * carregamento não anima. Fallback: aparece sozinho após 6s.
+ * carregamento não anima (decidido pelo IntersectionObserver, sem medir
+ * layout na montagem). Fallback: aparece sozinho após 6s.
  * Marca `data-reveal` para o MotionReveal não animar os textos de dentro de
  * novo (o card já carrega o movimento).
  */
@@ -26,31 +27,47 @@ export function Reveal({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (el.getBoundingClientRect().top <= window.innerHeight) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    // Nada de getBoundingClientRect aqui: ~25 cards montando em sequência, cada
+    // um lendo layout e escrevendo estilo, forçavam ~25 relayouts da página
+    // inteira no carregamento. O IntersectionObserver responde fora do caminho
+    // crítico; quem já está na tela na 1ª resposta nunca é escondido.
+    let hidden = false;
     const show = () => {
+      if (!hidden) return;
       el.style.opacity = "1";
       el.style.transform = "none";
       el.style.clipPath = "inset(0% 0% 0% 0% round 0px)";
     };
-    el.style.opacity = "0";
-    el.style.transform = "translateY(48px) scale(.96)";
-    el.style.clipPath = "inset(6% 4% 0% 4% round 6px)";
-    el.style.transition = [
-      `opacity .8s ${EASE} ${delay}ms`,
-      `transform 1.1s ${EASE} ${delay}ms`,
-      `clip-path 1.1s ${EASE} ${delay}ms`,
-    ].join(", ");
-
+    const hide = () => {
+      hidden = true;
+      el.style.opacity = "0";
+      el.style.transform = "translateY(48px) scale(.96)";
+      el.style.clipPath = "inset(6% 4% 0% 4% round 6px)";
+      el.style.transition = [
+        `opacity .8s ${EASE} ${delay}ms`,
+        `transform 1.1s ${EASE} ${delay}ms`,
+        `clip-path 1.1s ${EASE} ${delay}ms`,
+      ].join(", ");
+    };
+    let first = true;
     const io = new IntersectionObserver(
       (entries) => {
-        entries.forEach((en) => {
+        const en = entries[entries.length - 1];
+        if (first) {
+          first = false;
           if (en.isIntersecting) {
-            show();
-            io.unobserve(en.target);
+            io.disconnect();
+            return;
           }
-        });
+          hide();
+          return;
+        }
+        if (en.isIntersecting) {
+          show();
+          io.disconnect();
+        }
       },
       { threshold: 0.12 }
     );

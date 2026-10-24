@@ -19,6 +19,18 @@ const loadAmbient = () => import("@/lib/ambient").then((m) => m.ambient);
 export function SoundToggle() {
   const { t } = useLanguage();
   const [on, setOn] = useState(false);
+  // quando o rodapé aparece, o botão sobe a altura dele (não cobre o texto)
+  const [lift, setLift] = useState(0);
+
+  useEffect(() => {
+    const footer = document.querySelector("footer");
+    if (!footer) return;
+    const io = new IntersectionObserver(([en]) =>
+      setLift(en.isIntersecting ? Math.round(en.boundingClientRect.height) + 14 : 0)
+    );
+    io.observe(footer);
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     let wanted = false;
@@ -66,7 +78,8 @@ export function SoundToggle() {
       aria-pressed={on}
       aria-label={on ? t.soundOff : t.soundOn}
       title={on ? t.soundOff : t.soundOn}
-      className="fixed bottom-6 left-4 z-50 flex h-11 cursor-pointer items-center gap-2.5 rounded-full border border-bord bg-bg/80 pr-4 pl-3.5 backdrop-blur-[8px] transition-colors hover:border-accent sm:left-6"
+      style={{ transform: `translateY(-${lift}px)` }}
+      className="fixed bottom-6 left-4 z-50 flex h-11 cursor-pointer items-center gap-2.5 rounded-full border border-bord bg-bg/80 pr-4 pl-3.5 backdrop-blur-[8px] transition-[transform,border-color] duration-500 ease-[cubic-bezier(.16,1,.3,1)] hover:border-accent sm:left-6"
     >
       {/* desligado: anel pulsando pede o clique */}
       {!on && <span aria-hidden className="absolute inset-0 animate-ping rounded-full border border-accent/50" />}

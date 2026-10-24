@@ -73,7 +73,7 @@ export function SystemsSection() {
 
                 <dl className="m-0 mb-[clamp(16px,2.4vh,24px)] flex flex-col gap-2 text-[13.5px] leading-[1.5]">
                   <div className="grid grid-cols-[64px_1fr] items-baseline gap-3">
-                    <dt className="font-mono text-[10px] tracking-[.16em] text-err uppercase">✕ {t.sysBefore}</dt>
+                    <dt className="font-mono text-[10px] tracking-[.16em] text-[#E8877A] uppercase">✕ {t.sysBefore}</dt>
                     <dd className="m-0 text-muted">{s.before[lang]}</dd>
                   </div>
                   <div className="grid grid-cols-[64px_1fr] items-baseline gap-3">

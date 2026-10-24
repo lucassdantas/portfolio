@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { makeProgram } from "@/shaders/particles";
 import { VERTEX_SRC, buildAstronautSrc } from "@/shaders/astronaut";
 import type { ambient as AmbientEngine } from "@/lib/ambient";
 
@@ -74,17 +73,52 @@ export function OrbitSection() {
       return;
     }
 
+    // a trilha (se tocando) sobe de intensidade com a cena; o módulo vem sob demanda
+    let amb: typeof AmbientEngine | null = null;
+    void import("@/lib/ambient").then((m) => {
+      amb = m.ambient;
+    });
+
     const start = () => {
       started = true;
-      // a trilha (se tocando) sobe de intensidade com a cena; o módulo vem sob demanda
-      let amb: typeof AmbientEngine | null = null;
-      void import("@/lib/ambient").then((m) => {
-        amb = m.ambient;
-      });
       const isTouch = window.matchMedia("(hover: none)").matches || window.innerWidth < 820;
       if (!gl) return showStatic();
-      const prog = makeProgram(gl, VERTEX_SRC, buildAstronautSrc(isTouch ? 64 : 100));
-      if (!prog) return showStatic();
+      // compila sem travar a página: com KHR_parallel_shader_compile o navegador
+      // compila em paralelo e aqui só se pergunta "terminou?" a cada quadro. Sem a
+      // extensão a primeira pergunta bloqueia — mas a seção ainda está a duas
+      // telas de distância (rootMargin do `near`)
+      const prog = gl.createProgram();
+      const vs = gl.createShader(gl.VERTEX_SHADER);
+      const fs = gl.createShader(gl.FRAGMENT_SHADER);
+      if (!prog || !vs || !fs) return showStatic();
+      gl.shaderSource(vs, VERTEX_SRC);
+      gl.shaderSource(fs, buildAstronautSrc(isTouch ? 64 : 100));
+      gl.compileShader(vs);
+      gl.compileShader(fs);
+      gl.attachShader(prog, vs);
+      gl.attachShader(prog, fs);
+      gl.linkProgram(prog);
+      const par = gl.getExtension("KHR_parallel_shader_compile") as { COMPLETION_STATUS_KHR: number } | null;
+      let pollId = 0;
+      const poll = () => {
+        if (par && !gl!.getProgramParameter(prog, par.COMPLETION_STATUS_KHR)) {
+          pollId = requestAnimationFrame(poll);
+          return;
+        }
+        if (!gl!.getProgramParameter(prog, gl!.LINK_STATUS)) {
+          console.warn(gl!.getProgramInfoLog(prog));
+          showStatic();
+          return;
+        }
+        begin(prog);
+      };
+      pollId = requestAnimationFrame(poll);
+      cleanup = () => cancelAnimationFrame(pollId);
+    };
+
+    const begin = (prog: WebGLProgram) => {
+      if (!gl) return showStatic();
+      const isTouch = window.matchMedia("(hover: none)").matches || window.innerWidth < 820;
       gl.useProgram(prog);
 
       const buf = gl.createBuffer();
@@ -110,6 +144,17 @@ export function OrbitSection() {
       };
       resize();
       window.addEventListener("resize", resize);
+
+      // aquecimento: um desenho de 2×2 px com a cena vazia faz a GPU terminar o
+      // pipeline agora, longe da tela, e não no primeiro quadro visível
+      gl.viewport(0, 0, 2, 2);
+      gl.uniform2f(U.uRes, 2, 2);
+      gl.uniform1f(U.uTime, 0);
+      gl.uniform1f(U.uProg, 0);
+      gl.uniform2f(U.uRot, 0, 0);
+      gl.uniform2f(U.uMouse, 0, 0);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      gl.viewport(0, 0, canvas.width, canvas.height);
 
       const mouse = { tx: 0, ty: 0, x: 0, y: 0 };
       const onMove = (e: PointerEvent) => {
@@ -241,7 +286,7 @@ export function OrbitSection() {
       };
     };
 
-    // só cria o contexto WebGL quando a seção está a ~1 tela de distância
+    // começa a compilar quando a seção está a ~2 telas de distância
     const near = new IntersectionObserver(
       (entries) => {
         if (!started && entries[0]?.isIntersecting) {
@@ -249,7 +294,7 @@ export function OrbitSection() {
           start();
         }
       },
-      { rootMargin: "100% 0px" }
+      { rootMargin: "200% 0px" }
     );
     near.observe(section);
 
