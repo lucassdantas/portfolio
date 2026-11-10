@@ -17,6 +17,13 @@ export type OrbitHeroFrame = {
   w2: number;
 };
 
+export type OrbitHeroPulse = {
+  /** Ato em que o clique aconteceu: 1 planeta, 2 tesserato, 3 órbitas calmas. */
+  act: 1 | 2 | 3;
+  /** No 1º ato, se o clique pegou perto do bug vermelho. */
+  bug: boolean;
+};
+
 export type OrbitHeroOptions = {
   texts?: Partial<OrbitHeroTexts>;
   ariaLabel?: string;
@@ -24,6 +31,8 @@ export type OrbitHeroOptions = {
   trip?: number;
   hue?: number;
   onFrame?: (s: OrbitHeroFrame) => void;
+  /** Clique/toque curto na cena. */
+  onPulse?: (s: OrbitHeroPulse) => void;
 };
 
 export type OrbitHeroInstance = {

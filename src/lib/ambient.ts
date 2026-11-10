@@ -46,6 +46,7 @@ class Ambient {
   private noise: AudioBuffer | null = null;
   private chordIndex = 0;
   private intensity = 0;
+  private lastChime = -1;
   private audioEl: HTMLAudioElement | null = null;
   playing = false;
 
@@ -135,6 +136,50 @@ class Ambient {
     osc.connect(g).connect(this.filter!);
     osc.start(start);
     osc.stop(start + 3);
+  }
+
+  /**
+   * Sino de clique na cena da órbita, afinado com a trilha (notas da mesma
+   * escala dos sinos). Planeta: uma nota; tesserato: nota + quinta rápida;
+   * órbitas calmas: nota grave e longa; "catch" (pegou o bug): duas notas
+   * subindo. Só toca com o som ligado; cliques seguidos a menos de 120ms viram um só.
+   */
+  chime(kind: "planet" | "tess" | "calm" | "catch") {
+    const ctx = this.ctx;
+    if (!ctx || !this.playing || this.audioEl) return;
+    const now = ctx.currentTime;
+    if (now - this.lastChime < 0.12) return;
+    this.lastChime = now;
+    const pick = (a: number[]) => a[Math.floor(Math.random() * a.length)];
+    if (kind === "tess") {
+      const f = pick([659.25, 783.99, 880.0]);
+      this.ping(f, now, 0.05, 0.9);
+      this.ping(f * 1.5, now + 0.07, 0.035, 0.7);
+    } else if (kind === "catch") {
+      this.ping(783.99, now, 0.05, 1.6);
+      this.ping(1046.5, now + 0.11, 0.05, 2.2);
+    } else if (kind === "calm") {
+      this.ping(pick([261.63, 329.63, 392.0]), now, 0.06, 3.2);
+    } else {
+      this.ping(pick(BELLS.slice(0, 5)), now, 0.045, 2.4);
+    }
+  }
+
+  /** Nota de sino com ataque curto: direto no master (nítida) e pelo filtro (cauda de reverb). */
+  private ping(freq: number, start: number, gain: number, dur: number) {
+    const ctx = this.ctx!;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, start);
+    g.gain.exponentialRampToValueAtTime(gain, start + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+    osc.connect(g);
+    g.connect(this.master!);
+    g.connect(this.filter!);
+    osc.start(start);
+    osc.stop(start + dur + 0.1);
   }
 
   /** Bumbo: seno com a afinação despencando — o "tum" grave. Acordes abaixam junto (sidechain). */

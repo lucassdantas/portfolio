@@ -22,6 +22,10 @@
  * - onFrame({ p, w2 }) para a trilha sonora acompanhar o tesserato.
  * - seção ocupa 100% do pai, fontes do site, título em <h2>, título em 2 linhas,
  *   botão com canto de 3px (padrão do site).
+ * - clique/toque: onda de choque no ponto do clique (anel que empurra e acende
+ *   as partículas e volta em ~1s); no planeta, clicar perto do bug dá um tranco
+ *   nele; no tesserato, um quarto de volta extra na 4ª dimensão + glitch de cor;
+ *   nas órbitas calmas, a onda é suave. `onPulse({ act, bug })` avisa a trilha.
  */
 
 function createOrbitHero(canvas, getProps) {
@@ -42,7 +46,7 @@ function createOrbitHero(canvas, getProps) {
 
     const VS = [
       'attribute vec4 aR;attribute float aT;',
-      'uniform float uTime,uP,uAspect,uPx,uF,uTravel,uTrip,uHue,uVel;uniform vec2 uMouse;uniform vec3 uCam,uOff,uOff3;uniform mat3 uView,uObj;',
+      'uniform float uTime,uP,uAspect,uPx,uF,uTravel,uTrip,uHue,uVel,uSpin,uGl,uBug,uBugPh;uniform vec4 uClk;uniform vec2 uMouse;uniform vec3 uCam,uOff,uOff3;uniform mat3 uView,uObj;',
       'varying vec3 vC;',
       '#define PI 3.14159265',
       '#define TAU 6.2831853',
@@ -79,10 +83,11 @@ function createOrbitHero(canvas, getProps) {
       '  float s=r.y*2.0-1.0;vec4 q;',
       '  if(b<0.5)q=vec4(s,o);else if(b<1.5)q=vec4(o.x,s,o.y,o.z);else if(b<2.5)q=vec4(o.x,o.y,s,o.z);else q=vec4(o,s);',
       '  q+=(vec4(r.z,fract(r.z*7.13),fract(r.z*13.7),fract(r.z*3.3))-0.5)*0.025;',
-      '  float a1=t*0.33+uP*7.0,a2=t*0.21+uP*4.0,a3=t*0.27+uP*2.0;',
+      '  float a1=t*0.33+uP*7.0+uSpin,a2=t*0.21+uP*4.0+uSpin*0.6,a3=t*0.27+uP*2.0+uSpin*0.35;',
       '  q.xw=r2(a1)*q.xw;q.yw=r2(a2)*q.yw;q.zw=r2(a3)*q.zw;q.xy=r2(t*0.07)*q.xy;',
       '  float k=2.7/(2.7-q.w);',
-      '  col=pal(q.w*0.22+t*0.05+0.55)*(0.55+0.25*k)*2.0;',
+      '  float gj=step(0.72,fract(r.z*91.7+floor(t*24.0)*0.137))*uGl;',
+      '  col=pal(q.w*0.22+t*0.05+0.55+uGl*0.5+gj*0.4)*(0.55+0.25*k)*2.0*(1.0+uGl*0.8);',
       '  return q.xyz*k*0.62;',
       ' }',
       ' float L=26.0;float layer=floor(r.x*44.0);',
@@ -91,7 +96,7 @@ function createOrbitHero(canvas, getProps) {
       ' vec2 sq=sd<0.5?vec2(f,-1.0):sd<1.5?vec2(1.0,f):sd<2.5?vec2(-f,1.0):vec2(-1.0,-f);',
       ' sq*=2.9+0.15*sin(t*1.3+layer);sq=r2(z*0.11+t*0.18)*sq;',
       ' float fade=smoothstep(-L+4.0,-L+11.0,z)*(1.0-smoothstep(0.5,3.5,z));',
-      ' col=pal(layer*0.045+t*0.06)*1.7*fade;',
+      ' col=pal(layer*0.045+t*0.06+uGl*0.33+step(0.75,fract(layer*0.61+floor(t*24.0)*0.29))*uGl*0.4)*1.7*fade*(1.0+uGl*0.5);',
       ' return vec3(sq,z);',
       '}',
 
@@ -110,7 +115,7 @@ function createOrbitHero(canvas, getProps) {
       '}',
 
       'void main(){',
-      ' float t=uTime;vec3 col;float size;vec3 p;',
+      ' float t=uTime;vec3 col;float size;vec3 p;float ring=0.0;',
       ' float w2=smoothstep(0.3,0.36,uP)*(1.0-smoothstep(0.72,0.78,uP));',
       ' float w3=smoothstep(0.72,0.78,uP);',
       ' if(aT<0.5){',
@@ -127,8 +132,8 @@ function createOrbitHero(canvas, getProps) {
       '  p+=mix(mix(uOff,vec3(0.0),k1),uOff3,k2);',
       ' } else if(aT<1.5){',
       '  float s=aR.x;float tau=t-s*0.9;',
-      '  float off=smoothstep(-0.3,1.0,sin(tau*0.28-1.2));',
-      '  float rr1=1.95+off*1.4+0.05*sin(tau*3.0);float a1=tau*0.75;',
+      '  float off=smoothstep(-0.3,1.0,sin(tau*0.28-1.2))+uBug*1.2;',
+      '  float rr1=1.95+off*1.4+0.05*sin(tau*3.0);float a1=tau*0.75+uBugPh;',
       '  vec3 P1=vec3(cos(a1)*rr1,0.0,sin(a1)*rr1);P1.yz=r2(0.38)*P1.yz;P1.xy=r2(-0.32)*P1.xy;P1+=vec3(0.0,off*0.5,0.0);',
       '  float a2=tau*2.1;vec3 P2=vec3(cos(a2)*2.2,sin(tau*1.3)*1.2,sin(a2)*2.2);',
       '  float rr3=1.82;float a3=tau*0.55;',
@@ -145,9 +150,13 @@ function createOrbitHero(canvas, getProps) {
       ' if(wz<0.15){gl_Position=vec4(2.0,2.0,2.0,1.0);gl_PointSize=0.0;vC=vec3(0.0);return;}',
       ' gl_Position=vec4(v.x*uF/uAspect,v.y*uF,0.0,wz);',
       ' if(aT<0.5){vec2 nd=gl_Position.xy/wz;vec2 dm=(nd-uMouse)*vec2(uAspect,1.0);float l=length(dm);',
-      '  vec2 push=dm/max(l,1e-3)*0.11*exp(-l*l*22.0)*(1.0-w2);gl_Position.xy+=push/vec2(uAspect,1.0)*wz;}',
+      '  vec2 push=dm/max(l,1e-3)*0.11*exp(-l*l*22.0)*(1.0-w2);gl_Position.xy+=push/vec2(uAspect,1.0)*wz;',
+      '  vec2 dc=(gl_Position.xy/wz-uClk.xy)*vec2(uAspect,1.0);float lc=length(dc);',
+      '  float amp=uClk.w*exp(-uClk.z*mix(2.2,3.6,w3))*mix(1.0,0.45,w3);',
+      '  ring=exp(-pow((lc-uClk.z*1.5)/0.07,2.0))*amp;',
+      '  gl_Position.xy+=dc/max(lc,1e-3)*ring*0.09/vec2(uAspect,1.0)*wz;}',
       ' gl_PointSize=size*uPx*clamp(6.0/wz,0.3,4.0);',
-      ' vC=col*clamp(wz/6.0,0.6,1.6);',
+      ' vC=col*clamp(wz/6.0,0.6,1.6)+ring*mix(vec3(0.55,0.65,1.0),vec3(1.0,0.75,0.55),w3)*0.9;',
       '}'
     ].join('\n');
     const FS = 'precision mediump float;varying vec3 vC;void main(){vec2 q=gl_PointCoord-0.5;float d=dot(q,q)*4.0;float a=exp(-d*3.2);gl_FragColor=vec4(vC*a,1.0);}';
@@ -183,13 +192,14 @@ function createOrbitHero(canvas, getProps) {
     const U = {}, UB = {};
     const lookup = () => {
       locR = gl.getAttribLocation(pPts, 'aR'); locT = gl.getAttribLocation(pPts, 'aT'); locQ = gl.getAttribLocation(pBg, 'aP');
-      ['uTime', 'uP', 'uAspect', 'uPx', 'uF', 'uTravel', 'uTrip', 'uHue', 'uVel', 'uMouse', 'uCam', 'uOff', 'uOff3', 'uView', 'uObj'].forEach((n) => { U[n] = gl.getUniformLocation(pPts, n); });
+      ['uTime', 'uP', 'uAspect', 'uPx', 'uF', 'uTravel', 'uTrip', 'uHue', 'uVel', 'uMouse', 'uCam', 'uOff', 'uOff3', 'uView', 'uObj', 'uClk', 'uSpin', 'uGl', 'uBug', 'uBugPh'].forEach((n) => { U[n] = gl.getUniformLocation(pPts, n); });
       ['uW', 'uGlow', 'uAspect', 'uTime'].forEach((n) => { UB[n] = gl.getUniformLocation(pBg, n); });
     };
 
     const clamp01 = (x) => Math.min(1, Math.max(0, x));
     const ss = (a, b, x) => { const t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); };
-    const st = { t: 0, p: 0, travel: 0, mx: 0, my: 0, tx: 9, ty: 9, scale: 1, acc: 0, n: 0, w: 0, h: 0 };
+    const st = { t: 0, p: 0, travel: 0, mx: 0, my: 0, tx: 9, ty: 9, scale: 1, acc: 0, n: 0, w: 0, h: 0,
+      ck: [9, 9, 99, 0], spin: 0, spinT: 0, gl: 0, bug: 0, bugPh: 0, last: null };
     const onMove = (e) => { const r = canvas.getBoundingClientRect(); if (!r.width) return; st.tx = ((e.clientX - r.left) / r.width) * 2 - 1; st.ty = -(((e.clientY - r.top) / r.height) * 2 - 1); };
     const onLeave = () => { st.tx = 9; st.ty = 9; };
     window.addEventListener('pointermove', onMove);
@@ -211,6 +221,10 @@ function createOrbitHero(canvas, getProps) {
       const p = st.p;
       const vel = Math.abs(st.p - prev) / Math.max(dt, 1e-3);
       const k = Math.min(1, dt * 4);
+      // clique: idade da onda, giro do tesserato, glitch e tranco do bug decaindo
+      st.ck[2] += dt;
+      st.spin += (st.spinT - st.spin) * Math.min(1, dt * 4);
+      st.gl *= Math.exp(-dt * 3); st.bug *= Math.exp(-dt * 1.6); st.bugPh += dt * st.bug * 2.5;
       st.mx += ((st.tx > 5 ? 0 : st.tx) - st.mx) * k; st.my += ((st.ty > 5 ? 0 : st.ty) - st.my) * k;
 
       const cw = canvas.clientWidth || 1, ch = canvas.clientHeight || 1;
@@ -251,14 +265,53 @@ function createOrbitHero(canvas, getProps) {
       gl.uniform3f(U.uOff3, offX * 0.72, offY, 0);
       gl.uniformMatrix3fv(U.uView, false, view);
       gl.uniformMatrix3fv(U.uObj, false, obj);
+      gl.uniform4f(U.uClk, st.ck[0], st.ck[1], st.ck[2], st.ck[3]);
+      gl.uniform1f(U.uSpin, st.spin); gl.uniform1f(U.uGl, st.gl); gl.uniform1f(U.uBug, st.bug); gl.uniform1f(U.uBugPh, st.bugPh);
+      st.last = { ut: t * (0.6 + 0.4 * speed), obj, view, cam: [st.mx * 0.14, st.my * 0.1, camZ], offX, offY, aspect, f: 1 / Math.tan(fov / 2) };
       gl.drawArrays(gl.POINTS, 0, TOT);
       gl.disableVertexAttribArray(locR); gl.disableVertexAttribArray(locT);
       return { p, w2 };
     };
 
+    // posição na tela (NDC) da cabeça do bug no 1º ato — a mesma conta do shader (aT == 1, s = 0)
+    const bugNdc = () => {
+      const L = st.last; if (!L) return null;
+      const tau = L.ut;
+      const off = ss(-0.3, 1, Math.sin(tau * 0.28 - 1.2)) + st.bug * 1.2;
+      const rr = 1.95 + off * 1.4 + 0.05 * Math.sin(tau * 3), a = tau * 0.75 + st.bugPh;
+      let x = Math.cos(a) * rr, y = 0, z = Math.sin(a) * rr, c = Math.cos(0.38), s = Math.sin(0.38);
+      [y, z] = [c * y + s * z, -s * y + c * z];
+      c = Math.cos(-0.32); s = Math.sin(-0.32);
+      [x, y] = [c * x + s * y, -s * x + c * y];
+      y += off * 0.5;
+      const O = L.obj, V = L.view;
+      const px = O[0] * x + O[3] * y + O[6] * z + L.offX - L.cam[0], py = O[1] * x + O[4] * y + O[7] * z + L.offY - L.cam[1], pz = O[2] * x + O[5] * y + O[8] * z - L.cam[2];
+      const vx = V[0] * px + V[3] * py + V[6] * pz, vy = V[1] * px + V[4] * py + V[7] * pz, wz = -(V[2] * px + V[5] * py + V[8] * pz);
+      return wz < 0.15 ? null : [vx * L.f / L.aspect / wz, vy * L.f / wz];
+    };
+
+    // clique em (clientX, clientY): onda no ponto e o efeito do ato atual
+    const pulse = (cx, cy, soft) => {
+      const r = canvas.getBoundingClientRect(); if (!r.width) return null;
+      const x = ((cx - r.left) / r.width) * 2 - 1, y = -(((cy - r.top) / r.height) * 2 - 1);
+      const p = st.p, w2 = ss(0.3, 0.36, p) * (1 - ss(0.72, 0.78, p)), w3 = ss(0.72, 0.78, p);
+      const act = w2 > 0.5 ? 2 : w3 > 0.5 ? 3 : 1;
+      const k = soft ? 0.35 : 1;
+      st.ck = [x, y, 0, k];
+      let bug = false;
+      if (act === 2) { st.spinT += (Math.PI / 2) * k; st.gl = k; }
+      if (act === 1) {
+        const b = bugNdc();
+        const aspect = r.width / r.height;
+        if (b && Math.hypot((b[0] - x) * aspect, b[1] - y) < 0.28) { bug = true; st.bug = Math.min(1.4, st.bug + k); }
+      }
+      return { act, bug };
+    };
+
     return {
       frame,
       ready,
+      pulse,
       failed: () => broken,
       // integração: só desce (subir e descer em sequência realocava o buffer a cada vez)
       adapt: (dt) => {
@@ -351,6 +404,23 @@ export function mountOrbitHero(root, opts = {}) {
   const hero = createOrbitHero(canvas, () => props);
   if (!hero) { console.warn('OrbitHero: WebGL indisponível; mostrando só os textos.'); }
 
+  // clique/toque curto no palco (arrastar para rolar não conta; links e botões seguem normais)
+  const soft = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  let down = null;
+  const onDown = (e) => { down = e.button > 0 ? null : { x: e.clientX, y: e.clientY, t: performance.now(), id: e.pointerId }; };
+  const onUp = (e) => {
+    const d = down; down = null;
+    if (!d || e.pointerId !== d.id || !hero || !hero.ready()) return;
+    if (performance.now() - d.t > 450 || Math.hypot(e.clientX - d.x, e.clientY - d.y) > 12) return;
+    if (e.target && e.target.closest && e.target.closest('a,button')) return;
+    const info = hero.pulse(e.clientX, e.clientY, soft);
+    if (info && opts.onPulse) opts.onPulse(info);
+  };
+  const onCancel = () => { down = null; };
+  stage.addEventListener('pointerdown', onDown);
+  stage.addEventListener('pointerup', onUp);
+  stage.addEventListener('pointercancel', onCancel);
+
   const ss = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
   const set = (n, o, y, cx) => {
     const key = o.toFixed(3) + '|' + y.toFixed(1);
@@ -394,6 +464,7 @@ export function mountOrbitHero(root, opts = {}) {
     setOptions(o) { Object.assign(props, o || {}); },
     destroy() {
       alive = false; cancelAnimationFrame(raf); if (io) io.disconnect();
+      stage.removeEventListener('pointerdown', onDown); stage.removeEventListener('pointerup', onUp); stage.removeEventListener('pointercancel', onCancel);
       if (hero) { try { hero.dispose(); } catch (e) { console.error(e); } }
       wrap.remove();
     }

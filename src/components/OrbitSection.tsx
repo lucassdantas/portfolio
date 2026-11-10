@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { ambient as AmbientEngine } from "@/lib/ambient";
-import type { OrbitHeroInstance, OrbitHeroTexts } from "@/components/orbit-hero/orbitHero";
+import type { OrbitHeroInstance, OrbitHeroPulse, OrbitHeroTexts } from "@/components/orbit-hero/orbitHero";
 
 const escapeHtml = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -19,6 +19,8 @@ const escapeHtml = (s: string) =>
  *   montagem espera uma pausa da rolagem. Até lá, o servidor entrega o título.
  * - Trilha sonora: a batida eletrônica entra só no tesserato (2º ato) — a
  *   intensidade da `ambient` acompanha o peso desse ato; fora dele, o pad calmo.
+ * - Clique/toque curto na cena: onda de choque (efeito no `orbitHero.js`) e,
+ *   com o som ligado, um sino afinado com a trilha (`ambient.chime`).
  * - Sem WebGL, o próprio componente mostra só os textos, guiados pela rolagem.
  */
 export function OrbitSection() {
@@ -63,6 +65,24 @@ export function OrbitSection() {
     let loading = false;
     let intensity = 0;
     let prefStamp = 0;
+    let pendingChime: Parameters<typeof AmbientEngine.chime>[0] | null = null;
+    const soundOn = () => {
+      try {
+        return localStorage.getItem("ldp-sound") === "on";
+      } catch {
+        return false; // sem storage: som desligado
+      }
+    };
+    const loadAmbient = () => {
+      loading = true;
+      void import("@/lib/ambient").then((m) => {
+        if (disposed) return;
+        amb = m.ambient;
+        amb.setIntensity(intensity);
+        if (pendingChime) amb.chime(pendingChime);
+        pendingChime = null;
+      });
+    };
     const setIntensity = (v: number) => {
       intensity = v;
       if (amb) {
@@ -73,19 +93,16 @@ export function OrbitSection() {
       const now = performance.now();
       if (now - prefStamp < 500) return;
       prefStamp = now;
-      let on = false;
-      try {
-        on = localStorage.getItem("ldp-sound") === "on";
-      } catch {
-        /* sem storage: som desligado */
+      if (soundOn()) loadAmbient();
+    };
+    // clique na cena: sino afinado com a trilha (só com o som ligado)
+    const onPulse = (s: OrbitHeroPulse) => {
+      const kind = s.bug ? "catch" : s.act === 2 ? "tess" : s.act === 3 ? "calm" : "planet";
+      if (amb) amb.chime(kind);
+      else if (soundOn()) {
+        pendingChime = kind;
+        if (!loading) loadAmbient();
       }
-      if (!on) return;
-      loading = true;
-      void import("@/lib/ambient").then((m) => {
-        if (disposed) return;
-        amb = m.ambient;
-        amb.setIntensity(intensity);
-      });
     };
     // saiu da seção (link da nav no meio do tesserato, por exemplo): volta ao calmo
     const io = new IntersectionObserver((es) => {
@@ -118,6 +135,7 @@ export function OrbitSection() {
         texts: textsRef.current,
         ariaLabel: ariaRef.current,
         onFrame: (s) => setIntensity(Math.round(s.w2 * 100) / 100),
+        onPulse,
       });
       setMounted(true);
     };
