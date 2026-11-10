@@ -20,7 +20,8 @@
  * - a resolução só cai, nunca sobe de volta: cada troca de tamanho realoca o
  *   buffer do canvas (subir e descer em sequência era uma travada a cada vez).
  * - onFrame({ p, w2 }) para a trilha sonora acompanhar o tesserato.
- * - seção ocupa 100% do pai, fontes do site, título em <h2>, título em 2 linhas.
+ * - seção ocupa 100% do pai, fontes do site, título em <h2>, título em 2 linhas,
+ *   botão com canto de 3px (padrão do site).
  */
 
 function createOrbitHero(canvas, getProps) {
@@ -297,7 +298,7 @@ const CSS = `
 .oh-t1 .oh-h{color:#F4F6FF}
 .oh-t3 .oh-h{color:#FFF6EE}
 .oh-sub{margin:0;max-width:30ch;font-size:clamp(16px,1.4vw,20px);line-height:1.45;color:#E9D9CF}
-.oh-cta{display:inline-flex;align-items:center;gap:12px;min-height:48px;margin-top:8px;padding:0 22px;border:1px solid rgba(255,246,238,.55);border-radius:999px;font-size:16px;font-weight:600;text-decoration:none;color:#F4F1EC;background:rgba(20,8,24,.25)}
+.oh-cta{display:inline-flex;align-items:center;gap:12px;min-height:48px;margin-top:8px;padding:0 22px;border:1px solid rgba(255,246,238,.55);border-radius:3px;font-size:16px;font-weight:600;text-decoration:none;color:#F4F1EC;background:rgba(20,8,24,.25)}
 .oh-cta:hover{color:#FFD9B8}
 .oh-mono{margin:0;font-family:var(--font-dm-mono),"JetBrains Mono",ui-monospace,monospace}
 .oh-hint{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:12px;pointer-events:none}
