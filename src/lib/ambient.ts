@@ -1,12 +1,12 @@
 // Trilha ambiente do site, gerada ao vivo com Web Audio API — sem arquivo,
 // sem lib, nada para baixar. Calma e baixinha no site inteiro; a
-// OrbitSection sobe a "intensidade" enquanto o astronauta está em cena e
+// OrbitSection sobe a "intensidade" enquanto o tesserato 4D está em cena e
 // devolve ao zero depois.
 //
 // Camadas: pad (acordes longos, osciladores levemente desafinados num
 // filtro passa-baixa), grave contínuo, sinos esparsos sorteados numa escala
 // pentatônica e um reverb gerado (resposta ao impulso de ruído com
-// decaimento). Intensidade abre o filtro e, no astronauta, entra uma batida
+// decaimento). Intensidade abre o filtro e, no tesserato, entra uma batida
 // eletrônica (bumbo, clap, chimbal, baixo pulsando, acordes "respirando" a
 // cada bumbo — sidechain); no fim da cena ela some e o calmo volta.
 //
@@ -20,7 +20,7 @@ import { site } from "@/data";
 type Ctor = typeof AudioContext;
 
 const BASE_GAIN = 0.05; // volume "baixinho" no site todo
-const PEAK_GAIN = 0.15; // no auge do astronauta (com a batida)
+const PEAK_GAIN = 0.15; // no auge do tesserato (com a batida)
 const STEP = 0.125; // semicolcheia a 120 bpm: a grade da batida
 const CHORD_SECONDS = 9;
 // acordes em Hz (Cmaj9 → Am9 → Fmaj7 → Gsus2), registro médio-grave
@@ -281,7 +281,7 @@ class Ambient {
     return BASE_GAIN + (PEAK_GAIN - BASE_GAIN) * this.intensity;
   }
 
-  /** 0 = calmo (site inteiro), 1 = auge (astronauta). Transição suave. */
+  /** 0 = calmo (site inteiro), 1 = auge (tesserato da órbita). Transição suave. */
   setIntensity(v: number) {
     const i = Math.max(0, Math.min(1, v));
     if (Math.abs(i - this.intensity) < 0.01) return;

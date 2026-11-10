@@ -56,19 +56,16 @@ export interface Translation {
   coreB: string;
   coreCap: string;
   coreFlow: string;
-  /** OrbitSection (astronauta, cena em public/astro-hero): textos da cena em três atos. */
+  /** OrbitSection (cena de partículas em três atos, src/components/orbit-hero). */
   orbitHint: string;
-  /** Enquanto o astronauta carrega. */
-  orbitLoading: string;
-  /** Crédito do modelo 3D (Smithsonian, CC0). */
-  orbitCredit: string;
   /** Título do 1º ato. */
   orbitA: string;
-  /** Frase do 3º ato; `
-` vira quebra de linha. */
+  /** Frase do 3º ato; `\n` vira quebra de linha. */
   orbitB: string;
   orbitMidTop: string;
   orbitMidBottom: string;
+  /** Linha abaixo da frase do 3º ato. */
+  orbitFinalSub: string;
   /** Botão do 3º ato (leva ao contato). */
   orbitCta: string;
   /** Descrição da cena para leitor de tela. */

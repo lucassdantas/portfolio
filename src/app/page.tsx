@@ -30,7 +30,7 @@ const OrbitSection = dynamic(() => import("@/components/OrbitSection").then((m) 
 const ContactSection = dynamic(() => import("@/components/ContactSection").then((m) => m.ContactSection));
 const ChatWidget = dynamic(() => import("@/components/ChatWidget").then((m) => m.ChatWidget));
 
-// o astronauta (OrbitSection) é a 3ª seção: aparece logo depois do manifesto
+// a órbita de partículas (OrbitSection) é a 3ª seção: aparece logo depois do manifesto
 const sections = [
   OrbitSection,
   StackSection,

@@ -7,7 +7,7 @@ const EASE = 0.085;
 /** Ganho por clique de roda: deltas de mouse vêm em ~100px; trackpad, em passos finos. */
 const WHEEL_GAIN = 1.0;
 /**
- * Sobre a seção do astronauta a página anda no máximo isto por segundo: a cena
+ * Sobre a seção da órbita a página anda no máximo isto por segundo: a cena
  * é conduzida pela rolagem, mas uma rolada "de maluco" não a atravessa num
  * piscar (a seção tem ~4 telas → mínimo de ~5s). Fora dela, sem limite.
  */
@@ -25,7 +25,7 @@ const ORBIT_MAX_PX_PER_S = 820;
  * - Não rouba a roda de quem tem rolagem própria (terminal, chat, modal,
  *   textarea) nem quando a página está travada (`overflow: hidden` no body).
  * - Dentro da `#orbita`, limita a velocidade (ORBIT_MAX_PX_PER_S) para a cena
- *   do astronauta nunca passar correndo.
+ *   da órbita nunca passar correndo.
  */
 export function SmoothScroll() {
   useEffect(() => {

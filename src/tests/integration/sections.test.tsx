@@ -148,18 +148,22 @@ describe("ProjectsSection — resultado em destaque", () => {
   });
 });
 
-describe("OrbitSection — interlúdio do astronauta", () => {
-  it("nada carrega sem interação: só o título e o aviso de carregamento", () => {
-    renderWithProviders(<OrbitSection />);
+describe("OrbitSection — interlúdio de partículas", () => {
+  it("nada monta sem interação: só o título vindo do servidor", () => {
+    const { container } = renderWithProviders(<OrbitSection />);
     expect(screen.getByRole("heading", { name: translations.pt.orbitA })).toBeInTheDocument();
-    expect(document.querySelector('script[src^="/astro-hero/"]')).toBeNull();
+    expect(container.querySelector("canvas")).toBeNull();
+    expect(screen.queryByText(new RegExp(translations.pt.orbitCta))).toBeNull();
   });
 
-  it("sem WebGL mostra os textos estáticos e o botão para o contato", async () => {
+  it("na primeira interação monta a cena; sem WebGL os textos e o botão para o contato seguem lá", async () => {
     renderWithProviders(<OrbitSection />);
-    const cta = await screen.findByRole("link", { name: new RegExp(translations.pt.orbitCta) });
+    fireEvent.pointerDown(window);
+    // o botão só fica visível no 3º ato (visibility: hidden zera o nome acessível), por isso busca por texto
+    const cta = (await screen.findByText(new RegExp(translations.pt.orbitCta))).closest("a");
     expect(cta).toHaveAttribute("href", "#contato");
-    expect(screen.getByText(translations.pt.orbitB.split("\n")[1])).toBeInTheDocument();
+    expect(screen.getByText(translations.pt.orbitMidBottom)).toBeInTheDocument();
+    expect(screen.getByText(translations.pt.orbitFinalSub)).toBeInTheDocument();
   });
 
   it("texto acompanha o idioma", async () => {
@@ -167,7 +171,8 @@ describe("OrbitSection — interlúdio do astronauta", () => {
     try {
       renderWithProviders(<OrbitSection />);
       expect(await screen.findByRole("heading", { name: translations.fr.orbitA })).toBeInTheDocument();
-      expect(await screen.findByRole("link", { name: new RegExp(translations.fr.orbitCta) })).toBeInTheDocument();
+      fireEvent.pointerDown(window);
+      expect((await screen.findByText(new RegExp(translations.fr.orbitCta))).closest("a")).toHaveAttribute("href", "#contato");
     } finally {
       localStorage.removeItem("ldp-lang");
     }
